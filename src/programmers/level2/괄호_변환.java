@@ -1,6 +1,6 @@
 package programmers.level2;
 
-public class °ýÈ£_º¯È¯ {
+public class ê´„í˜¸_ë³€í™˜ {
 	public static String solution(String p) {
 //		return p=="" ? "" : stringSeparation(p, 0, p.length());
 		return p=="" ? "" : stringSeparation1(p);
