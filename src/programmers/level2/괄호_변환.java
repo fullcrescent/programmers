@@ -103,7 +103,6 @@ public class 괄호_변환 {
 	public static void main(String args[]) {
 		String p = "()))((()";
 		String answer = solution(p);
-		
 		System.out.println(answer);
 	}
 }
