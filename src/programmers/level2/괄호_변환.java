@@ -2,8 +2,8 @@ package programmers.level2;
 
 public class °ýÈ£_º¯È¯ {
 	public static String solution(String p) {
-		return p=="" ? "" : stringSeparation(p, 0, p.length());
-//		return p=="" ? "" : stringSeparation1(p);
+//		return p=="" ? "" : stringSeparation(p, 0, p.length());
+		return p=="" ? "" : stringSeparation1(p);
 	}
 	
 	public static String stringSeparation1(String string) {
