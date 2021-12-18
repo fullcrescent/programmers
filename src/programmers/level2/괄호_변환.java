@@ -103,6 +103,7 @@ public class °ýÈ£_º¯È¯ {
 	public static void main(String args[]) {
 		String p = "()))((()";
 		String answer = solution(p);
+		
 		System.out.println(answer);
 	}
 }
