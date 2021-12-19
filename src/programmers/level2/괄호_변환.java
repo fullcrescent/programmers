@@ -1,8 +1,13 @@
 package programmers.level2;
 
 public class 괄호_변환 {
-	public static String solution(String p) {
-//		return p=="" ? "" : stringSeparation(p, 0, p.length());
+	public static void main(String args[]) {
+		String p = "()))((()";
+		String answer = solution1(p);
+		System.out.println(answer);
+	}
+	
+	public static String solution1(String p) {
 		return p=="" ? "" : stringSeparation1(p);
 	}
 	
@@ -50,6 +55,10 @@ public class 괄호_변환 {
 		}
 		
 		return verification;
+	}
+	
+	public static String solution(String p) {
+		return p=="" ? "" : stringSeparation(p, 0, p.length());
 	}
 	
 	public static String stringSeparation(String string, int start, int end) {
@@ -100,9 +109,4 @@ public class 괄호_변환 {
 		return verification;
 	}
 	
-	public static void main(String args[]) {
-		String p = "()))((()";
-		String answer = solution(p);
-		System.out.println(answer);
-	}
 }
