@@ -95,9 +95,19 @@ public class 수식_최대화 {
 				splitArray[i] = splitArray[i].substring(0, splitArray[i].length() - matcherPrev.group().length());
 				
 				count = opertaion(Integer.valueOf(matcherPrev.group()), Integer.valueOf(matcherNext.group()), operations.charAt(index));
-				if(splitArray[i].equals("")) {
-					splitArray[i+1] = count + splitArray[i+1];
-				}else if(!splitArray[i+1].equals("") || i+2 == splitArray.length) {
+				
+				if(splitArray[i].equals("")&&splitArray[i+1].equals("") && i+2 != splitArray.length) {
+					continue;
+				}else if(splitArray[i].equals("")){
+					splitArray[i+1] = count + splitArray[i+1]; 
+					if(i+2 == splitArray.length) {
+						expression = splitArray[i+1];
+					}
+					continue;
+				}
+				
+				
+				if(!splitArray[i+1].equals("") || i+2 == splitArray.length) {
 					expression += splitArray[i] + count + splitArray[i+1];
 				}else {
 					expression += splitArray[i];
@@ -108,7 +118,6 @@ public class 수식_최대화 {
 		}
 		
 		return split(expression, operations, index+1, patternPrev, patternNext);
-		
 	}
 
 	private static int opertaion(int number1, int number2, char operation) {
