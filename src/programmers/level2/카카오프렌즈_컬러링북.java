@@ -10,8 +10,7 @@ public class 카카오프렌즈_컬러링북 {
       int n = 4;
       int[][] picture = {{1, 1, 1, 0}, {1, 2, 2, 0}, {1, 0, 0, 1}, {0, 0, 0, 1}, {0, 0, 0, 3}, {0, 0, 0, 3}};
       int[] answer = solution(m, n, picture);
-      System.out.println(answer[0]);
-      System.out.println(answer[1]);
+      System.out.println(Arrays.toString(answer));
     }
   
     public static int[] solution(int m, int n, int[][] picture) {

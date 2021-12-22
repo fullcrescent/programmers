@@ -11,19 +11,56 @@ public class 수식_최대화 {
 	}
 	
 	public static long solution(String expression) {
-		Pattern patternPrev = Pattern.compile("^[0-9]*[^*+-]");
+		Pattern patternPrev = Pattern.compile("^[-]?[0-9]*[^*+-]");
 		Pattern patternNext= Pattern.compile("[^*+-][0-9]*$");
 		
-		String s = split(expression, "-*", 0, patternPrev, patternNext);
-		System.out.println(s);
-		return 0;
+		String operationSelect = "";
+		if(expression.contains("+")) {
+			operationSelect += "+";
+		}
+		if(expression.contains("-")) {
+			operationSelect += "-";
+		}
+		if(expression.contains("*")) {
+			operationSelect += "*";
+		}
+		
+		boolean[] visited = new boolean[operationSelect.length()];
+		
+		permutation(expression, operationSelect, visited, patternPrev, patternNext, operationSelect.length(), 0, new StringBuffer("   "));
+		
+		return max;
 	}
 	
-	private static int max; 
+	private static int max=0; 
 	
+	private static void permutation(String expression, String operationSelect, boolean[] visited, Pattern patternPrev, Pattern patternNext, int count, int index, StringBuffer operations) {
+		if(index == count) {
+			String value = split(expression, operations.toString().trim(), 0, patternPrev, patternNext);
+			max = Math.max(max, Math.abs(Integer.parseInt(value)));
+			return;
+		}
+		
+		for(int i=0; i<operationSelect.length(); i++) {
+			if(visited[i]) continue;
+			
+			visited[i] = true;
+			
+			operations.replace(index, index+1, String.valueOf(operationSelect.charAt(i))); 
+			
+			permutation(expression, operationSelect, visited, patternPrev, patternNext, count, index+1, operations);
+			
+			visited[i] = false;
+		}
+		
+		
+	}
 	
 	private static String split(String expression, String operations, int index, Pattern patternPrev, Pattern patternNext) {
 		if(operations.length() == index) {
+			if(expression.chars().filter(c -> c == '-').count()%2==0) {
+				expression = expression.replaceAll("-", "");
+			}
 			return expression;
 		}
 		
@@ -59,10 +96,8 @@ public class 수식_최대화 {
 				
 				count = opertaion(Integer.valueOf(matcherPrev.group()), Integer.valueOf(matcherNext.group()), operations.charAt(index));
 				if(splitArray[i].equals("")) {
-					continue;
-				}
-				
-				if(!splitArray[i+1].equals("") || i+2 == splitArray.length) {
+					splitArray[i+1] = count + splitArray[i+1];
+				}else if(!splitArray[i+1].equals("") || i+2 == splitArray.length) {
 					expression += splitArray[i] + count + splitArray[i+1];
 				}else {
 					expression += splitArray[i];
