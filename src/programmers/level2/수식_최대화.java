@@ -5,7 +5,7 @@ import java.util.regex.Pattern;
 
 public class 수식_최대화 {
 	public static void main(String args[]) {
-		String expression = "100-200+100*200-500*300-300";
+		String expression = "100*100-200+300-100+300";
 		long answer = solution(expression);
 		System.out.println(answer);
 	}
@@ -52,8 +52,6 @@ public class 수식_최대화 {
 			
 			visited[i] = false;
 		}
-		
-		
 	}
 	
 	private static String split(String expression, String operations, int index, Pattern patternPrev, Pattern patternNext) {
@@ -88,10 +86,11 @@ public class 수식_최대화 {
 			}
 			
 			splitArray[i+1] = splitArray[i] + count + splitArray[i+1];
-		}
-		
-		if(splitArray[splitArray.length-1].contains("--")) {
-			splitArray[splitArray.length-1] = splitArray[splitArray.length-1].replaceAll("--", "");
+			
+			// --가 나오면 바로 + 변환해 줘야함.
+			if(splitArray[i+1].contains("--")) {
+				splitArray[i+1] = splitArray[i+1].replaceAll("--", "");
+			}
 		}
 		
 		return split(splitArray[splitArray.length-1], operations, index+1, patternPrev, patternNext);
@@ -109,5 +108,4 @@ public class 수식_최대화 {
 		}
 		return 0;
 	}
-	
 }
