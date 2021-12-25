@@ -1,13 +1,23 @@
 package programmers.level2;
 
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 public class 수식_최대화 {
 	public static void main(String args[]) {
-		String expression = "100*100-200+300-100+300";
+		String expression = "100-200*300-500+20";
 		long answer = solution(expression);
 		System.out.println(answer);
+		
+		String expression1 = "100-200*300-500+20";
+		long answer1 = solution1(expression1);
+		System.out.println(answer1);
 	}
 	
 	public static long solution(String expression) {
@@ -108,4 +118,75 @@ public class 수식_최대화 {
 		}
 		return 0;
 	}
+	
+	// 참고
+	public static long solution1(String expression) {
+		// asList는 arrayList 반환 -> 삽입 삭제 빈번할 경우 LinkedList 유리
+		List<String> temp = new LinkedList<>(Arrays.asList(expression.split("[+,\\-,*]")));
+		List<Long> numbersList = temp.stream().map(Long::parseLong).collect(Collectors.toList());
+		List<Character> opertaionsList = new LinkedList<>(expression.replaceAll("[0-9]", "").chars().mapToObj(c -> (char)c).collect(Collectors.toList()));
+		
+		permutation1(new int[3], 0, numbersList, opertaionsList);
+		
+		return max1;
+	}
+	
+	private static Long max1 = 0L;
+	
+	private static void permutation1(int[] visit, int index, List<Long> numbersList, List<Character> opertaionsList) {
+		if(index==4) {
+			operation(visit, numbersList, opertaionsList);
+			return;
+		}
+		
+		for(int i=0; i<visit.length; i++) {
+			if(visit[i]==0) {
+				visit[i] = index;
+				permutation1(visit, index+1, numbersList, opertaionsList);
+				visit[i] = 0;
+			}
+		}
+	}
+
+	private static void operation(int[] visit, List<Long> numbersList, List<Character> opertaionsList) {
+		Map<Character, Integer> map = new HashMap<>();
+		map.put('+', visit[0]);
+		map.put('-', visit[1]);
+		map.put('*', visit[2]);
+		
+		Long temp = 0L;
+		
+		for(int i=1; i<visit.length;i++) {
+			for(int j=0; j<opertaionsList.size(); j++) {
+				char operation = opertaionsList.get(j);
+				if(map.get(operation)==i) {
+					temp = calculate(numbersList.get(j), numbersList.get(j+1), operation);
+					
+					numbersList.remove(j);
+					numbersList.remove(j);
+					numbersList.add(j, temp);
+					
+					opertaionsList.remove(j);
+
+					j--;
+				}
+			}
+		}
+		
+		max1 = Math.max(max1, Math.abs(numbersList.get(0)));
+	}
+
+	private static Long calculate(Long number1, Long number2, char operation) {
+		if(operation == '+') {
+			return number1 + number2;
+		}
+		if(operation == '-') {
+			return number1 - number2;
+		}
+		if(operation == '*') {
+			return number1 * number2;
+		}
+		return 0L;
+	}
+	
 }
