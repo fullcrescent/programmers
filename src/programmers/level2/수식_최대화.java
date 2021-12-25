@@ -122,6 +122,7 @@ public class 수식_최대화 {
 	// 참고
 	public static long solution1(String expression) {
 		// asList는 arrayList 반환 -> 삽입 삭제 빈번할 경우 LinkedList 유리
+		// 프로그래머스에서 import시 Collectors는 import java.util.stream.*; 까지 적어줘야함.
 		List<String> temp = new LinkedList<>(Arrays.asList(expression.split("[+,\\-,*]")));
 		List<Long> numbersList = temp.stream().map(Long::parseLong).collect(Collectors.toList());
 		List<Character> opertaionsList = new LinkedList<>(expression.replaceAll("[0-9]", "").chars().mapToObj(c -> (char)c).collect(Collectors.toList()));
@@ -154,26 +155,36 @@ public class 수식_최대화 {
 		map.put('-', visit[1]);
 		map.put('*', visit[2]);
 		
-		Long temp = 0L;
+		Long tempValue = 0L;
 		
-		for(int i=1; i<visit.length;i++) {
-			for(int j=0; j<opertaionsList.size(); j++) {
-				char operation = opertaionsList.get(j);
+		List<Long> tempNumbersList = new LinkedList<>();
+		List<Character> tempOpertaionsList = new LinkedList<>();
+		
+		for(Long temp : numbersList ) {
+			tempNumbersList.add(temp);
+		}
+		for(Character temp : opertaionsList ) {
+			tempOpertaionsList.add(temp);
+		}
+		
+		for(int i=1; i<visit.length+1;i++) {
+			for(int j=0; j<tempOpertaionsList.size(); j++) {
+				char operation = tempOpertaionsList.get(j);
 				if(map.get(operation)==i) {
-					temp = calculate(numbersList.get(j), numbersList.get(j+1), operation);
+					tempValue = calculate(tempNumbersList.get(j), tempNumbersList.get(j+1), operation);
 					
-					numbersList.remove(j);
-					numbersList.remove(j);
-					numbersList.add(j, temp);
+					tempNumbersList.remove(j);
+					tempNumbersList.remove(j);
+					tempNumbersList.add(j, tempValue);
 					
-					opertaionsList.remove(j);
+					tempOpertaionsList.remove(j);
 
 					j--;
 				}
 			}
 		}
 		
-		max1 = Math.max(max1, Math.abs(numbersList.get(0)));
+		max1 = Math.max(max1, Math.abs(tempNumbersList.get(0)));
 	}
 
 	private static Long calculate(Long number1, Long number2, char operation) {
