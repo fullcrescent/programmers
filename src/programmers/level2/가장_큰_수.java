@@ -5,7 +5,7 @@ import java.util.Arrays;
 public class 가장_큰_수 {
 
 	public static void main(String[] args) {
-		int[] numbers = {1,2,39998,4,5,6,7,8,80, 9,10, 39999};
+		int[] numbers = {90,908,89,898,10,101,1,8,9};
 		String answer = solution(numbers);
 		System.out.println(answer);
 	}
@@ -17,6 +17,9 @@ public class 가장_큰_수 {
 		String answer = "";
 		
 		for(String string : numbersToString) {
+			if(answer.equals("0") && string.equals("0")) {
+				continue;
+			}
 			answer += string;
 		}
 		
@@ -24,7 +27,7 @@ public class 가장_큰_수 {
 	}
 	
 	private static void sort(String[] numbers) {
-		int start = 0;
+		int start = 1;
         while(start < numbers.length) {
         	String pivot = numbers[start];
         	
@@ -40,17 +43,34 @@ public class 가장_큰_수 {
                 	
                 	while(temp1.length() != temp2.length()) {
                 		if(temp1.length() < temp2.length()) {
-                			temp1 += temp1.substring(temp1.length()-1);
+                			temp1 += temp1.substring(0,1);
                 		}else {
-                			temp2 += temp2.substring(temp2.length()-1);
+                			temp2 += temp2.substring(0,1);
                 		}
                 	}
                 }
                 
-                if (temp1.compareTo(temp2) < 0 || (temp1.compareTo(temp2) ==0 &&numbers[mid].compareTo(pivot) <0))
+                if (temp1.compareTo(temp2) < 0) {
                     right = mid;
-                else
-                    left = mid + 1;
+                }else if (temp1.compareTo(temp2) == 0) {
+                	int index=0;
+                	
+                	while(temp1.charAt(index) == (temp1.charAt(temp1.length()-1)) ){
+                		if(index == temp1.length()-1) {
+                			break;
+                		}
+                		index++;
+                	}
+                	
+                	if((temp1.charAt(index) > (temp1.charAt(temp1.length()-1)) && numbers[mid].length() > pivot.length())
+                			|| (temp1.charAt(index) < (temp1.charAt(temp1.length()-1)) && numbers[mid].length() < pivot.length()) ){
+                		right = mid;
+                	}else {
+                		left = mid + 1;
+                	}
+                }else {
+                	left = mid + 1;
+                }
             }
 
             switch (start - left) {
@@ -65,20 +85,4 @@ public class 가장_큰_수 {
         }
     }
 	
-	
-//	private static Long max =0L;
-//	
-//	private static void permutaion(int[] numbers, int index, boolean[] visit, Long value) {
-//		if(index == numbers.length) {
-//			max = Math.max(max, Long.valueOf(value));
-//			return;
-//		}
-//
-//		for(int i=0; i<numbers.length; i++) {
-//			if(visit[i]) continue;
-//			visit[i] = true;
-//			permutaion(numbers, index+1, visit, (long) (value + (Math.pow(10, value.toString().length()) * numbers[i])));
-//			visit[i] = false;
-//		}
-//	}
 }
