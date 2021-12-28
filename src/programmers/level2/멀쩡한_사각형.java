@@ -9,6 +9,11 @@ public class 멀쩡한_사각형 {
 		int h = 12;
 		long answer = solution(w, h);
 		System.out.println(answer);
+		
+		int w1 = 8;
+		int h1 = 12;
+		long answer1 = solution1(w1, h1);
+		System.out.println(answer1);
 	}
 	
 	public static long solution(int w, int h) {
@@ -45,4 +50,24 @@ public class 멀쩡한_사각형 {
         }
         return answer;
     }
+	
+	// 다른 사람의 풀이 참고
+	public static long solution1(int w, int h) {
+		long answer = (long) w*h;
+		int exclude = w + h - gcd(w, h); 
+		
+		return answer - exclude;
+	}
+
+	private static int gcd(int w, int h) {
+		int temp;
+		
+		while(h != 0) {
+			temp = w % h;
+			w = h;
+			h = temp;
+		}
+		
+		return w;
+	}
 }
