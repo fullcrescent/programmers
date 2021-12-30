@@ -9,31 +9,48 @@ public class 게임_맵_최단거리 {
 	}
 
 	public static int solution(int[][] maps) {
-		findLoad(maps, 0, 0, 0, new boolean[maps.length][maps[0].length]);
+		sum = new int[maps.length][maps[0].length];
+		findLoad(maps, 0, 0, 0);
 		return min;
 	}
 	
-	private static int min = -1;
+	static int min = -1;
+	static int[][] sum;
 	
-	static int[] dx = {-1, 0, 0, 1};
-	static int[] dy = {0, -1, 1, 0};
-	
-	private static void findLoad(int[][] maps, int x, int y, int count, boolean[][] visit) {
+	private static void findLoad(int[][] maps, int x, int y, int count) {
 		count++;
+		if(count == min) return ;
 		if(x==maps.length-1 && y==maps[0].length-1) {
 			if(min == -1) min = count;
-			
-			min = Math.min(min, count);
-			
+			min = Math.min(min,count);
 			return;
 		}
-		boolean[][] temp = visit;
-		for(int i=0; i<dx.length; i++) {
-			if((x+dx[i] < 0 || x+dx[i] == maps.length) || (y+dy[i] < 0 || y+dy[i] == maps[0].length) || visit[x+dx[i]][y+dy[i]]) continue;
-			if(maps[x+dx[i]][y+dy[i]] == 1) {
-				visit[x+dx[i]][y+dy[i]] = true;
-				findLoad(maps, x+dx[i], y+dy[i], count, temp);
-				visit[x+dx[i]][y+dy[i]] = false;
+		
+		if(x+1 != maps.length && maps[x+1][y] == 1) {
+			if(sum[x+1][y]==0 || sum[x+1][y] > count) {
+				sum[x+1][y] = count;
+				findLoad(maps, x+1, y, count);
+			}
+		}
+		
+		if(y+1 != maps[0].length && maps[x][y+1] == 1) {
+			if(sum[x][y+1]==0 || sum[x][y+1] > count) {
+				sum[x][y+1] = count;
+				findLoad(maps, x, y+1, count);
+			}
+		}
+		
+		if(x-1 > -1 && maps[x-1][y] == 1) {
+			if(sum[x-1][y]==0 || sum[x-1][y] > count) {
+				sum[x-1][y] = count;
+				findLoad(maps, x-1, y, count);
+			}
+		}
+		
+		if(y-1 > -1 && maps[x][y-1] == 1) {
+			if(sum[x][y-1]==0 || sum[x][y-1] > count) {
+				sum[x][y-1] = count;
+				findLoad(maps, x, y-1, count);
 			}
 		}
 	}
