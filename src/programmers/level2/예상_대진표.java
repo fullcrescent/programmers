@@ -36,6 +36,7 @@ public class 예상_대진표 {
 	
 	// 다른 사람의 풀이 참고
 	public static int solution1(int n, int a, int b) {
+		// XOR 연산을 통해 두 수의 일치하지 않는 부분 검사 -> 뒤에서부터 한 길이씩 대진 한 번에 대응됨		
 		return Integer.toBinaryString((a-1)^(b-1)).length();
 	}
 }
