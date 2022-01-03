@@ -23,38 +23,48 @@ public class 순위_검색 {
 
 	public static int[] solution(String[] info, String[] query) {
 		int[] answer = new int[query.length];
-		int answerCount;
-		int index =0;
-		for(String tempQuery : query) {
-			answerCount = 0;
-			String[] queryInfo = tempQuery.replaceAll("- ", "").replaceAll("and ", "").split(" ");
-			for(String tempInfo : info) {
-				int count=0;
-				int tempIndex=0;
-				for(String tempQueryInfo : queryInfo) {
-					if(tempIndex == queryInfo.length-1) {
-						if(Integer.parseInt(tempQueryInfo) <= Integer.parseInt(tempInfo.split(" ")[4])) {
-							count++;
-							break;
-						}
-					}
-					
-					if(tempInfo.contains(tempQueryInfo)) {
-						count++;
-						tempIndex++;
-					}else {
-						break;
-					}
-				}
-				if(count == queryInfo.length) {
-					answerCount++;
-				}
-			}
-			answer[index] = answerCount;
-			index++;
+		
+		Arrays.sort(info);
+		
+		int index=0;
+		
+		for(String temp : query) {
+			String[] tempValue = temp.replaceAll("and ", "").split(" ");
+			answer[index++] = search(info, tempValue[0], tempValue[1], tempValue[2], tempValue[3], Integer.valueOf(tempValue[4]));
 		}
 		
 		return answer;
 	}
-
+	
+	private static int search(String[] info, String language, String jobGroup, String career, String soulFood, int score) {
+		if(language == "-") {
+			return search(info, "java", jobGroup, career, soulFood, score)
+					+ search(info, "cpp", jobGroup, career, soulFood, score)
+					+ search(info, "python", jobGroup, career, soulFood, score);
+		}else if(jobGroup == "-") {
+			return search(info, language, "frontend", career, soulFood, score)
+					+ search(info, language, "backend", career, soulFood, score);
+		}else if(career == "-") {
+			return search(info, language, jobGroup, "junior", soulFood, score)
+					+ search(info, language, jobGroup, "senior", soulFood, score);
+		}else if(soulFood == "-") {
+			return search(info, language, jobGroup, career, "chicken", score)
+					+ search(info, language, jobGroup, career, "pizza", score);
+		}else {
+			boolean flag = false;
+			int value =0;
+			for(int i=0; i<info.length; i++) {
+				if(info[i].contains(language + " " + jobGroup + " " + career + " " + soulFood) && Integer.valueOf(info[i].split(" ")[4]) >= score) {
+					flag=true;
+					value++;
+				}
+				
+				if(flag) {
+					break;
+				}
+			}
+			return value;
+		}
+	}
 }
+
