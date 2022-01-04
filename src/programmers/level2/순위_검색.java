@@ -1,6 +1,8 @@
 package programmers.level2;
 
 import java.util.Arrays;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class 순위_검색 {
 
@@ -24,47 +26,42 @@ public class 순위_검색 {
 	public static int[] solution(String[] info, String[] query) {
 		int[] answer = new int[query.length];
 		
-		Arrays.sort(info);
+		StringBuilder sb = new StringBuilder();
 		
-		int index=0;
+		for(String temp : info) {
+			sb.append(temp);
+		}
+		
+		Pattern pattern = Pattern.compile("[^*+-][0-9]*$");
+		Matcher matcher;
 		
 		for(String temp : query) {
-			String[] tempValue = temp.replaceAll("and ", "").split(" ");
-			answer[index++] = search(info, tempValue[0], tempValue[1], tempValue[2], tempValue[3], Integer.valueOf(tempValue[4]));
+			String[] queryInfo = temp.replaceAll("and ", "").split(" ");
+			String a = (queryInfo[0].equals("-") ? "[a-z]* " : queryInfo[0] + " ") +
+					(queryInfo[1].equals("-") ? "[a-z]* " : queryInfo[1] + " ") +
+					(queryInfo[2].equals("-") ? "[a-z]* " : queryInfo[2] + " ") +
+					(queryInfo[3].equals("-") ? "[a-z]* " : queryInfo[3] + " ") +
+					"[0-9]*";
+			pattern = Pattern.compile(
+					(queryInfo[0].equals("-") ? "[a-z]* " : queryInfo[0] + " ") +
+					(queryInfo[1].equals("-") ? "[a-z]* " : queryInfo[1] + " ") +
+					(queryInfo[2].equals("-") ? "[a-z]* " : queryInfo[2] + " ") +
+					(queryInfo[3].equals("-") ? "[a-z]* " : queryInfo[3] + " ") +
+					"[0-9]*"
+					);
+					
+			matcher = pattern.matcher(sb.toString());
+			
+			System.out.println(a);
+			System.out.println(info);
+			while(matcher.find()) {
+				System.out.println(matcher.group());
+			}
+			
 		}
+		
 		
 		return answer;
 	}
-	
-	private static int search(String[] info, String language, String jobGroup, String career, String soulFood, int score) {
-		if(language == "-") {
-			return search(info, "java", jobGroup, career, soulFood, score)
-					+ search(info, "cpp", jobGroup, career, soulFood, score)
-					+ search(info, "python", jobGroup, career, soulFood, score);
-		}else if(jobGroup == "-") {
-			return search(info, language, "frontend", career, soulFood, score)
-					+ search(info, language, "backend", career, soulFood, score);
-		}else if(career == "-") {
-			return search(info, language, jobGroup, "junior", soulFood, score)
-					+ search(info, language, jobGroup, "senior", soulFood, score);
-		}else if(soulFood == "-") {
-			return search(info, language, jobGroup, career, "chicken", score)
-					+ search(info, language, jobGroup, career, "pizza", score);
-		}else {
-			boolean flag = false;
-			int value =0;
-			for(int i=0; i<info.length; i++) {
-				if(info[i].contains(language + " " + jobGroup + " " + career + " " + soulFood) && Integer.valueOf(info[i].split(" ")[4]) >= score) {
-					flag=true;
-					value++;
-				}
-				
-				if(flag) {
-					break;
-				}
-			}
-			return value;
-		}
-	}
-}
 
+}
