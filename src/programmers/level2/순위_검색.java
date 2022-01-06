@@ -1,8 +1,8 @@
 package programmers.level2;
 
 import java.util.Arrays;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.Comparator;
+import java.util.List;
 
 public class 순위_검색 {
 
@@ -25,41 +25,9 @@ public class 순위_검색 {
 
 	public static int[] solution(String[] info, String[] query) {
 		int[] answer = new int[query.length];
+		List<String> list = Arrays.asList(info);
 		
-		StringBuilder sb = new StringBuilder();
-		
-		for(String temp : info) {
-			sb.append(temp);
-		}
-		
-		Pattern pattern = Pattern.compile("[^*+-][0-9]*$");
-		Matcher matcher;
-		
-		for(String temp : query) {
-			String[] queryInfo = temp.replaceAll("and ", "").split(" ");
-			String a = (queryInfo[0].equals("-") ? "[a-z]* " : queryInfo[0] + " ") +
-					(queryInfo[1].equals("-") ? "[a-z]* " : queryInfo[1] + " ") +
-					(queryInfo[2].equals("-") ? "[a-z]* " : queryInfo[2] + " ") +
-					(queryInfo[3].equals("-") ? "[a-z]* " : queryInfo[3] + " ") +
-					"[0-9]*";
-			pattern = Pattern.compile(
-					(queryInfo[0].equals("-") ? "[a-z]* " : queryInfo[0] + " ") +
-					(queryInfo[1].equals("-") ? "[a-z]* " : queryInfo[1] + " ") +
-					(queryInfo[2].equals("-") ? "[a-z]* " : queryInfo[2] + " ") +
-					(queryInfo[3].equals("-") ? "[a-z]* " : queryInfo[3] + " ") +
-					"[0-9]*"
-					);
-					
-			matcher = pattern.matcher(sb.toString());
-			
-			System.out.println(a);
-			System.out.println(info);
-			while(matcher.find()) {
-				System.out.println(matcher.group());
-			}
-			
-		}
-		
+		list.sort(Comparator.comparingInt((i)->Integer.parseInt(i.replaceAll("[a-z ]", ""))));
 		
 		return answer;
 	}
