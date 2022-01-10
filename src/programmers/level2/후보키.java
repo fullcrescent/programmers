@@ -1,6 +1,10 @@
 package programmers.level2;
 
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 public class 후보키 {
 
@@ -13,24 +17,46 @@ public class 후보키 {
 				,{"500","muzi","music","3"}
 				,{"600","apeach","music","2"}};
 		int answer = solution(relation);
-//		System.out.println(answer);
+		System.out.println(answer);
 	}
 
 	public static int solution(String[][] relation) {
 		boolean visit[] = new boolean[relation[0].length];
 		
 		for(int i=0; i<visit.length; i++) {
-			
+			combination(relation, visit, 0, i+1);
 		}
-		
-		combination(relation, visit, 0, 1);
-		return 0;
+
+		return candidateVisit.size();
 	}
 	
-	private static int answer = 0;
+	private static List<boolean[]> candidateVisit = new LinkedList<>();
 	
 	private static void combination(String[][] relation, boolean[] visit, int index, int count) {
 		if(count==0) {
+			for(boolean[] tempVisit : candidateVisit) {
+				int tempIndex = 0;
+				
+				int tempCount = 0;
+				int visitCount = 0;
+				
+				for(boolean temp : tempVisit) {
+					if(temp) {
+						tempCount++;
+						if(visit[tempIndex]) {
+							visitCount++;
+						}
+					}
+					tempIndex++;
+				}
+				
+				if(tempCount==visitCount) {
+					return;
+				}
+			}
+			
+			Map<String, String> map = new HashMap<>();
+			
 			for(int i=0; i<relation.length; i++) {
 				String key="";
 				String value="";
@@ -42,10 +68,15 @@ public class 후보키 {
 						value += relation[i][j];
 					}
 				}
-				System.out.println("key=" + key);
-				System.out.println("value=" + value);
+				if(map.containsKey(key) || map.containsValue(value)) {
+					return;
+				}
+				map.put(key, value);
 			}
 			
+			boolean[] temp = Arrays.copyOf(visit, visit.length);
+			
+			candidateVisit.add(temp);
 			
 			return;
 		}
@@ -55,7 +86,6 @@ public class 후보키 {
 			combination(relation, visit, i+1, count-1);
 			visit[i] = false;	
 		}
-		
 	}
 
 }
