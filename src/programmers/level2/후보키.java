@@ -29,7 +29,7 @@ public class 후보키 {
 		boolean visit[] = new boolean[relation[0].length];
 		
 		for(int i=0; i<visit.length; i++) {
-			// visit.length개에서 i+1개를 뽑는 경우의 수 - 조합
+			// visit.length개에서 i+1개를 뽑는 경우의 수 -> 조합
 			combination(relation, visit, 0, i+1);
 		}
 
@@ -84,6 +84,15 @@ public class 후보키 {
 				if(map.containsKey(key)) {
 					return;
 				}
+				
+				// Random a = new Random();
+				// value += a.nextLong()+relation[i][j];  
+				// value 앞의 접두사를 Random수로 바꾼 후 throws Exception과 아래의 소스로 테스트할 경우 5,6,8,21 테스트 케이스에서 런타임 에러 확인
+				// ???? 테스트 케이스가 어떻게 되는건지...
+//				if(map.containsValue(value)){
+//                    throw new Exception();
+//                }
+				
 				map.put(key, value);
 			}
 			
