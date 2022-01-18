@@ -9,11 +9,11 @@ public class 두개_이하로_다른_비트 {
 		long[] answer = solution(numbers);
 		System.out.println(Arrays.toString(answer));
 		
-		long[] numbers1 = {5, 7};
+		long[] numbers1 = {3, 7};
 		long[] answer1 = solution1(numbers1);
 		System.out.println(Arrays.toString(answer1));
 		
-		long[] numbers2 = {5, 7};
+		long[] numbers2 = {3, 7};
 		long[] answer2 = solution2(numbers2);
 		System.out.println(Arrays.toString(answer2));
 	}
@@ -70,21 +70,18 @@ public class 두개_이하로_다른_비트 {
         
         for(long number : numbers) {
         	// 0의 위치
-        	int zeroIndex=1;
+        	int zeroIndex=-1;
         	while(number%2!=0) {
         		zeroIndex++;
         		number /= 2;
         	}
         	
-        	if(zeroIndex<=2) {
-        		answer[index++]++;
-        	}else {
-        		answer[index++] += Math.pow(2, zeroIndex-2); 
-        	}
+        	long temp = (long) Math.pow(2, zeroIndex);
+        	
+        	answer[index++] += temp!=0 ? temp : 1; 
         }
         
         return answer;
     }
-	
 	
 }
