@@ -26,5 +26,5 @@ public class H_Index {
 		return answer-1;
 	}
 	
-	// 다른 사람의 풀이 참고
+	// 다른 사람의 풀이 참고 작성중
 }
