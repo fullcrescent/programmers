@@ -71,6 +71,7 @@ public class 소수_찾기 {
 		return true;
 	}
 	
+	// 다른 사람의 풀이 참고
 	public static int solution1(String numbers) {
 		int answer1 = 0;
 		Set<Integer> set = new HashSet<>();
