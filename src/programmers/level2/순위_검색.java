@@ -97,4 +97,6 @@ public class 순위_검색 {
 			return list.size()-start;
 		}
 	}
+	
+	// 다른 사람의 풀이 참고 작성중
 }
