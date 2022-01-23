@@ -21,8 +21,8 @@ public class 수식_최대화 {
 	}
 	
 	public static long solution(String expression) {
-		Pattern patternPrev = Pattern.compile("[^*+-][0-9]*$");
-		Pattern patternNext= Pattern.compile("^[-]?[0-9]*[^*+-]");
+		Pattern patternPrev = Pattern.compile("[^*+-][0-9]*$");			// 뒤에서 숫자 찾기
+		Pattern patternNext= Pattern.compile("^[-]?[0-9]*[^*+-]");		// 앞에서 숫자 찾기
 		
 		String operationSelect = "";
 		if(expression.contains("-")) {
@@ -79,11 +79,11 @@ public class 수식_최대화 {
 		long count =0;
 		
 		for(int i=0; i<splitArray.length-1; i++) {
-			matcherPrev = patternPrev.matcher(splitArray[i]);
+			matcherPrev = patternPrev.matcher(splitArray[i]);		// 뒤에서 숫자 찾기
 			matcherPrev.find();
 			splitArray[i] = splitArray[i].substring(0, splitArray[i].length() - matcherPrev.group().length());
 
-			matcherNext = patternNext.matcher(splitArray[i+1]);
+			matcherNext = patternNext.matcher(splitArray[i+1]);		// 앞에서 숫자 찾기
 			matcherNext.find();
 			splitArray[i+1] = splitArray[i+1].substring(matcherNext.group().length(), splitArray[i+1].length());
 			
@@ -119,7 +119,7 @@ public class 수식_최대화 {
 		return 0;
 	}
 	
-	// 참고
+	// 다른 사람의 풀이 참고
 	public static long solution1(String expression) {
 		// asList는 arrayList 반환 -> 삽입 삭제 빈번할 경우 LinkedList 유리
 		// 프로그래머스에서 import시 Collectors는 import java.util.stream.*; 까지 적어줘야함.
@@ -151,6 +151,8 @@ public class 수식_최대화 {
 
 	private static void operation(int[] visit, List<Long> numbersList, List<Character> opertaionsList) {
 		Map<Character, Integer> map = new HashMap<>();
+		
+		// visit 우선순위 배열
 		map.put('+', visit[0]);
 		map.put('-', visit[1]);
 		map.put('*', visit[2]);
@@ -170,6 +172,8 @@ public class 수식_최대화 {
 		for(int i=1; i<visit.length+1;i++) {
 			for(int j=0; j<tempOpertaionsList.size(); j++) {
 				char operation = tempOpertaionsList.get(j);
+				
+				// 우선순위를 기반으로 연산 구분
 				if(map.get(operation)==i) {
 					tempValue = calculate(tempNumbersList.get(j), tempNumbersList.get(j+1), operation);
 					
