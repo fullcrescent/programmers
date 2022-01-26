@@ -7,7 +7,7 @@ import java.util.Queue;
 public class 교점에_별_만들기 {
 
 	public static void main(String[] args) {
-		int[][] line = {{1, 0, 4}, {0, 1, 4}, {0, 1, -4}, {1, 0, -4}};
+		int[][] line = {{1, -1, 0}, {2, -1, 0}};
 		String[] answer = solution(line);
 		System.out.println(Arrays.toString(answer));
 	}
@@ -15,35 +15,35 @@ public class 교점에_별_만들기 {
 	public static String[] solution(int[][] line) {
 		Queue<Star> queue = new LinkedList<>();
 		
-		int maxX = 0;
-		int minX = 0;
+		long maxX = 0;
+		long minX = 0;
 		
-		int maxY = 0;
-		int minY = 0;
+		long maxY = 0;
+		long minY = 0;  
 		
 		boolean flag = false;
 		
 		for(int i=0; i<line.length-1; i++) {
 			for(int j=i+1; j<line.length; j++) {
-				int A = line[i][0];
-				int B = line[i][1];
-				int C = line[i][2];
+				long A = line[i][0];
+				long B = line[i][1];
+				long C = line[i][2];
 				
-				int D = line[j][0];
-				int E = line[j][1];
-				int F = line[j][2];
+				long D = line[j][0];
+				long E = line[j][1];
+				long F = line[j][2];
 				
-				int numeratorX = B*F-C*E;
-				int numeratorY = C*D-A*F;
-				int denominator = A*E-B*D;
+				long numeratorX = B*F-C*E;
+				long numeratorY = C*D-A*F;
+				long denominator = A*E-B*D;
 				
 				if(denominator==0) {
 					continue;
 				}
 				
 				if(numeratorX%denominator==0 && numeratorY%denominator==0) {
-					int X = numeratorX/denominator;
-					int Y = numeratorY/denominator;
+					long X = numeratorX/denominator;
+					long Y = numeratorY/denominator;
 					
 					queue.add(new Star(X, Y));
 					
@@ -62,7 +62,7 @@ public class 교점에_별_만들기 {
 			}
 		}
 		
-		String[] answer = new String[maxY-minY+1];
+		String[] answer = new String[(int) (maxY-minY+1)];
 
 		for(int i=0; i<=maxY-minY; i++) {
 			String temp = "";
@@ -74,20 +74,20 @@ public class 교점에_별_만들기 {
         
 		while(!queue.isEmpty()) {
 			Star temp = queue.poll();
-			int replaceX = temp.x - minX;
-			int replaceY = maxY - temp.y ;
+			long replaceX = temp.x - minX;
+			long replaceY = maxY - temp.y;
 			
-			answer[replaceY] = answer[replaceY].substring(0, replaceX) + "*" + answer[replaceY].substring(replaceX+1);
+			answer[(int) replaceY] = answer[(int) replaceY].substring(0, (int) replaceX) + "*" + answer[(int) replaceY].substring((int) (replaceX)+1);
 		}
 		
         return answer;
     }
 	
 	static class Star{
-		int x; 
-		int y;
+		long x; 
+		long y;
 		
-		public Star(int x, int y) {
+		public Star(long x, long y) {
 			this.x = x;
 			this.y = y;
 		}
