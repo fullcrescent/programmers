@@ -61,12 +61,14 @@ public class 구명보트 {
 	
 	// 다른 사람의 풀이 참고
 	public static int solution1(int[] people,int limit){
+		// 정렬의 경우 리스트 변경하지 말고 바로 하는게 효율이 좋음
 		Arrays.sort(people);
 		
 		int i = 0;
 		int j = people.length-1;
 		
 		while(i<j) {
+			// 큰값에서 작은 것들 더하는 형식으로 구성 - 최대 두명 제한이기에 성립
 			if(people[i] + people[j] <= limit) {
 				i++;
 			}
