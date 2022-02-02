@@ -24,6 +24,21 @@ public class 순위_검색 {
 				,"- and - and - and - 150"};
 		int answer[] = solution(info, query);
 		System.out.println(Arrays.toString(answer));
+		
+		String[] info1 = {"java backend junior pizza 150"
+				,"python frontend senior chicken 210"
+				,"python frontend senior chicken 150"
+				,"cpp backend senior pizza 260"
+				,"java backend junior pizza 80"
+				,"python backend senior chicken 50"};
+		String[] query1 = {"java and backend and junior and pizza 100"
+				,"python and frontend and senior and chicken 200"
+				,"cpp and - and senior and pizza 250"
+				,"- and backend and senior and - 150"
+				,"- and - and - and chicken 100"
+				,"- and - and - and - 150"};
+		int answer1[] = solution1(info1, query1);
+		System.out.println(Arrays.toString(answer1));
 	}
 
 	public static int[] solution(String[] info, String[] query) {
@@ -98,5 +113,100 @@ public class 순위_검색 {
 		}
 	}
 	
-	// 다른 사람의 풀이 참고 작성중
+	// 다른 사람의 풀이 참고
+	public static int[] solution1(String[] info, String[] query) {
+		int[] answer = new int[query.length];
+		
+		String[] language = {"cpp", "java", "python"},
+				jobGroup = {"frontend", "backend"},
+				career = {"junior", "senior"},
+				soulFood = {"chicken", "pizza"};
+		
+		Map<String, Map<String, Map<String, Map<String, List<Integer>>>>> map = new HashMap<>();
+		
+		for(String tempLanguage : language) {
+			map.put(tempLanguage, new HashMap<>());
+		}
+		
+		for(String tempLanguage : map.keySet()) {
+			Map<String, Map<String, Map<String, List<Integer>>>> jobGroupMap = map.get(tempLanguage);
+			for(String tempJobGroup : jobGroup) {
+				jobGroupMap.put(tempJobGroup, new HashMap<>());
+			}
+			
+			for(String tempJobGroup : jobGroupMap.keySet()) {
+				Map<String, Map<String, List<Integer>>> carrerMap = jobGroupMap.get(tempJobGroup);
+				for(String tempCarrer : career) {
+					carrerMap.put(tempCarrer, new HashMap<>());
+				}
+				
+				for(String tempCarrer : carrerMap.keySet()) {
+					Map<String, List<Integer>> soulFoodMap = carrerMap.get(tempCarrer);
+					for(String tempSoulFood : soulFood) {
+						soulFoodMap.put(tempSoulFood, new ArrayList<Integer>());
+					}
+				}
+			}
+		}
+		
+		for(String temp : info) {
+			String[] value = temp.split(" ");
+			map.get(value[0]).get(value[1]).get(value[2]).get(value[3]).add(Integer.parseInt(value[4]));
+		}
+		
+		for(Map<String, Map<String, Map<String, List<Integer>>>> temp0 : map.values())
+			for(Map<String, Map<String, List<Integer>>> temp1 : temp0.values())
+				for(Map<String, List<Integer>> temp2 : temp1.values())
+					for(List<Integer> temp3 : temp2.values())
+						temp3.sort(null);
+		
+		int index = 0;
+		
+		for(String temp : query) {
+			String[] mapInfo = temp.replaceAll("and ", "").split(" ");
+			int score = Integer.parseInt(mapInfo[4]);
+			
+			for(String tempLanguage : language) {
+				if(mapInfo[0].equals("-") || mapInfo[0].equals(tempLanguage)) {
+					Map<String, Map<String, Map<String, List<Integer>>>> jobGroupMap = map.get(tempLanguage);
+					
+					for(String tempJobGroup : jobGroup) {
+						if(mapInfo[1].equals("-") || mapInfo[1].equals(tempJobGroup)) {
+							Map<String, Map<String, List<Integer>>> carrerMap = jobGroupMap.get(tempJobGroup);
+							
+							for(String tempCareer : career) {
+								if(mapInfo[2].equals("-") || mapInfo[2].equals(tempCareer)) {
+									Map<String, List<Integer>> soulFoodMap = carrerMap.get(tempCareer);
+									
+									for(String tempSoulFood : soulFood) {
+										if(mapInfo[3].equals("-") || mapInfo[3].equals(tempSoulFood)) {
+											List<Integer> list = soulFoodMap.get(tempSoulFood);
+											
+											int start =0;
+											int end = list.size()-1;
+											
+											while(start<=end) {
+												int mid = (start+end)/2;
+												
+												if(list.get(mid)<score) {
+													start=mid+1;
+												}else {
+													end=mid-1;
+												}
+											}
+											
+											answer[index] += list.size()-start;
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			index++;
+		}
+		
+		return answer;
+	}
 }
