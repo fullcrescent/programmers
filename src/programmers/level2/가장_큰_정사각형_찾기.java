@@ -13,8 +13,10 @@ public class 가장_큰_정사각형_찾기 {
 		int jLength = board[0].length;
 		
 		int count = 0;
+		int temp =1;
 		
-		for(int i1=0; i1<iLength; i1++) {
+		for(int i1=0; i1<iLength; i1=i1+temp) {
+			temp=1;
 			Loop1 :
 			for(int j1=0; j1<jLength; j1++) {
 				if(board[i1][j1]==1) {
@@ -25,11 +27,14 @@ public class 가장_큰_정사각형_찾기 {
 						for(int j2=j1; j2<jIndex; j2++) {
 							if(board[i2][j2]==0) {
 								if(iIndex-i2==jIndex-j2) {
-									j1=jIndex;
+									j1=jIndex+1;
+									temp=count;
 								}else if(iIndex-i2<jIndex-j2){
 									j1=j2;
+									temp=Math.min(temp, i2-i1+1);
 								}else if(iIndex-i2>jIndex-j2){
                                 	i1=i2;
+                                	j1=j2;
                                 }
 								continue Loop1;
 							}
@@ -62,6 +67,7 @@ public class 가장_큰_정사각형_찾기 {
 					count = iIndex-i1;
 					iLength = board.length-count; 
 					jLength = board[0].length-count;
+					j1=jIndex;
 				}
 			}
 		}
