@@ -9,6 +9,13 @@ public class n진수_게임 {
 		int p = 2;
 		String answer = solution(n, t, m, p);
 		System.out.println(answer);
+		
+		int n1 = 16;
+		int t1 = 16;
+		int m1 = 2;
+		int p1 = 2;
+		String answer1 = solution1(n1, t1, m1, p1);
+		System.out.println(answer1);
 	}
 	
 	public static String solution(int n, int t, int m, int p) {
@@ -48,4 +55,23 @@ public class n진수_게임 {
 		return answer.toString();
 	}
 	
+	// 다른 사람의 풀이 참고
+	public static String solution1(int n, int t, int m, int p) {
+		StringBuilder sb = new StringBuilder();
+		StringBuilder answer = new StringBuilder();
+		
+		int index = 0;
+		
+		while(sb.length()<=t*m) {
+			sb.append(Integer.toString(index++, n));
+		}
+		
+		String s = sb.toString();
+		
+		for(int i=0; i<t; i++) {
+			answer.append(s.charAt(i*m+p-1));
+		}
+		
+		return answer.toString().toUpperCase();
+	}
 }
