@@ -9,6 +9,10 @@ public class 최댓값과_최솟값 {
 		String s = "-1 -2 -3 -4";
 		String answer = solution(s);
 		System.out.println(answer);
+		
+		String s1 = "-1 -2 -3 -4";
+		String answer1 = solution1(s1);
+		System.out.println(answer1);
 	}
 	
 	public static String solution(String s) {
@@ -20,5 +24,12 @@ public class 최댓값과_최솟값 {
 		});
 		
 		return temp[0] + " " + temp[temp.length-1];
+	}
+	
+	// 다른 사람의 풀이 참고
+	public static String solution1(String s) {
+		return Arrays.stream(s.split(" ")).mapToInt(Integer::parseInt).min().getAsInt() 
+				+ " " 
+				+ Arrays.stream(s.split(" ")).mapToInt(Integer::parseInt).max().getAsInt();
 	}
 }
