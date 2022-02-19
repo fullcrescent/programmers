@@ -5,8 +5,8 @@ import java.util.Arrays;
 public class 양궁대회 {
 
 	public static void main(String[] args) {
-		int n = 10;
-		int[] info = {0,0,0,0,0,0,0,0,8,1,1};
+		int n = 9;
+		int[] info = {0, 0, 1, 2, 0, 1, 1, 1, 1, 1, 1};
 		int[] answer = solution(n, info);
 		System.out.println(Arrays.toString(answer));
 	}
@@ -17,20 +17,37 @@ public class 양궁대회 {
 		int index = -1;
 		
 		while(n>0 && index++<info.length-1) {
-			if(n<info[index]) {
+			if(n<info[index]+1) {
 				continue;
 			}
 			
 			if(info[index]>1) {
-				int tempSum = 0;
-				for(int i=index+1; i<index+1+info[index]+1 && i<info.length ; i++) {
-					tempSum += 10-i;
+				int tempSum1 = 10-index;
+				int count1 = n-info[index];
+				for(int i=index+1; i<info.length; i++) {
+					if(count1>info[i]) {
+						tempSum1 += (10-i);
+						count1 -= info[i]+1;
+					}
+					if(count1==0) {
+						break;
+					}
 				}
 				
-				if(tempSum<(10-index)) {
+				int tempSum2 = 0;
+				int count2 = n;
+				for(int i=index+1; i<info.length; i++) {
+					if(count2>info[i]) {
+						tempSum2 += (10-i);
+						count2 -= info[i]+1;
+					}
+				}
+				
+				if(tempSum1>tempSum2) {
 					answer[index] = info[index]+1;
 					n -= answer[index];
 				}
+			
 			}else if(n>=info[index]+1) {
 				answer[index] = info[index]+1;
 				n -= answer[index];
