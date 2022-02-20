@@ -1,19 +1,22 @@
 package programmers.level2;
 
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 
 public class 양궁대회 {
 
 	public static void main(String[] args) {
-		int n = 5;
-		int[] info = {2, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0};
+		int n = 9;
+		int[] info = {0,0,1,2,0,1,1,1,1,1,1};
 		int[] answer = solution(n, info);
 		System.out.println(Arrays.toString(answer));
 	}
 	
 	public static int[] solution(int n, int[] info) {
+		int[] answer = new int[info.length];
+		
 		Map<Integer, Double> map = new HashMap<>();
 			
 		for(int i=0; i<info.length; i++) {
@@ -24,22 +27,51 @@ public class 양궁대회 {
 			}
 		}
 		
-		Object[] array = map.values().toArray();
+		Object[] array = map.keySet().toArray();
 		
-		Arrays.sort(array);
+		Arrays.sort(array, new Comparator<Object>() {
+			@Override
+			public int compare(Object o1, Object o2) {
+				return -Double.compare(map.get(o1), map.get(o2));
+			}
+		});
 		
-		while(n>0) {
-			for(Object key : array) {
-				System.out.println(key.toString());
+		int index = 0;
+		
+		while(n>0 && index<info.length) {
+			int key = (int) array[index++];
+			
+			if(n<info[key]+1) {
+				continue;
 			}
 			
+			answer[key] = info[key]+1;
+			n -= answer[key];
 		}
 		
+		if(n>0) {
+			answer[info.length-1] += n;
+		}
 		
+		int ryan = 0;
+		int apeach = 0;
 		
+		for(int i=0; i<info.length; i++) {
+			if(info[i]<answer[i]) {
+				ryan += 10-i;
+			}else {
+				if(info[i]==0) {
+					continue;
+				}
+				apeach += 10-i;
+			}
+		}
 		
-		
-		return null; 
-	
+		if(ryan>apeach) {
+			return answer;
+		}else {
+			int[] temp = {-1};
+			return temp;
+		}
 	}
 }
