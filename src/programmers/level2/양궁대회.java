@@ -8,8 +8,8 @@ import java.util.Map;
 public class 양궁대회 {
 
 	public static void main(String[] args) {
-		int n = 9;
-		int[] info = {0,0,1,2,0,1,1,1,1,1,1};
+		int n = 8;
+		int[] info = {3,0,0,0,0,1,0,0,0,0,0};
 		int[] answer = solution(n, info);
 		System.out.println(Arrays.toString(answer));
 	}
@@ -21,7 +21,7 @@ public class 양궁대회 {
 			
 		for(int i=0; i<info.length; i++) {
 			if(info[i]>1) {
-				map.put(i, ((double)(10-i)*info[i]/(info[i]+1)));
+				map.put(i, ((double)(10-i)*2/(info[i]+1)));
 			}else {
 				map.put(i, (double) (10-i));
 			}
@@ -32,7 +32,11 @@ public class 양궁대회 {
 		Arrays.sort(array, new Comparator<Object>() {
 			@Override
 			public int compare(Object o1, Object o2) {
-				return -Double.compare(map.get(o1), map.get(o2));
+				if(Double.compare(map.get(o1), map.get(o2))!=0){
+					return -Double.compare(map.get(o1), map.get(o2));
+				}else {
+					return -Integer.compare((int)o1, (int)o2);
+				}
 			}
 		});
 		
