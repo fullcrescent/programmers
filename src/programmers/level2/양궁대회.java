@@ -1,67 +1,68 @@
 package programmers.level2;
 
 import java.util.Arrays;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Map;
 
 public class 양궁대회 {
 
 	public static void main(String[] args) {
-		int n = 8;
-		int[] info = {3,0,0,0,0,1,0,0,0,0,0};
+		int n = 5;
+		int[] info = {2,1,1,1,0,0,0,0,0,0,0};
 		int[] answer = solution(n, info);
 		System.out.println(Arrays.toString(answer));
 	}
 	
 	public static int[] solution(int n, int[] info) {
-		int[] answer = new int[info.length];
+		answer = new int[info.length];
+		boolean[] visit = new boolean[info.length];
 		
-		Map<Integer, Double> map = new HashMap<>();
-			
-		for(int i=0; i<info.length; i++) {
-			if(info[i]>1) {
-				map.put(i, ((double)(10-i)*2/(info[i]+1)));
-			}else {
-				map.put(i, (double) (10-i));
-			}
+		dfs(visit, info, n, 0);
+		
+		if(max>0) {
+			return answer;
+		}else {
+			int[] temp = {-1};
+			return temp;
 		}
-		
-		Object[] array = map.keySet().toArray();
-		
-		Arrays.sort(array, new Comparator<Object>() {
-			@Override
-			public int compare(Object o1, Object o2) {
-				if(Double.compare(map.get(o1), map.get(o2))!=0){
-					return -Double.compare(map.get(o1), map.get(o2));
-				}else {
-					return -Integer.compare((int)o1, (int)o2);
+	}
+	
+	static int[] answer;
+	static int max = 0;
+	
+	private static void dfs(boolean[] visit, int[] info, int n, int index) {
+		if(index==info.length || n==0) {
+			int[] temp = new int[visit.length];
+			
+			for(int i=0; i<visit.length; i++) {
+				if(visit[i]) {
+					temp[i] = info[i]+1;
 				}
 			}
-		});
-		
-		int index = 0;
-		
-		while(n>0 && index<info.length) {
-			int key = (int) array[index++];
+			temp[visit.length-1] = n;
 			
-			if(n<info[key]+1) {
-				continue;
+			score(temp, info);
+			
+			return;
+		}
+		
+		for(int i=index; i<info.length; i++) {
+			if(visit[i]) continue;
+			
+			if(n>info[i]) {
+				visit[i] = true;
+				dfs(visit, info, n-(info[i]+1), i+1);
+			}else {
+				dfs(visit, info, n, i+1);
 			}
-			
-			answer[key] = info[key]+1;
-			n -= answer[key];
+			visit[i] = false;
 		}
-		
-		if(n>0) {
-			answer[info.length-1] += n;
-		}
-		
+	}
+
+	private static void score(int[] temp, int[] info) {
 		int ryan = 0;
 		int apeach = 0;
 		
 		for(int i=0; i<info.length; i++) {
-			if(info[i]<answer[i]) {
+			if(info[i]<temp[i]) {
 				ryan += 10-i;
 			}else {
 				if(info[i]==0) {
@@ -70,12 +71,10 @@ public class 양궁대회 {
 				apeach += 10-i;
 			}
 		}
-		
-		if(ryan>apeach) {
-			return answer;
-		}else {
-			int[] temp = {-1};
-			return temp;
+		if(ryan>apeach && max<=ryan-apeach) {
+			max = ryan-apeach;
+			answer = temp;
 		}
 	}
+	
 }
