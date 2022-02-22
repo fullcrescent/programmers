@@ -71,10 +71,21 @@ public class 양궁대회 {
 				apeach += 10-i;
 			}
 		}
-		if(ryan>apeach && max<=ryan-apeach) {
+		
+		int score = ryan-apeach;
+		
+		if(max<score) {
 			max = ryan-apeach;
 			answer = temp;
+		}else if(max==score) {
+			for(int i=info.length-1; i>-1; i--) {
+				if(answer[i]<temp[i]) {
+					answer = temp;
+					break;
+				}else if(answer[i]>temp[i]) {
+					break;
+				}
+			}
 		}
 	}
-	
 }
