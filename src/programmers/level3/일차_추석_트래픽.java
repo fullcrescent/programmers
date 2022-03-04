@@ -1,5 +1,8 @@
 package programmers.level3;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class 일차_추석_트래픽 {
 
 	public static void main(String[] args) {
@@ -18,6 +21,15 @@ public class 일차_추석_트래픽 {
 	}
 	
 	public static int solution(String[] lines) {
+		Map<String, Integer> map = new HashMap<>();
+		for(String temp : lines) {
+			if(map.get(temp)==null) {
+				map.put(temp, 1);
+			}else {
+				map.put(temp, map.get(temp));
+			}
+		}
+		
 		return 0;
 	}
 
