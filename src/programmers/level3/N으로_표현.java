@@ -46,7 +46,11 @@ public class N으로_표현 {
 			for(int temp2 : list2) {
 				tempList.add(temp1+temp2);
 				tempList.add(temp1-temp2);
+				tempList.add(temp2-temp1);
 				tempList.add(temp1*temp2);
+				if(temp1!=0) {
+					tempList.add(temp2/temp1);
+				}
 				if(temp2!=0) {
 					tempList.add(temp1/temp2);
 				}
