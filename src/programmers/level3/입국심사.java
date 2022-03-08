@@ -7,7 +7,7 @@ import java.util.List;
 public class 입국심사 {
 
 	public static void main(String[] args) {
-		int n = 35;
+		int n = 18;
 		int[] times = {7, 10};
 		long answer = solution(n, times);
 		System.out.println(answer);
@@ -18,21 +18,32 @@ public class 입국심사 {
 		
 		Arrays.sort(times);
 		
-		for(int time : times) {
-			list.add((long) time);
-		}
+		int[] count = new int[times.length];
 		
-		int index=0;
-		
+		Loop1:
 		while(list.size()<n) {
-			if(list.get(index)==1) {
+			for(int i=0; i<times.length; i++) {
+				if(list.size()>=n) {
+					break Loop1;
+				}
+				
+				long temp = times[i]*++count[i];
+				list.add(temp);
+				
+				if(i==times.length-1) {
+					continue;
+				}
+				
+				if(temp+times[i]<times[i+1]*(count[i+1]+1)) {
+					while(temp+times[i]<times[i+1]*(count[i+1]+1)) {
+						temp = times[i]*++count[i];
+						list.add(temp);
+					}
+				}
 				
 			}
-			
-		
 		}
 		
-		
-		return 0;
+		return list.get(n-1);
 	}
 }
