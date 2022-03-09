@@ -2,25 +2,26 @@ package programmers.level3;
 
 import java.util.ArrayDeque;
 import java.util.Arrays;
-import java.util.Deque;
+import java.util.Comparator;
 
 public class 이중우선순위큐 {
 
 	public static void main(String[] args) {
-		String[] operations = {"I 16", "I -5643", "D -1", "D 1", "D 1", "I 123", "D -1"};
+		String[] operations = {"I -45", "I 653", "D 1", "I -642", "I 45", "I 97", "D 1", "D -1", "I 333"};
 		int[] answer = solution(operations);
 		System.out.println(Arrays.toString(answer));
 	}
 	
 	public static int[] solution(String[] operations) {
-		Deque<Integer> deque = new ArrayDeque<>();
+		PriorityDeque<Integer> deque = new PriorityDeque<Integer>();
 		
 		for(String operation : operations) {
 			String[] temp = operation.split(" ");
 			
 			if(temp[0].equals("I")) {
 				int value = Integer.parseInt(temp[1]);
-				deque.add(value);
+				deque.offer(value);
+				deque.sort(null);
 			}else if(temp[0].equals("D")) {
 				if(deque.isEmpty()) continue;
 				
@@ -35,10 +36,24 @@ public class 이중우선순위큐 {
 		int[] answer = new int[2];
 		
 		if(!deque.isEmpty()) {
-			answer[0] = deque.pollFirst();
-			answer[1] = deque.pollLast();
+			answer[0] = deque.pollLast();
+			answer[1] = deque.pollFirst();
 		}
 		
 		return answer;
+	}
+	
+	static class PriorityDeque<Integer> extends ArrayDeque<Integer>{
+		public void sort(Comparator<Integer> c) {
+			Object[] array = toArray();
+			
+			Arrays.sort(array);
+			
+			clear();
+			
+			for(Object temp : array) {
+				this.add((Integer) temp);
+			}
+		}
 	}
 }
