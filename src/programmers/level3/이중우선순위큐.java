@@ -43,7 +43,13 @@ public class 이중우선순위큐 {
 		return answer;
 	}
 	
-	static class PriorityDeque<Integer> extends ArrayDeque<Integer>{
+	static class PriorityDeque<T> extends ArrayDeque<Integer>{
+
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+
 		public void sort(Comparator<Integer> c) {
 			Object[] array = toArray();
 			
