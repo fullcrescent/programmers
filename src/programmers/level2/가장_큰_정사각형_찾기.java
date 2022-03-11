@@ -6,6 +6,10 @@ public class 가장_큰_정사각형_찾기 {
 		int[][] board = {{1,1,1,1,1,1,1,1},{1,1,0,1,0,1,1,1},{0,0,0,1,1,1,1,1}};
 		int answer = solution(board);
 		System.out.println(answer);
+		
+		int[][] board1 = {{1,1,1,1,1,1,1,1},{1,1,0,1,0,1,1,1},{0,0,0,1,1,1,1,1}};
+		int answer1 = solution1(board1);
+		System.out.println(answer1);
 	}
 
 	public static int solution(int[][] board) {
@@ -41,4 +45,17 @@ public class 가장_큰_정사각형_찾기 {
 		return (int) Math.pow(answer, 2);
 	}
 	
+	// 다른 사람의 풀이 참고
+	public static int solution1(int[][] board) {
+		int answer =0;
+		for(int i=0; i<board.length; i++) {
+			for(int j=0; j<board[i].length; j++) {
+				if(board[i][j]>0) {
+					board[i][j] = Math.min(Math.min(j>0 ? board[i][j-1]:0, i>0 ? board[i-1][j] : 0), i>0&&j>0 ? board[i-1][j-1] : 0) + 1;
+					answer = Math.max(answer, board[i][j]);
+				}
+			}
+		}
+		return (int) Math.pow(answer, 2);
+	}
 }
