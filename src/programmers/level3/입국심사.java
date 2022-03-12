@@ -1,49 +1,35 @@
 package programmers.level3;
 
 import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
 
 public class 입국심사 {
 
 	public static void main(String[] args) {
-		int n = 18;
+		int n = 19;
 		int[] times = {7, 10};
 		long answer = solution(n, times);
 		System.out.println(answer);
 	}
 	
 	public static long solution(int n, int[] times) {
-		List<Long> list = new LinkedList<>();
-		
 		Arrays.sort(times);
 		
-		int[] count = new int[times.length];
+		int time = 0;
+		int index = 0;
+		int sum =0;
 		
-		Loop1:
-		while(list.size()<n) {
+		while(sum!=n) {
+			sum = 0;
+			time += times[index]; 
 			for(int i=0; i<times.length; i++) {
-				if(list.size()>=n) {
-					break Loop1;
-				}
-				
-				long temp = times[i]*++count[i];
-				list.add(temp);
-				
-				if(i==times.length-1) {
-					continue;
-				}
-				
-				if(temp+times[i]<times[i+1]*(count[i+1]+1)) {
-					while(temp+times[i]<times[i+1]*(count[i+1]+1)) {
-						temp = times[i]*++count[i];
-						list.add(temp);
-					}
-				}
-				
+				sum += time/times[i];
+			}
+			
+			if(sum>n) {
+				time -= 2*times[index++];
 			}
 		}
 		
-		return list.get(n-1);
+		return time;
 	}
 }
