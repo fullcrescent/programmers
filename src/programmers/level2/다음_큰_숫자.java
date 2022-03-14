@@ -63,7 +63,6 @@ public class 다음_큰_숫자 {
 		while(count!=Integer.bitCount(n)) {
 			n++;
 		}
-		
 		return n;
 	}
 }
