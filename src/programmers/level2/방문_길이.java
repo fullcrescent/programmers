@@ -1,7 +1,11 @@
 package programmers.level2;
 
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public class 방문_길이 {
 
@@ -9,6 +13,10 @@ public class 방문_길이 {
 		String dirs = "LULLLLLLU";
 		int answer = solution(dirs);
 		System.out.println(answer);
+		
+		String dirs1 = "LULLLLLLU";
+		int answer1 = solution1(dirs1);
+		System.out.println(answer1);
 	}
 
 	public static int solution(String dirs) {
@@ -64,6 +72,45 @@ public class 방문_길이 {
 			this.x2 = x2;
 			this.y2 = y2;
 		}
+	}
+	
+	// 다른 사람의 풀이 참고
+	public static int solution1(String dirs) {
+		Map<Character, int[]> map = new HashMap<>();
+		map.put('U', new int[] {0, 1});
+		map.put('D', new int[] {0, -1});
+		map.put('L', new int[] {-1, 0});
+		map.put('R', new int[] {1, 0});
+		
+		int x = 0;
+		int y = 0;
+		
+		Set<String> set = new HashSet<>();
+		
+		for(int i=0; i<dirs.length(); i++) {
+			char temp = dirs.charAt(i);
+			
+			String s1 = x+""+y;
+			
+			x += map.get(temp)[0];
+			y += map.get(temp)[1];
+			
+			if(x<-5 || x>5) {
+				x -= map.get(dirs.charAt(i))[0];
+				continue;
+			}
+			if(y<-5 || y>5) {
+				y -= map.get(dirs.charAt(i))[1];
+				continue;
+			}
+			
+			String s2 = x+""+y;
+			
+			set.add(s1+s2);
+			set.add(s2+s1);
+		}
+		
+		return set.size()/2;
 	}
 }
 
