@@ -7,6 +7,11 @@ public class 스킬트리 {
 		String[] skill_trees = {"BACDE", "CBADF", "AECB", "BDA"};
 		int answer = solution(skill, skill_trees);
 		System.out.println(answer);
+		
+		String skill1 = "CBD";
+		String[] skill_trees1 = {"BACDE", "CBADF", "AECB", "BDA"};
+		int answer1 = solution1(skill1, skill_trees1);
+		System.out.println(answer1);
 	}
 	
 	public static int solution(String skill, String[] skill_trees) {
@@ -34,4 +39,16 @@ public class 스킬트리 {
         return answer;
 	}
 	
+	// 다른 사람의 풀이 참고
+	public static int solution1(String skill, String[] skill_trees) {
+		int answer = skill_trees.length;
+		
+		for(String temp : skill_trees) {
+			if(skill.indexOf(temp.replaceAll("[^" + skill + "]", ""))!=0) {
+				answer--;
+			}
+		}
+		
+		return answer;
+	}
 }
