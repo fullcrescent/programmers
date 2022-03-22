@@ -1,36 +1,75 @@
 package programmers.level3;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
 public class 일차_추석_트래픽 {
 
 	public static void main(String[] args) {
-		String[] lines = {"2016-09-15 20:59:57.421 0.351s",
-				"2016-09-15 20:59:58.233 1.181s",
-				"2016-09-15 20:59:58.299 0.8s",
-				"2016-09-15 20:59:58.688 1.041s",
-				"2016-09-15 20:59:59.591 1.412s",
-				"2016-09-15 21:00:00.464 1.466s",
-				"2016-09-15 21:00:00.741 1.581s",
-				"2016-09-15 21:00:00.748 2.31s",
-				"2016-09-15 21:00:00.966 0.381s",
-				"2016-09-15 21:00:02.066 2.62s"};
+		String[] lines = {
+				"2016-09-15 23:59:59.999 0.001s", "2016-09-15 23:59:59.999 0.001s", "2016-09-15 23:59:59.999 0.001s"
+				};
 		int answer = solution(lines);
 		System.out.println(answer);
 	}
 	
 	public static int solution(String[] lines) {
-		Map<String, Integer> map = new HashMap<>();
-		for(String temp : lines) {
-			if(map.get(temp)==null) {
-				map.put(temp, 1);
-			}else {
-				map.put(temp, map.get(temp));
+		int answer = 0;
+		Map<Integer, long[]> map = new HashMap<>();
+		
+		int index=0;
+		for(String line : lines) {
+			String[] temp = line.split(" ");
+			
+			Calendar cal = Calendar.getInstance();
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+			Date date = null;
+			try {
+				date = sdf.parse(temp[0] + " " + temp[1]);
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+			
+			cal.setTime(date);
+			long[] array = new long[2];
+			array[1] = cal.getTimeInMillis();
+			array[0] = cal.getTimeInMillis() - (long)(Double.parseDouble(temp[2].replaceAll("[a-z]", ""))*1000) + 1;
+		
+			map.put(index++, array);
+		}
+		
+		for(int key : map.keySet()) {
+			long[] temp = map.get(key);
+			
+			answer = Math.max(answer, checkTime(map, temp));
+		}
+		
+		return answer;
+	}
+
+	private static int checkTime(Map<Integer, long[]> map, long[] value) {
+		int start = 0;
+		int end = 0;
+		
+		for(int key : map.keySet()) {
+			long[] temp = map.get(key);
+			if((temp[0]<=value[0]&&value[0]<=temp[1]) || (temp[0]<=value[0]+999&&value[0]+999<=temp[1])) {
+				start++;
 			}
 		}
 		
-		return 0;
+		for(int key : map.keySet()) {
+			long[] temp = map.get(key);
+			if((temp[0]<=value[1]&&value[1]<=temp[1]) || (temp[0]<=value[1]+999&&value[1]+999<=temp[1])) {
+				end++;
+			}
+		}
+		
+		return start>end ? start : end;
 	}
 
 }
