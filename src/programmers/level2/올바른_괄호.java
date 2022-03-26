@@ -8,6 +8,10 @@ public class 올바른_괄호 {
 		String s= "()(()";
 		boolean answer = solution(s);
 		System.out.println(answer);
+		
+		String s1= "()(()";
+		boolean answer1 = solution1(s1);
+		System.out.println(answer1);
 	}
 	
 	public static boolean solution(String s) {
@@ -25,5 +29,23 @@ public class 올바른_괄호 {
 		}
 		
 		return stack.isEmpty();
+	}
+	
+	// 다른 사람의 풀이 참고
+	public static boolean solution1(String s) {
+		int count = 0;
+		
+		for(char temp : s.toCharArray()) {
+			if(temp=='(') {
+				count++;
+			}else {
+				count--;
+			}
+			if(count<0) {
+				return false;
+			}
+		}
+		
+		return count==0;
 	}
 }
