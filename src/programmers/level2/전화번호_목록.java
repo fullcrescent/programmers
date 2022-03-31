@@ -2,6 +2,8 @@ package programmers.level2;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 public class 전화번호_목록 {
 	public static void main(String args[]) {
@@ -12,6 +14,10 @@ public class 전화번호_목록 {
 		String[] phone_book1 = {"119", "97674223", "1195524421"};
 		boolean answer1 = solution1(phone_book1);
 		System.out.println(answer1);
+		
+		String[] phone_book2 = {"119", "97674223", "1195524421"};
+		boolean answer2 = solution2(phone_book2);
+		System.out.println(answer2);
 	}
 	
 	public static boolean solution(String[] phone_book) {
@@ -36,6 +42,24 @@ public class 전화번호_목록 {
 			}
 		}
 
+		return true;
+    }
+	
+	public static boolean solution2(String[] phone_book) {
+		Map<String, Integer> map = new HashMap<>();
+		
+		for(String temp : phone_book) {
+			map.put(temp, 1);
+		}
+		
+		for(String temp : map.keySet()) {
+			for(int i=1; i<temp.length();i++) {
+				if(map.containsKey(temp.substring(0, i))) {
+					return false;
+				}
+			}
+		}
+		
 		return true;
     }
 }
