@@ -3,9 +3,13 @@ package programmers.level2;
 public class 조이스틱 {
 
 	public static void main(String[] args) {
-		String name = "JEROEN";
+		String name = "AAAABBBBBBBAA";
 		int answer = solution(name);
 		System.out.println(answer);
+		
+		String name1 = "AAAABBBBBBBAA";
+		int answer1 = solution1(name1);
+		System.out.println(answer1);
 	}
 
 	public static int solution(String name) {
@@ -56,5 +60,26 @@ public class 조이스틱 {
 		}
 		
 		return answer;
+	}
+	
+	// 다른 사람의 풀이 참고
+	public static int solution1(String name) {
+		int answer = 0;
+
+		for(char temp : name.toCharArray()) {
+			answer += temp-'A'>12 ? 26-temp+'A' : temp-'A';
+		}
+		
+		int min = name.length()-1;
+		
+		for(int i=0; i<name.length(); i++) {
+			int next = i+1;
+			while(next<name.length()&&name.charAt(next)=='A') {
+				next++;
+			}
+			min = Math.min(min, i+name.length()-next+Math.min(i, name.length()-next));
+		}
+		
+		return answer+min;
 	}
 }
