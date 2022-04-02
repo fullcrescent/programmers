@@ -11,6 +11,11 @@ public class 카펫 {
 		int yellow = 24;
 		int[] answer = solution(brown, yellow);
 		System.out.println(Arrays.toString(answer));
+		
+		int brown1 = 24;
+		int yellow1 = 24;
+		int[] answer1 = solution1(brown1, yellow1);
+		System.out.println(Arrays.toString(answer1));
 	}
 
 	public static int[] solution(int brown, int yellow) {
@@ -46,5 +51,12 @@ public class 카펫 {
 		
 		return answer;
 	}
-
+	
+	// 다른 사람의 풀이 참고
+	public static int[] solution1(int brown, int yellow) {
+		int a = (brown+4)/2;
+		int b = yellow+brown;
+		
+		return new int[] {(int) (a+Math.sqrt(a*a-4*b))/2, (int) (a-Math.sqrt(a*a-4*b))/2};
+	}
 }
