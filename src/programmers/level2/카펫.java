@@ -54,9 +54,10 @@ public class 카펫 {
 	
 	// 다른 사람의 풀이 참고
 	public static int[] solution1(int brown, int yellow) {
-		int a = (brown+4)/2;
-		int b = yellow+brown;
+		int a = 1;
+		int b = (brown+4)/2;		// 가로 + 세로
+		int c = yellow+brown;		// 가로 * 세로
 		
-		return new int[] {(int) (a+Math.sqrt(a*a-4*b))/2, (int) (a-Math.sqrt(a*a-4*b))/2};
+		return new int[] {(int) (b+Math.sqrt(b*b-4*a*c))/2*a, (int) (b-Math.sqrt(b*b-4*a*c))/2*a};
 	}
 }
