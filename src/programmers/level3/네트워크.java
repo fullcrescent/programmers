@@ -40,7 +40,6 @@ public class 네트워크 {
 			answer++;
 		}
 		
-		
 		return answer;
 	}
 }
