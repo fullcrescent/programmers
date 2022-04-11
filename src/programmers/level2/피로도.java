@@ -7,6 +7,11 @@ public class 피로도 {
 		int[][] dungeons = {{80,20},{50,40},{30,10}};
 		int answer = solution(k, dungeons);
 		System.out.println(answer);
+		
+		int k1 = 80;
+		int[][] dungeons1 = {{80,20},{50,40},{30,10}};
+		int answer1 = solution1(k1, dungeons1);
+		System.out.println(answer1);
 	}
 	
 	public static int solution(int k, int[][] dungeons) {
@@ -43,5 +48,25 @@ public class 피로도 {
 			adventure(k, dungeons, visit, i, count);
 			visit[i]=false;
 		}
+	}
+	
+	// 다른 사람의 풀이 참고
+	public static int solution1(int k, int[][] dungeons) {
+		return dfs(k, dungeons);
+	}
+
+	private static int dfs(int k, int[][] dungeons) {
+		int answer = 0;
+		
+		for(int[] temp : dungeons) {
+			int swap = temp[0];
+			if(temp[0]<=k) {
+				temp[0] = 5000;
+				answer = Math.max(1+dfs(k-temp[1], dungeons), answer);
+				temp[0] = swap;
+			}
+		}
+		
+		return answer;
 	}
 }
