@@ -6,7 +6,7 @@ import java.util.Comparator;
 public class 입국심사 {
 
 	public static void main(String[] args) {
-		int n = 12;
+		int n = 13;
 		int[] times = {7, 10,12};
 		long answer = solution(n, times);
 		System.out.println(answer);
@@ -14,7 +14,7 @@ public class 입국심사 {
 	
 	public static long solution(int n, int[] times) {
 		long lcm = 1;
-		int count = n;
+		
 		for(long time : times) {
 			lcm = lcm(lcm, time);
 		}
@@ -31,31 +31,65 @@ public class 입국심사 {
 		Object[] array = new Object[times.length];
 		
 		for(int i=0; i<times.length; i++) {
-			Object[] temp = new Object[3];
+			long[] temp = new long[2];
 			double time = (double)((long)n*ratioArray[i])/sum;
 			
-			temp[0] = (long)times[i];
+			temp[0] = times[i];
 			temp[1] = (long)time;
-			count -= (long)time;
-			temp[2] = time - (long)time;
+			n -= temp[1];
 			
 			array[i] = temp;
 		}
 		
-		Arrays.sort(array, new Comparator<Object>() {
-			@Override
-			public int compare(Object i1, Object i2) {
-				Object[] temp1 = (Object[]) i1;
-				Object[] temp2 = (Object[]) i2;
-				
-				return Long.compare((long)temp1[0] * ((long)temp1[1]+1), (long)temp2[0] * ((long)temp2[1]+1));
-			}
-		});
-		
 		long answer = 0;
 		
-		Object[] temp = (Object[]) array[(count-1)%times.length];
-		answer =  (long)temp[0] * ((long)temp[1]+1);
+		if(n==0) {
+			Arrays.sort(array, new Comparator<Object>() {
+				@Override
+				public int compare(Object i1, Object i2) {
+					long[] temp1 = (long[]) i1;
+					long[] temp2 = (long[]) i2;
+					
+					return Long.compare(temp1[0] * temp1[1], temp2[0] * temp2[1]);
+				}
+			});
+			
+			long[] temp = (long[]) array[array.length-1];
+			answer =  temp[0] * temp[1];
+			
+		}else {
+			Arrays.sort(array, new Comparator<Object>() {
+				@Override
+				public int compare(Object i1, Object i2) {
+					long[] temp1 = (long[]) i1;
+					long[] temp2 = (long[]) i2;
+					
+					return Long.compare(temp1[0] * (temp1[1]+1), temp2[0] * (temp2[1]+1));
+				}
+			});
+			
+			int index=0;
+			int count = 1;
+			
+			while(n>0) {
+				n--;
+				
+				long[] temp1 = (long[]) array[index];
+				long[] temp2 = (long[]) array[index+1];
+				
+				long value1 = temp1[0] * (temp1[1]+count);
+				long value2 = temp2[0] * (temp2[1]+1);
+				
+				if(value1<value2) {
+					count++;
+					answer = value1;
+				}else {
+					index++;
+					count=1;
+					answer = value2;
+				}
+			}
+		}
 		
 		return answer;
 	}
