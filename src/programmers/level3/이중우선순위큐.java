@@ -4,6 +4,8 @@ import java.util.ArrayDeque;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Queue;
 
@@ -75,30 +77,61 @@ public class 이중우선순위큐 {
 		Queue<Integer> pq = new PriorityQueue<Integer>();
 		Queue<Integer> reverse_pq = new PriorityQueue<Integer>(Collections.reverseOrder());
 		
+		Map<Integer, Integer> map = new HashMap<>();		// 속도를 위해서 추가
+		
 		for(String operation : operations) {
 			String[] temp = operation.split(" ");
 			
+			int input = Integer.parseInt(temp[1]);
+			
 			if(temp[0].equals("I")) {
-				pq.add(Integer.parseInt(temp[1]));
-				reverse_pq.add(Integer.parseInt(temp[1]));
+				pq.add(input);
+				reverse_pq.add(input);
+				
+				map.put(input, map.getOrDefault(input, 0)+1);
 			}else if(temp[0].equals("D")) {
-				if(!pq.isEmpty()) {
-					if(temp[1].equals("1")) {
-						pq.remove(reverse_pq.poll());
-					}else {
-						reverse_pq.remove(pq.poll());
-					}
+				if(input==1) {
+					remove(reverse_pq, map);
+				}else {
+					remove(pq, map);
 				}
+			}
+		}
+		
+		if(map.keySet().size()==0) return new int[2]; 	// 키가 하나도 안 들어오는 경우 처리
+		
+		int max = Collections.min(map.keySet());
+		int min = Collections.max(map.keySet());
+		int size = 0;
+		
+		for(int key : map.keySet()) {
+			int temp = map.get(key);
+			
+			if(temp>=1) {
+				max = Math.max(max, key);
+				min = Math.min(min, key);
+				size++;
 			}
 		}
 		
 		int[] answer = new int[2];
 		
-		if(!pq.isEmpty()) {
-			answer[0] = reverse_pq.poll();
-			answer[1] = pq.poll();
+		if(size!=0) {
+			answer[0] = max;
+			answer[1] = min;
 		}
 		
 		return answer;
+	}
+
+	private static void remove(Queue<Integer> queue, Map<Integer, Integer> map) {
+		while(!queue.isEmpty()) {
+			int temp = queue.poll();
+			
+			if(map.getOrDefault(temp, 0)==0) continue;			// 0일 경우 다음 숫자로 넘어감
+			
+			map.put(temp, map.get(temp)-1);
+			break;
+		}
 	}
 }
