@@ -58,4 +58,5 @@ public class 가장_큰_정사각형_찾기 {
 		}
 		return (int) Math.pow(answer, 2);
 	}
+	
 }
