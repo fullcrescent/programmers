@@ -7,6 +7,11 @@ public class 단체사진_찍기 {
 		String[] data = {"N~F=0", "R~T>2"};
 		int answer = solution(n, data);
 		System.out.println(answer);
+		
+		int n1 = 2;
+		String[] data1 = {"N~F=0", "R~T>2"};
+		int answer1 = solution1(n1, data1);
+		System.out.println(answer1);
 	}
 	
 	public static int solution(int n, String[] data) {
@@ -66,5 +71,15 @@ public class 단체사진_찍기 {
 		}
 		
 		return true;
+	}
+	
+	// 다른 사람의 풀이 참고 - 변경X
+	public static int solution1(int n, String[] data) {
+		answer = 0;
+		boolean[] visit = new boolean[8];
+		
+		dfs(visit, data, new StringBuilder(), 0);
+		
+		return answer;
 	}
 }
