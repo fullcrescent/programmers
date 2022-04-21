@@ -24,6 +24,7 @@ public class 순위 {
 		}
 		
 		List<Integer> list = new ArrayList<>(map.keySet());
+		
 		list.sort((i1, i2) -> -Integer.compare(map.get(i1), map.get(i2)));
 		
 		int tempValue = list.get(0);
