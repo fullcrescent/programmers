@@ -9,6 +9,11 @@ public class 양궁대회 {
 		int[] info = {2,1,1,1,0,0,0,0,0,0,0};
 		int[] answer = solution(n, info);
 		System.out.println(Arrays.toString(answer));
+		
+		int n1 = 5;
+		int[] info1 = {2,1,1,1,0,0,0,0,0,0,0};
+		int[] answer1 = solution1(n1, info1);
+		System.out.println(Arrays.toString(answer1));
 	}
 	
 	public static int[] solution(int n, int[] info) {
@@ -87,5 +92,23 @@ public class 양궁대회 {
 				}
 			}
 		}
+	}
+	
+	// 다른 사람의 풀이 참고
+	public static int[] solution1(int n, int[] info) {
+		for(int i=0; i<1<<arrow; i++) {
+			if(Integer.bitCount(i)<n) find(n, i, info);
+		}
+		
+		return max==0 ? new int[] {-1} : answer1;
+	}
+	
+	static int arrow = 11;
+	static int[] answer1;
+	static int max1 = 0;
+	
+	private static void find(int n, int i, int[] info) {
+		int score = 0;
+		int[] state = new int[arrow];
 	}
 }
