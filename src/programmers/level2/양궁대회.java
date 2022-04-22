@@ -96,19 +96,45 @@ public class 양궁대회 {
 	
 	// 다른 사람의 풀이 참고
 	public static int[] solution1(int n, int[] info) {
-		for(int i=0; i<1<<arrow; i++) {
-			if(Integer.bitCount(i)<n) find(n, i, info);
+		for(int i=0; i<1<<scoreRange; i++) {
+			if(Integer.bitCount(i)<=n) find(n, i, info);
 		}
 		
-		return max==0 ? new int[] {-1} : answer1;
+		return max1==0 ? new int[] {-1} : answer1;
 	}
 	
-	static int arrow = 11;
 	static int[] answer1;
-	static int max1 = 0;
+	static int scoreRange = 11;
+	static int max1;
 	
-	private static void find(int n, int i, int[] info) {
+	private static void find(int n, int value, int[] info) {
 		int score = 0;
-		int[] state = new int[arrow];
+		int[] state = new int[scoreRange];
+		
+		for(int i=1; i<=10; i++) {
+			if((value&1<<i)>0){
+				n -= state[10-i] = info[10-i]+1;
+				if(n<0) return;
+				
+				score += i;
+			}else if(info[10-i]>0) score -= i;
+		}
+		
+		if(score<=0)	return;
+		
+		state[10] = n;
+		
+		if(max1<score) {
+			max1 = score;
+			answer1 = state;
+		}else if(max1==score){
+			for(int i=10; i>=0; i--) {
+				if(answer1[i]!=state[i]) {
+					if(answer1[i]<state[i]) answer1 = state;
+					
+					return;
+				}
+			}
+		}
 	}
 }
