@@ -12,6 +12,11 @@ public class 전력망을_둘로_나누기 {
 		int[][] wires = {{1,3},{2,3},{3,4},{4,5},{4,6},{4,7},{7,8},{7,9}};
 		int answer = solution(n, wires);
 		System.out.println(answer);
+		
+		int n1 = 9;
+		int[][] wires1 = {{1,3},{2,3},{3,4},{4,5},{4,6},{4,7},{7,8},{7,9}};
+		int answer1 = solution1(n1, wires1);
+		System.out.println(answer1);
 	}
 	
 	public static int solution(int n, int[][] wires) {
@@ -65,4 +70,33 @@ public class 전력망을_둘로_나누기 {
 		return divideCount;
 	}
 
+	// 다른 사람의 풀이 참고
+	public static int solution1(int n, int[][] wires) {
+		boolean[][] temp = new boolean[n+1][n+1];
+		boolean[] visit = new boolean[n+1];
+		
+		min = n;
+		
+		for(int[] wire : wires) {
+			temp[wire[0]][wire[1]] = temp[wire[1]][wire[0]] = true;
+		}
+		
+		dfs(1, n, temp, visit);
+		
+		return min; 
+	}
+	
+	static int min;
+
+	private static int dfs(int start, int n, boolean[][] temp, boolean[] visit) {
+		visit[start] = true;
+		int child = 1;
+		
+		for(int i=1; i<=n; i++) {
+			if(!visit[i]&&temp[start][i]) child += dfs(i, n, temp, visit);
+		}
+		
+		min = Math.min(min, Math.abs(2*child - n));
+		return child;
+	}
 }
