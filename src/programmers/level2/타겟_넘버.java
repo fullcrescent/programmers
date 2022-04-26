@@ -10,8 +10,8 @@ public class 타겟_넘버 {
 		
 		int[] numbers1 = {1, 1, 1, 1, 1};
 		int target1 = 3;
-		int answer1 = solution1(numbers, target);
-		System.out.println(answer);
+		int answer1 = solution1(numbers1, target1);
+		System.out.println(answer1);
 	}
 	
 	public static int solution(int[] numbers, int target) {
