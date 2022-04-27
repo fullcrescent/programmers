@@ -8,6 +8,10 @@ public class 쿼드압축_후_개수_세기 {
 		int[][] arr = {{1,1,0,0},{1,0,0,0},{1,0,0,1},{1,1,1,1}};
 		int[] answer = solution(arr);
 		System.out.println(Arrays.toString(answer));
+		
+		int[][] arr1 = {{1,1,0,0},{1,0,0,0},{1,0,0,1},{1,1,1,1}};
+		int[] answer1 = solution1(arr1);
+		System.out.println(Arrays.toString(answer1));
 	}
 	
 	public static int[] solution(int[][] arr) {
@@ -64,4 +68,35 @@ public class 쿼드압축_후_개수_세기 {
 			quadCompress(arr, (x1+x2)/2, (y1+y2)/2, x2, y2);
 		}
 	}
+	
+	// 다른 사람의 풀이 참고
+	public static int[] solution1(int[][] arr) {
+		quadCompress1(arr, 0, 0, arr.length, arr.length);
+
+		return new int[] {answer0, answer1}; 
+	}
+	
+	static int answer0 = 0;
+	static int answer1 = 0;
+	
+	private static void quadCompress1(int[][] arr, int x1, int y1, int x2, int y2) {
+		int oneCount = 0;
+		int max = (int) Math.pow(x2-x1, 2);
+		
+		for(int i=x1; i<x2; i++) {
+			for(int j=y1; j<y2; j++) {
+				oneCount += arr[i][j];
+			}
+		}
+		
+		if(oneCount==0) answer0++;
+		else if(oneCount==max) answer1++;
+		else {
+			quadCompress1(arr, x1, y1, (x1+x2)/2, (y1+y2)/2);
+			quadCompress1(arr, (x1+x2)/2, y1, x2, (y1+y2)/2);
+			quadCompress1(arr, x1, (y1+y2)/2, (x1+x2)/2, y2);
+			quadCompress1(arr, (x1+x2)/2, (y1+y2)/2, x2, y2);
+		}
+	}
+
 }
