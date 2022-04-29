@@ -73,11 +73,13 @@ public class 행렬_테두리_회전하기 {
 	public static int[] solution1(int rows, int columns, int[][] queries) {
 		int[] answer = new int[queries.length];
 		
-		int[][] array = new int[rows][columns];
+		int[][] array = new int[rows+1][columns+1];
 		
-		for(int i=0; i<rows; i++) {
-			for(int j=0; j<columns; j++) {
-				array[i][j] = i*columns + (j+1); 
+		int index = 1;
+		
+		for(int i=1; i<=rows; i++) {
+			for(int j=1; j<=columns; j++) {
+				array[i][j] = index++; 
 			}
 		}
 		
