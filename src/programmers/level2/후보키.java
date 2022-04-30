@@ -1,10 +1,13 @@
 package programmers.level2;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class 후보키 {
 
@@ -23,6 +26,12 @@ public class 후보키 {
 				,{"bbb","a","b2c"}};
 		int answer = solution(relation);
 		System.out.println(answer);
+		
+		String[][] relation1 = {
+				{"aaa","a2b","c"}
+				,{"bbb","a","b2c"}};
+		int answer1 = solution1(relation1);
+		System.out.println(answer1);
 	}
 
 	public static int solution(String[][] relation) {
@@ -110,5 +119,38 @@ public class 후보키 {
 			visit[i] = false;	
 		}
 	}
+	
+	// 다른 사람의 풀이 참고
+	public static int solution1(String[][] relation) {
+		List<Integer> list = new ArrayList<>();
+		
+		for(int i=1; i<(1<<relation[0].length); i++) {			// 조합의 합
+			Set<String> set = new HashSet<>();
+			
+			for(int j=0; j<relation.length; j++) {
+				String now = "";
+				
+				for(int k=0; k<relation[j].length; k++) {
+					System.out.println(i);
+					System.out.println((1<<k));
+					System.out.println(i & (1<<k));
+					if((i & (1<<k)) > 0) now += relation[j][k];
+				}
 
+				set.add(now);
+			}
+			if(set.size() == relation.length && possible(list, i)) list.add(i);
+		}
+		
+		return list.size();
+	}
+
+	private static boolean possible(List<Integer> list, int now) {
+		for(int i=0; i<list.size(); i++) {
+			if((list.get(i)&now) == list.get(i)) return false;
+		}
+		
+		return true;
+	}
+	
 }
