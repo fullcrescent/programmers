@@ -8,6 +8,12 @@ public class 프렌즈4블록 {
 		String[] board = {"CCBDE", "AAADE", "AAABF", "CCBBF"};
 		int answer = solution(m, n, board);
 		System.out.println(answer);
+		
+		int m1 = 4;
+		int n1 = 5; 
+		String[] board1 = {"CCBDE", "AAADE", "AAABF", "CCBBF"};
+		int answer1 = solution1(m1, n1, board1);
+		System.out.println(answer1);
 	}
 	
 	public static int solution(int m, int n, String[] board) {
@@ -86,5 +92,64 @@ public class 프렌즈4블록 {
 				delete[i+dx[index]][j+dy[index]] = true;
 			}
 		}
+	}
+	
+	// 다른 사람의 풀이 참고
+	public static int solution1(int m, int n, String[] board) {
+		int answer = 0;
+		int prevAnswer = -1;
+		
+		char[][] boardArray = new char[m+2][n+2];
+		
+		for(int i=0; i<m; i++) {
+			for(int j=0; j<n; j++) {
+				boardArray[i][j] = board[i].charAt(j);
+			}
+		}
+		
+		while(true) {
+			if(answer==prevAnswer) break;
+			
+			prevAnswer = answer;
+			
+			boolean[][] boardClean = new boolean[m+2][n+2];
+			
+			for(int i=0; i<m; i++) {
+				for(int j=0; j<n; j++) {
+					if(boardArray[i][j]!=' '
+							&&boardArray[i][j]==boardArray[i+1][j]
+							&&boardArray[i][j]==boardArray[i][j+1]
+							&&boardArray[i][j]==boardArray[i+1][j+1]) {
+						boardClean[i][j] = true;
+						boardClean[i+1][j] = true;
+						boardClean[i][j+1] = true;
+						boardClean[i+1][j+1] = true;
+					}
+				}
+			}
+			
+			for(int i=0; i<m; i++) {
+				for(int j=0; j<n; j++) {
+					if(boardClean[i][j]) {
+						boardArray[i][j] = ' ';
+						answer++;
+						boardClean[i][j] = false;
+					}
+				}
+			}
+			
+			for(int k=0; k<m; k++) {
+				for(int i=m; i>0; i--) {
+					for(int j=0; j<n; j++) {
+						if(boardArray[i][j]==' ') {
+							boardArray[i][j] = boardArray[i-1][j];
+							boardArray[i-1][j] = ' ';
+						}
+					}
+				}
+			}
+		}
+		
+		return answer;
 	}
 }
