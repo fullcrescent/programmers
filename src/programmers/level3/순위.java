@@ -16,33 +16,60 @@ public class 순위 {
 	
 	public static int solution(int n, int[][] results) {
 		int answer = 0;
-		Map<Integer, Integer> map = new HashMap<>();
+		Map<Integer, List<Integer>> winMap = new HashMap<>();
+		Map<Integer, List<Integer>> loseMap = new HashMap<>();
 		
 		for(int[] temp : results) {
-			map.put(temp[0], map.getOrDefault(temp[1], 0)+1);
-			map.put(temp[1], map.getOrDefault(temp[1], 0));
+			List<Integer> tempList = winMap.getOrDefault(temp[0], new ArrayList<>());
+			tempList.add(temp[1]);
+			winMap.put(temp[0], tempList);
+			
+			tempList = loseMap.getOrDefault(temp[1], new ArrayList<>());
+			tempList.add(temp[0]);
+			loseMap.put(temp[1], tempList);
 		}
 		
-		List<Integer> list = new ArrayList<>(map.keySet());
-		
-		list.sort((i1, i2) -> -Integer.compare(map.get(i1), map.get(i2)));
-		
-		int tempValue = list.get(0);
-		int count =0;
-		for(int i=1; i<list.size(); i++) {
-			if(tempValue!=map.get(list.get(i))) {
-				if(count==0) {
-					answer++;
+		for(int i=1; i<n+1; i++) {
+			boolean[] visit = new boolean[n+1];
+			visit[i] = true;
+			
+			
+			find(winMap, i, visit);
+			find(loseMap, i, visit);
+			
+			boolean flag = true;
+			
+			for(int k=1; k<n+1; k++) {
+				if(!visit[k]) {
+					flag = false;
+					break;
 				}
-				tempValue = map.get(list.get(i));
-				count = 0;
-			}else {
-				count++;
 			}
+			
+			if(flag) answer++;
 		}
-		
-		if(count==0) answer++;
 		
 		return answer;
+	}
+
+	private static void find(Map<Integer, List<Integer>> map, int i, boolean[] visit) {
+		List<Integer> tempList = new ArrayList<>();
+		
+		for(int temp : map.getOrDefault(i, new ArrayList<>())) {
+			tempList.add(temp);
+		}
+		
+		int index = 0;
+		
+		while(!tempList.isEmpty() && index<tempList.size()) {
+			int temp = tempList.get(index++);
+			
+			if(visit[temp]) continue;
+			
+			visit[temp] = true;
+			if(map.get(temp)!=null) {
+				tempList.addAll(map.get(temp));
+			}
+		}
 	}
 }
