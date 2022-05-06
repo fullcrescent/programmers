@@ -1,15 +1,13 @@
 package programmers.level3;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.Arrays;
 import java.util.PriorityQueue;
 import java.util.Queue;
 
 public class 디스크_컨트롤러 {
 
 	public static void main(String[] args) {
-		int[][] jobs = {{0, 3}, {10, 20}, {2, 6}};
+		int[][] jobs = {{0, 20}, {0,10}};
 		int answer = solution(jobs);
 		System.out.println(answer);
 	}
@@ -17,43 +15,35 @@ public class 디스크_컨트롤러 {
 	public static int solution(int[][] jobs) {
 		int answer = 0;
 		
-		List<int[]> list = new ArrayList<>();
-		
-		for(int[] temp : jobs) {
-			int[] tempArray = new int[3];
-			tempArray[0] = temp[0];
-			tempArray[1] = temp[1];
-			list.add(tempArray);
-		}
+		Arrays.sort(jobs, (i1, i2)->{
+			if(i1[0]!=i2[0]) return Integer.compare(i1[0], i2[0]);
+
+			return Integer.compare(i1[1], i2[1]);
+		});
 		
 		Queue<int[]> queue = new PriorityQueue<>((i1, i2) -> Integer.compare(i1[1], i2[1]));
+		int index = 0;
 		
+		queue.add(jobs[index]);
 		
-		while(!list.isEmpty()) {
-			list.get(0)[2] = list.get(0)[1];
-			queue.add(list.get(0));
-			list.remove(0);
-			
-			while(!queue.isEmpty()) {
-				int[] value = queue.poll();
-				answer += value[2]-value[0];
+		int time = jobs[index][0];
+		
+		while(index<jobs.length) {
+			if(!queue.isEmpty()) {
+				int[] temp = queue.poll();
 				
-				Iterator<int[]> iter = list.iterator();
+				time += temp[1];
+				answer += time - temp[0];
 				
-				while(iter.hasNext()){
-					int[] temp = iter.next();
-					
-					if(temp[0]<=value[1]) {
-						queue.add(temp);
-						iter.remove();
-					}
+				while(index+1<jobs.length && jobs[index+1][0]<time) {
+					queue.add(jobs[++index]);
 				}
-				
-				iter = queue.iterator();
-				while(iter.hasNext()){
-					int[] temp = iter.next();
-					temp[2] = temp[1]+value[2];
-				}
+			}else if(index+1<jobs.length) {
+				index++;
+				time = jobs[index][0];
+				queue.add(jobs[index]);
+			}else {
+				break;
 			}
 		}
 		
