@@ -5,18 +5,20 @@ import java.util.Arrays;
 public class 숫자_게임 {
 
 	public static void main(String[] args) {
-		int[] A = {2,2,2,2};
-		int[] B = {1,1,1,1};
+		int[] A = {1,3,5,7};
+		int[] B = {0,2,6,7};
 		int answer = solution(A, B);
 		System.out.println(answer);
 	}
 
 	public static int solution(int[] A, int[] B) {
 		Arrays.sort(A);
+		Arrays.sort(B);
 		
 		boolean[] visit = new boolean[A.length];
 		
 		answer = 0;
+		max = A.length-1;
 		
 		for(int i=B.length-1; i>-1; i--) {
 			find(A, B[i], visit);
@@ -26,9 +28,14 @@ public class 숫자_게임 {
 	}
 	
 	static int answer;
+	static int max;
 	
 	private static void find(int[] A, int findValue, boolean[] visit) {
-		if(A[0]>findValue) {
+		if(A[0]>=findValue) {
+			visit[max] = true;
+			while(max>-1 && visit[max]) {
+				max--;
+			}
 			return;
 		}
 		
@@ -43,6 +50,7 @@ public class 숫자_게임 {
 				left = mid+1;
 			}else {
 				right = mid-1;
+				mid--;
 			}
 		}
 		
@@ -53,6 +61,10 @@ public class 숫자_게임 {
 		if(mid>-1) {
 			visit[mid] = true;
 			answer++;
+			
+			while(max>-1 && visit[max]) {
+				max--;
+			}
 		}
 	}
 }
