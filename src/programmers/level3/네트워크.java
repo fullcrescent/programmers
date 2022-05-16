@@ -10,6 +10,11 @@ public class 네트워크 {
 		int[][] computers = {{1, 1, 0}, {1, 1, 1}, {0, 1, 1}};
 		int answer = solution(n, computers);
 		System.out.println(answer);
+		
+		int n1 = 3;
+		int[][] computers1 = {{1, 1, 0}, {1, 1, 1}, {0, 1, 1}};
+		int answer1 = solution1(n1, computers1);
+		System.out.println(answer1);
 	}
 	
 	public static int solution(int n, int[][] computers) {
@@ -41,5 +46,30 @@ public class 네트워크 {
 		}
 		
 		return answer;
+	}
+	
+	// 다른 사람의 풀이 참고
+	public static int solution1(int n, int[][] computers) {
+		int answer = 0;
+		boolean[] visit = new boolean[n];
+		
+		for(int i=0; i<n; i++) {
+			if(!visit[i]) {
+				dfs(computers, visit, i);
+				answer++;
+			}
+		}
+		
+		return answer;
+	}
+
+	private static void dfs(int[][] computers, boolean[] visit, int index) {
+		visit[index] = true;
+		
+		for(int i=0; i<computers.length; i++) {
+			if(computers[index][i]==1 && !visit[i]) {
+				dfs(computers, visit, i);
+			}
+		}
 	}
 }
