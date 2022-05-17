@@ -5,30 +5,13 @@ import java.util.Map;
 
 public class 브라이언의_고민 {
 
-	public static void main(String[] args) {
-		String sentence = "AAAaBaAbBBBBbCcBdBdBdBcCeBfBeGgGGjGjxRvRvRvRvRvRx";
+	public static void main(String[] args) throws Exception {
+		String sentence = "HELLOWbObRbLb";
 		String answer = solution(sentence);
 		System.out.println(answer);
-		
-//		System.out.println("테케");
-//		System.out.println(solution("HaEaLaLaObWORLDb"));
-//		System.out.println(solution("SpIpGpOpNpGJqOqA"));
-//		System.out.println(solution("AxAxAxAoBoBoB"));
-//		System.out.println(solution("aIaAM"));
-//		System.out.println(solution("AAAaBaAbBBBBbCcBdBdBdBcCeBfBeGgGGjGjGRvRvRvRvRvR"));
-//		System.out.println(solution("aaA"));
-//		System.out.println(solution("Aaa"));
-//		System.out.println(solution("HaEaLaLaOWaOaRaLaD"));
-//		System.out.println(solution("aHELLOWORLDa"));
-//		System.out.println(solution("HaEaLaLObWORLDb"));
-//		System.out.println(solution("HaEaLaLaObWORLDb"));
-//		System.out.println(solution("aHbEbLbLbOacWdOdRdLdDc"));
-//		System.out.println(solution("abAba"));
-//		System.out.println(solution("xAaAbAaAx"));
-//		System.out.println(solution("AbAaAbAaC"));
 	}
 
-	public static String solution(String sentence) {
+	public static String solution(String sentence) throws Exception{
 		Map<Character, Integer> map = new HashMap<>();
 		
 		for(char temp : sentence.toCharArray()) {
@@ -49,28 +32,23 @@ public class 브라이언의_고민 {
 			
 			if(Character.isLowerCase(temp)) {
 				int iMove = i;
+				int count = 1;
 				
-				if(map.get(temp)!=2) {					// 단어 사이사이
-					if(!flag) return "invalid";
+				iMove += 2;
+				
+				while(iMove<sentence.length() && temp==sentence.charAt(iMove)) {
+					count++;
+					if(iMove+1>=sentence.length()) break;
+					if(Character.isLowerCase(sentence.charAt(++iMove))) return "invalid";
+					iMove++;
+				}
+				
+				if(count!=map.get(temp)) {
+					if(map.get(temp)!=2) return "invalid";
 					
-					int count = 1;
+					iMove = i;
 					
-					iMove += 2;
-					
-					while(iMove<sentence.length() && temp==sentence.charAt(iMove)) {
-						count++;
-						if(Character.isLowerCase(sentence.charAt(++iMove))) return "invalid";
-						iMove++;
-					}
-					
-					if(count!=map.get(temp)) return "invalid";
-					
-					if(flag) sb.insert(sb.length()-1, " ");
-					sb.append(sentence.substring(i, iMove).replaceAll(String.valueOf(temp), "") + " ");
-					
-					i = iMove-1;
-				}else if(map.get(temp)==2) {						// 특정 단어 앞뒤
-					while(temp!=sentence.charAt(++iMove)) {}
+					while(iMove+1<sentence.length() && temp!=sentence.charAt(++iMove)) {}
 					
 					if(Character.isLowerCase(sentence.charAt(i+1))||Character.isLowerCase((sentence.charAt(iMove-1)))) return "invalid";
 					String addString = sentence.substring(i, iMove).replaceAll(String.valueOf(temp), "");
@@ -82,6 +60,13 @@ public class 브라이언의_고민 {
 					sb.append(addString.replaceAll("[a-z]", "") + " ");
 					
 					 i = iMove;
+				}else {
+					if(!flag) return "invalid";
+					
+					if(flag) sb.insert(sb.length()-1, " ");
+					sb.append(sentence.substring(i, iMove).replaceAll(String.valueOf(temp), "") + " ");
+					
+					i = iMove-1;
 				}
 				
 				flag = false;
