@@ -9,6 +9,10 @@ public class 단속카메라 {
 		int[][] routes = {{-20,-15}, {-14,-5}, {-18,-13}, {-5,-3}};
 		int answer = solution(routes);
 		System.out.println(answer);
+		
+		int[][] routes1 = {{-20,-15}, {-14,-5}, {-18,-13}, {-5,-3}};
+		int answer1 = solution1(routes1);
+		System.out.println(answer1);
 	}
 	
 	public static int solution(int[][] routes) {
@@ -38,6 +42,22 @@ public class 단속카메라 {
 			i--;
 		}
 		
+		return answer;
+	}
+	
+	// 다른 사람의 풀이 참고
+	public static int solution1(int[][] routes) {
+		Arrays.sort(routes, (i1, i2) -> Integer.compare(i1[1], i2[1]));
+		
+		int answer = 0;
+		int min = -30000;
+		
+		for(int[] temp : routes) {
+			if(min<temp[0]) {
+				min = temp[1];
+				answer++;
+			}
+		}
 		return answer;
 	}
 }
