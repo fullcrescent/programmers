@@ -8,6 +8,8 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.IntStream;
+import java.util.stream.Collectors;
 
 public class 베스트앨범 {
 
@@ -16,6 +18,11 @@ public class 베스트앨범 {
 		int[] plays = {500, 600, 150, 800, 1100, 2500, 100, 1000};
 		int[] answer = solution(genres, plays);
 		System.out.println(Arrays.toString(answer));
+		
+		String[] genres1 = {"classic", "pop", "classic", "classic","jazz","pop", "Rock", "jazz"};
+		int[] plays1 = {500, 600, 150, 800, 1100, 2500, 100, 1000};
+		int[] answer1 = solution1(genres1, plays1);
+		System.out.println(Arrays.toString(answer1));
 	}
 	
 	public static int[] solution(String[] genres, int[] plays) {
@@ -72,4 +79,47 @@ public class 베스트앨범 {
 		return answerList.stream().mapToInt(i->i).toArray();
 	}
 
+	// 다른 사람의 풀이 참고
+	public static int[] solution1(String[] genres, int[] plays) {
+		return IntStream.range(0, genres.length)
+				.mapToObj(i -> new Music(i, plays[i], genres[i]))
+				.collect(Collectors.groupingBy(Music::getGenre))
+				.entrySet().stream()
+				.sorted((i1, i2) -> sum(i2.getValue()) - sum(i1.getValue()))
+				.flatMap(i->i.getValue().stream().sorted().limit(2))
+				.mapToInt(i->i.id).toArray();
+	}
+	
+	private static int sum(List<Music> music) {
+		int answer = 0;
+		
+		for(Music temp : music)	answer += temp.played;
+		
+		return answer;
+	}
+
+	public static class Music implements Comparable<Music> {
+		private int id;
+		private int played;
+		private String genre;
+		
+		public Music(int id, int played, String genre) {
+			this.id  = id;
+			this.played = played;
+			this.genre = genre;
+		}
+
+		public String getGenre() {
+			return genre;
+		}
+		
+		@Override
+		public int compareTo(Music input) {
+			if(this.played == input.played) {
+				return this.id-input.id;
+			}
+			
+			return input.played-this.played;
+		}
+	}
 }
