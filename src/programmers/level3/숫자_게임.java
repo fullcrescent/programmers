@@ -9,6 +9,11 @@ public class 숫자_게임 {
 		int[] B = {0,2,6,7};
 		int answer = solution(A, B);
 		System.out.println(answer);
+		
+		int[] A1 = {1,3,5,7};
+		int[] B1 = {0,2,6,7};
+		int answer1 = solution1(A1, B1);
+		System.out.println(answer1);
 	}
 
 	public static int solution(int[] A, int[] B) {
@@ -66,5 +71,22 @@ public class 숫자_게임 {
 				max--;
 			}
 		}
+	}
+	
+	// 다른 사람의 풀이 참고
+	public static int solution1(int[] A, int[] B) {
+		int answer = 0;
+		
+		Arrays.sort(A);
+		Arrays.sort(B);
+		
+		for(int i=A.length-1, j=B.length-1; i>=0; i--) {
+			if(A[i]<B[j]) {
+				answer++;
+				j--;
+			}
+		}
+		
+		return answer;
 	}
 }
