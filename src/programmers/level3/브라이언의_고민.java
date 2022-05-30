@@ -25,16 +25,14 @@ public class 브라이언의_고민 {
 	}
 
 	private static String patterRemove(String sentence, StringBuffer sb, Map<Character, Integer> map) {
-		boolean flag = false;
+		boolean flag = true;
 		
 		for(int i=0; i<sentence.length(); i++) {
 			char temp = sentence.charAt(i);
 			
 			if(Character.isLowerCase(temp)) {
 				int iMove = i;
-				int count = 1;
-				
-				iMove += 2;
+				int count = 0;
 				
 				while(iMove<sentence.length() && temp==sentence.charAt(iMove)) {
 					count++;
@@ -63,10 +61,14 @@ public class 브라이언의_고민 {
 				}else {
 					if(!flag) return "invalid";
 					
-					if(flag) sb.insert(sb.length()-1, " ");
+					if(flag) sb.insert(sb.length()<1 ? 0 : sb.length()-1, " ");
 					sb.append(sentence.substring(i, iMove).replaceAll(String.valueOf(temp), "") + " ");
 					
-					i = iMove-1;
+					if(iMove+1!=sentence.length()) {
+						i = iMove-1;
+					}else {
+						i = iMove;
+					}
 				}
 				
 				flag = false;
