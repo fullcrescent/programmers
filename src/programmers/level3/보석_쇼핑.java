@@ -9,7 +9,7 @@ import java.util.Map;
 public class 보석_쇼핑 {
 
 	public static void main(String[] args) {
-		String[] gems = {"XYZ", "XYZ", "XYZ"};
+		String[] gems = {"DIA", "RUBY", "RUBY", "DIA", "DIA", "EMERALD", "SAPPHIRE", "DIA", "SAPPHIRE", "EMERALD", "RUBY"};
 		int[] answer = solution(gems);
 		System.out.println(Arrays.toString(answer));
 	}
@@ -27,16 +27,15 @@ public class 보석_쇼핑 {
 		}
 		
 		int min = gems.length;
+		int max = 0;
+		boolean flag = true;
 		
-		Loop1 :
-		for(int i=0; i<gems.length-map.size(); i++) {
-			int max = 0;
-			
-			for(String temp : map.keySet()) {
-				if(map.get(temp).size()>0) {
-					max = Math.max(max, map.get(temp).get(0));
-				}else {
-					break Loop1;
+		for(int i=0; i<=gems.length-map.size(); i++) {
+			if(flag) {
+				for(String temp : map.keySet()) {
+					if(map.get(temp).size()>0) {
+						max = Math.max(max, map.get(temp).get(0));
+					}
 				}
 			}
 			
@@ -44,7 +43,7 @@ public class 보석_쇼핑 {
 			int tempValue = temp.get(0);
 			temp.remove(0);
 			
-			while(temp.size()>0 && ++tempValue==temp.get(0)) {
+			while(temp.size()>0 && i<max && ++tempValue==temp.get(0)) {
 				i++;
 				temp.remove(0);
 			}
@@ -55,6 +54,13 @@ public class 보석_쇼핑 {
 				answer[1] = max+1;
 			}
 			
+			if(temp.size()==0) {
+				break;
+			}else if(temp.get(0)<max) {
+				flag = false;
+			}else {
+				flag = true;
+			}
 		}
 		
 		return answer;
