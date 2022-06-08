@@ -2,8 +2,10 @@ package programmers.level3;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class 불량_사용자 {
 
@@ -15,10 +17,7 @@ public class 불량_사용자 {
 	}
 	
 	public static int solution(String[] user_id, String[] banned_id) {
-		answer = 0;
-		
 		Map<Integer, List<Integer>> map = new HashMap<>();
-		Map<String, Integer> countMap = new HashMap<>();
 		
 		int index = 0;
 		
@@ -41,34 +40,28 @@ public class 불량_사용자 {
 			}
 			
 			map.put(index++, temp);
-			
-			countMap.put(banned, countMap.getOrDefault(banned, 0)+1);
 		}
 		
 		boolean[] visit = new boolean[user_id.length];
 		
 		validate(map, visit, 0, map.size());
 		
-		for(int temp : countMap.values()) {
-			if(temp>1) {
-				int divide = 1;
-				
-				for(int i=2; i<=temp; i++) {
-					divide *= i;
-				}
-				
-				answer = answer/divide;
-			}
-		}
-		
-		return answer;
+		return answer.size();
 	}
 	
-	static int answer;
-
+	static Set<String> answer = new HashSet<>();
+	
 	private static void validate(Map<Integer, List<Integer>> map, boolean[] visit, int start, int end) {
 		if(start==end) {
-			answer++;
+			String temp = "";
+			for(int i=0; i<visit.length; i++) {
+				if(visit[i]) {
+					temp += i + "/"; 
+				}
+			}
+			
+			answer.add(temp);
+			
 			return;
 		}
 		
