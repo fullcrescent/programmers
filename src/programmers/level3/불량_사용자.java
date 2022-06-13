@@ -82,7 +82,6 @@ public class 불량_사용자 {
 	// 다른 사람의 풀이 참고
 	public static int solution1(String[] user_id, String[] banned_id) {
 		set = new HashSet<>();
-		
 		validate1(0, user_id, banned_id, 0);
 		
 		return set.size();
