@@ -5,10 +5,10 @@ import java.util.Arrays;
 public class 셔틀버스 {
 
 	public static void main(String[] args) {
-		int n = 1;
-		int t = 1;
+		int n = 2;
+		int t = 10;
 		int m = 5;
-		String[] timetable = {"08:00", "08:01", "08:02", "08:03","08:03"};
+		String[] timetable = {"00:00", "00:00", "00:00", "00:00","00:00"};
 		String answer = solution(n, t, m, timetable);
 		System.out.println(answer);
 	}
@@ -47,7 +47,7 @@ public class 셔틀버스 {
 			flag = end==index;
 		}
 		
-		return convertString(index<=0 ? endTime : flag ? time[index-1]-1 : start);
+		return convertString(index>0 && flag ? time[index-1]-1 : endTime);
 	}
 
 	private static String convertString(int value) {
