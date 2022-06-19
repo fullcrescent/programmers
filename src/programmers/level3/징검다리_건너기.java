@@ -1,5 +1,10 @@
 package programmers.level3;
 
+import java.util.HashSet;
+import java.util.PriorityQueue;
+import java.util.Queue;
+import java.util.Set;
+
 public class 징검다리_건너기 {
 
 	public static void main(String[] args) {
@@ -10,38 +15,32 @@ public class 징검다리_건너기 {
 	}
 	
 	public static int solution(int[] stones, int k) {
-		int answer = 0;
+		// List contain 해보기
+		Set<Integer> set = new HashSet<>();
 		
-		while(true) {
+		for(int i=0; i<stones.length; i++) {
+			set.add(stones[i]);
+		}
+		
+		Queue<Integer> queue = new PriorityQueue<>(set);
+		
+		while(!queue.isEmpty()) {
+			int min =queue.poll();
+		
 			int temp = 0;
 			
-			for(int i=0; i<stones.length; i++) {
-				if(stones[i]>0) {
-					
-					temp = 0;
+			for(int stone : stones) {
+				if(stone>min) {
+					temp=0;
 				}else {
 					temp++;
 					if(temp==k) {
-						return answer;
+						return min;
 					}
 				}
 			}
-			
-			int min = 200000000;
-			
-			for(int i=0; i<stones.length; i++) {
-				if(stones[i]>0)	min = Math.min(min, stones[i]);;
-			}
-			
-			for(int i=0; i<stones.length; i++) {
-				if(stones[i]<=min) {
-					stones[i] = 0;
-				}else {
-					stones[i] -= min;
-				}
-			}
-			
-			answer += min;
 		}
+		
+		return 0;
 	}
 }
