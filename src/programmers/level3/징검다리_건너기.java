@@ -1,9 +1,7 @@
 package programmers.level3;
 
-import java.util.HashSet;
-import java.util.PriorityQueue;
-import java.util.Queue;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 public class 징검다리_건너기 {
 
@@ -15,32 +13,31 @@ public class 징검다리_건너기 {
 	}
 	
 	public static int solution(int[] stones, int k) {
-		// List contain 해보기
-		Set<Integer> set = new HashSet<>();
+		int answer = 200000000;
 		
-		for(int i=0; i<stones.length; i++) {
-			set.add(stones[i]);
-		}
+		List<Integer> list = new ArrayList<>();
 		
-		Queue<Integer> queue = new PriorityQueue<>(set);
-		
-		while(!queue.isEmpty()) {
-			int min =queue.poll();
-		
-			int temp = 0;
-			
-			for(int stone : stones) {
-				if(stone>min) {
-					temp=0;
-				}else {
-					temp++;
-					if(temp==k) {
-						return min;
+		for(int stone : stones) {
+			if(!list.contains(stone)) {
+				list.add(stone);
+				
+				int min = stone;
+				
+				int temp = 0;
+				
+				for(int stone1 : stones) {
+					if(stone1>min) {
+						temp=0;
+					}else {
+						temp++;
+						if(temp==k) {
+							answer = Math.min(answer, min);
+						}
 					}
 				}
 			}
 		}
 		
-		return 0;
+		return answer;
 	}
 }
