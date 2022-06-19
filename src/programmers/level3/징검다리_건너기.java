@@ -1,7 +1,8 @@
 package programmers.level3;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.TreeSet;
+import java.util.Iterator;
+import java.util.Set;
 
 public class 징검다리_건너기 {
 
@@ -13,31 +14,31 @@ public class 징검다리_건너기 {
 	}
 	
 	public static int solution(int[] stones, int k) {
-		int answer = 200000000;
+		Set<Integer> set = new TreeSet<>();
 		
-		List<Integer> list = new ArrayList<>();
+		for(int i=0; i<stones.length; i++) {
+			set.add(stones[i]);
+		}
 		
-		for(int stone : stones) {
-			if(!list.contains(stone)) {
-				list.add(stone);
-				
-				int min = stone;
-				
-				int temp = 0;
-				
-				for(int stone1 : stones) {
-					if(stone1>min) {
-						temp=0;
-					}else {
-						temp++;
-						if(temp==k) {
-							answer = Math.min(answer, min);
-						}
+		Iterator<Integer> iter = set.iterator();
+		
+		while(iter.hasNext()) {
+			int min = iter.next();
+			
+			int temp = 0;
+			
+			for(int stone : stones) {
+				if(stone>min) {
+					temp=0;
+				}else {
+					temp++;
+					if(temp==k) {
+						return min;
 					}
 				}
 			}
 		}
 		
-		return answer;
+		return 0;
 	}
 }
