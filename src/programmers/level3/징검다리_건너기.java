@@ -10,23 +10,34 @@ public class 징검다리_건너기 {
 	}
 	
 	public static int solution(int[] stones, int k) {
-		int answer = 200000000;
+		int answer = 0;
 		
-		for(int stone : stones) {
-			if(stone>answer) continue;
+		int left = 0;
+		int right = 200000000;
+		int mid;
+		
+		while(left<=right) {
+			mid = (left+right)/2;
 			
-			int temp = 0;
+			int count = 0;
 			
-			for(int tempStone : stones) {
-				if(tempStone>stone) {
-					temp = 0;
-				}else {
-					temp++;
-					if(temp==k) {
-						answer = stone;
-						break;
-					}
+			for(int stone : stones) {
+				if(stone>mid) {
+					count = 0;
+					continue;
 				}
+				
+				count++;
+				if(count==k) {
+					break;
+				}
+			}
+			
+			if(count==k) {
+				answer = mid;
+				right = mid-1;
+			}else {
+				left = mid+1;
 			}
 		}
 		
