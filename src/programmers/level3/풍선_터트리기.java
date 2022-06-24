@@ -28,6 +28,10 @@ public class 풍선_터트리기 {
 			if(a[i]>right)	temp++;
 			
 			if(right==a[i+1]) {
+				while(i<a.length && right>a[i]) {
+					i++;
+				}
+				
 				right = 1000000000;
 				for(int j=i+2; j<a.length; j++) {
 					right = Math.min(right, a[j]);
