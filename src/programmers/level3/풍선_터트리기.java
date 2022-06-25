@@ -1,46 +1,46 @@
 package programmers.level3;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class 풍선_터트리기 {
 
 	public static void main(String[] args) {
-		int[] a = {-16,27,65,-2,58,-92,-71,-68,-61,-33};
+		int[] a = {-16,27,65,66,67,68,69,70,71,72};
 		int answer = solution(a);
 		System.out.println(answer);
 	}
 	
 	public static int solution(int[] a) {
+		List<Integer> list = new ArrayList<>();
+		
 		int answer = a.length;
 		
 		int left = a[0];
-		int right = 1000000000;
 		
-		for(int i=0; i<a.length; i++) {
-			right = Math.min(right, a[i]);
+		for(int i=2; i<a.length; i++) {
+			list.add(a[i]);
 		}
+		
+		list.sort(null);
 		
 		for(int i=1; i<a.length-1; i++) {
 			int temp = 0;
+			int value = a[i];
+			int right = list.get(0);
 			
 			left = Math.min(left, a[i-1]);
 			
-			if(left<a[i])	temp++;
+			list.remove((Integer)a[i+1]);
 			
-			if(a[i]>right)	temp++;
+			if(left<value)	temp++;
+			else 			continue;
 			
-			if(right==a[i+1]) {
-				while(i<a.length && right>a[i]) {
-					i++;
-				}
-				
-				right = 1000000000;
-				for(int j=i+2; j<a.length; j++) {
-					right = Math.min(right, a[j]);
-				}
-			}
+			if(value>right)	temp++;
+			else			continue;
 			
-			if(temp==2) {
-				answer--;
-			}
+			
+			if(temp==2) answer--;
 		}
 		
 		return answer;
