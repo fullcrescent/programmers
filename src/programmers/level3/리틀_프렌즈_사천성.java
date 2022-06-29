@@ -3,9 +3,9 @@ package programmers.level3;
 public class 리틀_프렌즈_사천성 {
 
 	public static void main(String[] args) {
-		int m = 3;
-		int n = 4; 
-		String[] board = {".A*.", "AN..", "*N**"};
+		int m = 5;
+		int n = 5; 
+		String[] board = {"FGHEI", "BAB..", "D.C*.", "CA..I", "DFHGE"};
 		String answer = solution(m, n, board);
 		System.out.println(answer);
 	}
@@ -72,6 +72,7 @@ public class 리틀_프렌즈_사천성 {
 						answer += temp;
 						board[startX] = board[startX].replace(temp, '.');
 						board[endX] = board[endX].replace(temp, '.');	
+						temp = 64;
 						continue;
 					}
 				}
@@ -105,6 +106,7 @@ public class 리틀_프렌즈_사천성 {
 						answer += temp;
 						board[startX] = board[startX].replace(temp, '.');
 						board[endX] = board[endX].replace(temp, '.');
+						temp = 64;
 						continue;
 					}
 				}
