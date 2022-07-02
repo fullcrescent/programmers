@@ -30,13 +30,14 @@ public class 표_편집 {
 				case 'U' :
 					while(move!=value){
 						start--;
-						
+
 						if(remove[start]) {
 							continue;
 						}
 						
 						move++;
 					}
+					
 					break;
 				case 'D' : 
 					while(move!=value){
@@ -48,24 +49,40 @@ public class 표_편집 {
 						
 						move++;
 					}
+					
 					break;
 				case 'C' :
 					stack.add(start);
 					remove[start] = true;
-					while(start<n) {
-						if(start==n-1) {
-							start = stack.peek()-1;
-							break;
-						}else if(remove[start]) {
-							start++;
-						}else {
-							break;
-						}
+					
+					int index = start+1;
+					
+					while(index<n) {
+						if(!remove[index]) break;
+						
+						index++;
 					}
+					
+					if(index==n) {
+						index = start-1;
+						
+						while(index>-1) {
+							if(!remove[index]) break;
+							
+							index--;
+						}
+					}	
+					
+					start = index; 
 					
 					break;
 				case 'Z' : 
 					remove[stack.pop()] = false;
+					
+					if(start==-1) {
+						start = stack.pop();
+					}
+					
 					break;
 			}
 		}
