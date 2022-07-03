@@ -37,9 +37,7 @@ public class 표_편집 {
 					stack.add(start);
 					remove[start] = true;
 					
-					int search = binarySearch(remove, start+1, n, value);
-					
-					start = search;
+					start = binarySearch(remove, start+1, n, value);
 					
 					break;
 				case 'Z' : 
