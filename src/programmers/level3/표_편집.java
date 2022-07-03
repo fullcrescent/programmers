@@ -1,5 +1,7 @@
 package programmers.level3;
 
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Stack;
 
 public class 표_편집 {
@@ -7,14 +9,18 @@ public class 표_편집 {
 	public static void main(String[] args) {
 		int n = 8;
 		int k = 2;
-		String[] cmd = {"D 2","C","U 3","C","D 4","C","U 2","Z","Z"};
+		String[] cmd = {"D 2", "C", "U 3", "C", "D 4", "C", "U 2", "Z", "Z", "U 1", "C"};
 		String answer = solution(n, k, cmd);
 		System.out.println(answer);
 	}
 	
 	public static String solution(int n, int k, String[] cmd) {
 		Stack<Integer> stack = new Stack<>();
-		boolean[] remove = new boolean[n];
+		List<Integer> list = new LinkedList<>();
+		
+		for(int i=0; i<n; i++) {
+			list.add(i);
+		}
 		
 		int start = k;
 		
@@ -24,64 +30,27 @@ public class 표_편집 {
 				value = Integer.valueOf(temp.split(" ")[1]);
 			}
 			
-			int move = 0;
-			
 			switch(temp.charAt(0)) {
 				case 'U' :
-					while(move!=value){
-						start--;
-
-						if(remove[start]) {
-							continue;
-						}
-						
-						move++;
-					}
-					
+					start = start-value;
 					break;
 				case 'D' : 
-					while(move!=value){
-						start++;
-						
-						if(remove[start]) {
-							continue;
-						}
-						
-						move++;
-					}
-					
+					start = start+value;
 					break;
 				case 'C' :
-					stack.add(start);
-					remove[start] = true;
+					stack.add(list.get(start));
+					list.remove(start);
 					
-					int index = start+1;
-					
-					while(index<n) {
-						if(!remove[index]) break;
-						
-						index++;
-					}
-					
-					if(index==n) {
-						index = start-1;
-						
-						while(index>-1) {
-							if(!remove[index]) break;
-							
-							index--;
-						}
-					}	
-					
-					start = index; 
+					start = list.size()<=start ? start-1 : start;
 					
 					break;
-				case 'Z' : 
-					remove[stack.pop()] = false;
+				case 'Z' :
+					int stackValue = stack.pop();
 					
-					if(start==-1) {
-						start = stack.pop();
-					}
+					if(stackValue<=start) start++;
+					
+					if(stackValue<=list.size())	list.add(stackValue, stackValue);
+					else						list.add(list.size(), stackValue);
 					
 					break;
 			}
@@ -90,8 +59,12 @@ public class 표_편집 {
 		StringBuilder sb = new StringBuilder();
 		
 		for(int i=0; i<n; i++) {
-			if(remove[i])	sb.append("X");
-			else 			sb.append("O");
+			sb.append("O");
+		}
+		
+		while(!stack.isEmpty()) {
+			int index = stack.pop();
+			sb.replace(index, index+1, "X");
 		}
 		
 		return sb.toString();
