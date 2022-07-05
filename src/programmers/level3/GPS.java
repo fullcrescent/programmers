@@ -9,14 +9,14 @@ public class GPS {
 		int n = 7;
 		int m = 10;
 		int[][] edge_list = {{1, 2}, {1, 3}, {2, 3}, {2, 4}, {3, 4}, {3, 5}, {4, 6}, {5, 6}, {5, 7}, {6, 7}};
-		int k = 6;
-		int[] gps_log = {1, 2, 3, 3, 6, 7};
+		int k = 7;
+		int[] gps_log = {1, 1, 1, 1, 1, 1, 7};
 		int answer = solution(n, m, edge_list, k, gps_log);
 		System.out.println(answer);
 	}
 	
 	public static int solution(int n, int m, int[][] edge_list, int k, int[] gps_log) {
-		int answer = -1;
+		int answer = k;
 		boolean[][] edge = new boolean[n+1][n+1];
 		
 		for(int i=1; i<=n; i++) {
@@ -33,8 +33,16 @@ public class GPS {
 			Set<Integer> set = null;
 			
 			for(int i1=i; i1>0; i1--) {
+				set = getSet(set, edge, gps_log[i1]);
 				
+				if(set.contains(gps_log[i1-1])) {
+					set = null;
+				}else {
+					temp++;
+				}
 			}
+			
+			set = null;
 			
 			for(int i2=i; i2<k-1; i2++) {
 				set = getSet(set, edge, gps_log[i2]);
@@ -46,7 +54,7 @@ public class GPS {
 				}
 			}
 			
-			answer = Math.max(answer, temp);
+			answer = Math.min(answer, temp);
 		}
 		
 		return answer;
