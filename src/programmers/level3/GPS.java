@@ -28,7 +28,7 @@ public class GPS {
 		}
 		
 		for(int i=0; i<k; i++) {
-			int temp = 0;
+			int temp = -1;
 			
 			Set<Integer> set = null;
 			
@@ -47,12 +47,15 @@ public class GPS {
 			for(int i2=i; i2<k-1; i2++) {
 				set = getSet(set, edge, gps_log[i2]);
 				
+				// 컨테인 이더라도 계속 쌓아야함
 				if(set.contains(gps_log[i2+1])) {
 					set = null;
 				}else {
 					temp++;
 				}
 			}
+			
+			if(set!=null && !set.contains(gps_log[gps_log.length-1])) temp = -1;
 			
 			answer = Math.min(answer, temp);
 		}
