@@ -31,7 +31,6 @@ public class 경주로_건설 {
 		if(count >= min) return ;
 		
 		if(x==maps.length-1 && y==maps[0].length-1) {
-			if(min == -1) min = count;
 			min = Math.min(min,count);
 			return;
 		}
@@ -41,7 +40,7 @@ public class 경주로_건설 {
 			int tempY = y+dy[i];
 			
 			if(tempX<=maps.length-1 && tempX>-1 && tempY<=maps[tempX].length-1 && tempY>-1 && maps[tempX][tempY] == 0) {
-				if(sum[tempX][tempY]==0 || sum[tempX][tempY] > count) {
+				if(sum[tempX][tempY]==0 || sum[tempX][tempY] >= count) {						
 					int tempCount = count + (direction!=direct[i] ? curveCost : straightCost);
 					sum[tempX][tempY] = tempCount;
 					findLoad(maps, tempX, tempY, tempCount, direct[i]);
