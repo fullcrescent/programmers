@@ -5,7 +5,7 @@ public class 보행자_천국 {
 	public static void main(String[] args) {
 		int m = 3;
 		int n = 6;
-		int[][] cityMap = {{0, 2, 0, 0, 0, 2}, {0, 0, 2, 0, 1, 0}, {1, 0, 0, 2, 2, 0}};
+		int[][] cityMap = {{0, 0, 0, 0, 0, 0}, {0, 2, 0, 2, 2, 2}, {1, 0, 0, 2, 2, 0}};
 		int answer = solution(m, n, cityMap);
 		System.out.println(answer);
 	}
@@ -32,15 +32,27 @@ public class 보행자_천국 {
 				if(cityMap[i][j]==0) {
 					long top  = cityMap[i-1][j]==1?0:dp[i-1][j];
 					long left = cityMap[i][j-1]==1?0:dp[i][j-1];
-					dp[i][j] += (top+left)%MOD;
-				}
-				else if(cityMap[i][j]==1) {
-					continue;
+					dp[i][j] += (long)(top+left)%MOD;
 				}
 				else if(cityMap[i][j]==2) {
-					dp[i][j+1] = dp[i][j-1];
-					dp[i+1][j] = dp[i-1][j];
-					continue;
+					int tempI = i+1;
+					int tempJ = j+1;
+					
+					if(cityMap[i-1][j]!=2) {
+						while(tempI<m && cityMap[tempI][j]==2) {tempI++;}
+						
+						if(tempI<m && cityMap[tempI][j]!=1) {
+							dp[tempI][j] = (dp[tempI][j]+dp[i-1][j])%MOD;
+						}
+					}
+					
+					if(cityMap[i][j-1]!=2) {
+						while(tempJ<n && cityMap[i][tempJ]==2) {tempJ++;}
+						
+						if(tempJ<n && cityMap[i][tempJ]!=1) {
+							dp[i][tempJ] = (dp[i][tempJ]+dp[i][j-1])%MOD;
+						}
+					}
 				}
 			}
 		}
