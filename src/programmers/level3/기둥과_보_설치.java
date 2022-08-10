@@ -20,8 +20,7 @@ public class 기둥과_보_설치 {
 	
 	public static int[][] solution(int n, int[][] build_frame) {
 		List<Point> addList = new ArrayList<>();
-		
-		List<Point> removeList = new ArrayList<>();
+		List<Point> answerList = new ArrayList<>();
 		
 		for(int i=0; i<n; i++) {
 			addList.add(new Point(i, 0, 0));
@@ -37,7 +36,18 @@ public class 기둥과_보_설치 {
 			/* 추가 */
 			else if(temp[3]==1) {
 				if(addList.contains(point)) {
-					System.out.println("a");
+					answerList.add(point);
+					addList.remove(point);
+					
+					if(point.type==0) {
+						addList.add(new Point(point.x-1, point.y+1, 0));
+						addList.add(new Point(point.x, point.y+1, 0));
+						addList.add(new Point(point.x, point.y+1, 1));
+					}else {
+						
+					}
+					
+					
 				}else {
 					System.out.println("b");
 				}
@@ -50,14 +60,6 @@ public class 기둥과_보_설치 {
 		return null;
 	}
 
-	private static boolean valid1(List<int[]> list, int[] array) {
-		for(int[] temp : list) {
-			
-		}
-		
-		return false;
-	}
-	
 	public static class Point{
 		int x;
 		int y;
@@ -70,8 +72,9 @@ public class 기둥과_보_설치 {
 			this.type = type;
 		}
 		
-		public boolean equals(Point point) {
-			return this.x==point.x && this.y==point.y && this.type==point.type;
+		public boolean equals(Object point) {
+			Point temp = (Point) point;
+			return this.x==temp.x && this.y==temp.y && this.type==temp.type;
 		}
 	}
 }
