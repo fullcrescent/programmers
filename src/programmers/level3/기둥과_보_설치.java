@@ -19,10 +19,11 @@ public class 기둥과_보_설치 {
 	static int[] dy = {0, 1};
 	
 	public static int[][] solution(int n, int[][] build_frame) {
+		int[][] answer;
 		List<Point> addList = new ArrayList<>();
 		List<Point> answerList = new ArrayList<>();
 		
-		for(int i=0; i<n; i++) {
+		for(int i=0; i<=n; i++) {
 			addList.add(new Point(i, 0, 0));
 		}
 		
@@ -31,33 +32,62 @@ public class 기둥과_보_설치 {
 			
 			/* 삭제 */
 			if(temp[3]==0) {
-				
+				if(point.type==0) {
+					if(answerList.contains(new Point(point.x-1, point.y+1, 1))
+						|| answerList.contains(new Point(point.x, point.y+1, 1))
+						|| answerList.contains(new Point(point.x, point.y+1, 0))){
+						continue;
+					}else {
+						answerList.remove(point);
+						addList.remove(new Point(point.x-1, point.y+1, 1));
+						addList.remove(new Point(point.x, point.y+1, 1));
+						addList.remove(new Point(point.x, point.y+1, 0));
+					}
+				}else if(point.type==1) {
+					
+				}
 			}
 			/* 추가 */
 			else if(temp[3]==1) {
 				if(addList.contains(point)) {
 					answerList.add(point);
-					addList.remove(point);
 					
 					if(point.type==0) {
-						addList.add(new Point(point.x-1, point.y+1, 0));
-						addList.add(new Point(point.x, point.y+1, 0));
+						addList.add(new Point(point.x-1, point.y+1, 1));
 						addList.add(new Point(point.x, point.y+1, 1));
-					}else {
-						
+						addList.add(new Point(point.x, point.y+1, 0));
+					}else if(point.type==1){
+						addList.add(new Point(point.x+1, point.y, 0));
+						if(answerList.contains(new Point(point.x+2, point.y, 1))) {
+							addList.add(new Point(point.x+1, point.y, 1));
+						}
+						if(answerList.contains(new Point(point.x-2, point.y, 1))) {
+							addList.add(new Point(point.x-1, point.y, 1));
+						}
 					}
-					
-					
-				}else {
-					System.out.println("b");
 				}
 			}
 		}
 		
+		answer = new int[answerList.size()][3];
 		
+		answerList.sort((o1, o2) -> {
+			if(o1.x==o2.x) {
+				return Integer.compare(o1.y, o2.y);
+			}else {
+				return Integer.compare(o1.x, o2.x);
+			}
+		});
 		
-			
-		return null;
+		int index = 0;
+		
+		for(Point temp : answerList) {
+			answer[index][0] = temp.x;
+			answer[index][1] = temp.y;
+			answer[index++][2] = temp.type;
+		}
+		
+		return answer;
 	}
 
 	public static class Point{
