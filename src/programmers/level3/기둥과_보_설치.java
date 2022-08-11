@@ -8,15 +8,12 @@ public class 기둥과_보_설치 {
 
 	public static void main(String[] args) {
 		int n = 5;
-		int[][] build_frame = {{1,0,0,1},{1,1,1,1},{2,1,0,1},{2,2,1,1},{5,0,0,1},{5,1,0,1},{4,2,1,1},{3,2,1,1}};
+		int[][] build_frame = {{0,0,0,1},{2,0,0,1},{4,0,0,1},{0,1,1,1},{1,1,1,1},{2,1,1,1},{3,1,1,1},{2,0,0,0},{1,1,1,0},{2,2,0,1}};
 		int[][] answer = solution(n, build_frame);
 		for(int[] temp : answer) {
 			System.out.println(Arrays.toString(temp));
 		}
 	}
-	
-	static int[] dx = {1, 0};
-	static int[] dy = {0, 1};
 	
 	public static int[][] solution(int n, int[][] build_frame) {
 		int[][] answer;
@@ -33,9 +30,13 @@ public class 기둥과_보_설치 {
 			/* 삭제 */
 			if(temp[3]==0) {
 				if(point.type==0) {
-					if(answerList.contains(new Point(point.x-1, point.y+1, 1))
-						|| answerList.contains(new Point(point.x, point.y+1, 1))
-						|| answerList.contains(new Point(point.x, point.y+1, 0))){
+					if(answerList.contains(new Point(point.x, point.y+1, 0))
+						|| (answerList.contains(new Point(point.x, point.y+1, 1)) 
+								&&!answerList.contains(new Point(point.x-1, point.y+1, 1)) 
+								&&!answerList.contains(new Point(point.x+1, point.y+1, 1)) )
+						|| (answerList.contains(new Point(point.x-1, point.y+1, 1))
+								&&!answerList.contains(new Point(point.x, point.y+1, 1))
+								&&!answerList.contains(new Point(point.x-2, point.y+1, 1)))){
 						continue;
 					}else {
 						answerList.remove(point);
@@ -44,7 +45,16 @@ public class 기둥과_보_설치 {
 						addList.remove(new Point(point.x, point.y+1, 0));
 					}
 				}else if(point.type==1) {
-					
+					if(answerList.contains(new Point(point.x+1, point.y, 0))
+							||(answerList.contains(new Point(point.x+2, point.y, 1)) && answerList.contains(new Point(point.x+1, point.y, 1)))
+							||(answerList.contains(new Point(point.x-2, point.y, 1)) && answerList.contains(new Point(point.x-1, point.y, 1)))) {
+						continue;
+					}else {
+						answerList.remove(point);
+						addList.remove(new Point(point.x+1, point.y, 0));
+						addList.remove(new Point(point.x+1, point.y, 1));
+						addList.remove(new Point(point.x-1, point.y, 1));
+					}
 				}
 			}
 			/* 추가 */
