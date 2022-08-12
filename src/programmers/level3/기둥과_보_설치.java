@@ -30,39 +30,35 @@ public class 기둥과_보_설치 {
 			/* 삭제 */
 			if(temp[3]==0) {
 				if(point.type==0) {
-					if((answerList.contains(new Point(point.x, point.y+1, 0))
-							&& (!answerList.contains(new Point(point.x-1, point.y+1, 1))
-								&& !answerList.contains(new Point(point.x, point.y+1, 1))))
-						|| (answerList.contains(new Point(point.x, point.y+1, 1)) 
-							&& (!answerList.contains(new Point(point.x+1, point.y, 0))
-								&& (!answerList.contains(new Point(point.x-1, point.y+1, 1)) 
-									&&!answerList.contains(new Point(point.x+1, point.y+1, 1)))) )
-						|| (answerList.contains(new Point(point.x-1, point.y+1, 1))
-							&& (!answerList.contains(new Point(point.x-1, point.y, 0))
-								|| (!answerList.contains(new Point(point.x, point.y+1, 1))
-									&&!answerList.contains(new Point(point.x-2, point.y+1, 1)))))){
-						continue;
-					}else {
+					if((!answerList.contains(new Point(point.x, point.y+1, 0))
+							|| (answerList.contains(new Point(point.x-1, point.y+1, 1))
+								|| answerList.contains(new Point(point.x, point.y+1, 1))))
+						&& (!answerList.contains(new Point(point.x, point.y+1, 1)) 
+							|| (answerList.contains(new Point(point.x+1, point.y, 0))
+								|| (answerList.contains(new Point(point.x-1, point.y+1, 1)) 
+									&&answerList.contains(new Point(point.x+1, point.y+1, 1)))) )
+						&& (!answerList.contains(new Point(point.x-1, point.y+1, 1))
+							|| (answerList.contains(new Point(point.x-1, point.y, 0))
+								|| (answerList.contains(new Point(point.x, point.y+1, 1))
+									&&answerList.contains(new Point(point.x-2, point.y+1, 1)))))){
 						answerList.remove(point);
 						addList.remove(new Point(point.x-1, point.y+1, 1));
 						addList.remove(new Point(point.x, point.y+1, 1));
 						addList.remove(new Point(point.x, point.y+1, 0));
 					}
 				}else if(point.type==1) {
-					if((answerList.contains(new Point(point.x, point.y, 0))
-							&& (!answerList.contains(new Point(point.x, point.y-1, 0))
-								|| !answerList.contains(new Point(point.x-1, point.y, 1))))
-						|| (answerList.contains(new Point(point.x+1, point.y, 0))
-							&& (!answerList.contains(new Point(point.x+1, point.y-1, 0))
-								|| !answerList.contains(new Point(point.x+1, point.y, 1))))
-						|| (answerList.contains(new Point(point.x-1, point.y, 1))
-							&& (!answerList.contains(new Point(point.x-1, point.y-1, 0))
-								|| !answerList.contains(new Point(point.x, point.y-1, 0))))
-						|| (answerList.contains(new Point(point.x+1, point.y, 1))
-							&& (!answerList.contains(new Point(point.x+1, point.y-1, 0))
-								|| !answerList.contains(new Point(point.x+2, point.y-1, 0))))) {
-						continue;
-					}else {
+					if((!answerList.contains(new Point(point.x, point.y, 0))
+							|| (answerList.contains(new Point(point.x, point.y-1, 0))
+								|| answerList.contains(new Point(point.x-1, point.y, 1))))
+						&& (!answerList.contains(new Point(point.x+1, point.y, 0))
+							|| (answerList.contains(new Point(point.x+1, point.y-1, 0))
+								|| answerList.contains(new Point(point.x+1, point.y, 1))))
+						&& (!answerList.contains(new Point(point.x-1, point.y, 1))
+							|| (answerList.contains(new Point(point.x-1, point.y-1, 0))
+								|| answerList.contains(new Point(point.x, point.y-1, 0))))
+						&& (!answerList.contains(new Point(point.x+1, point.y, 1))
+							|| (answerList.contains(new Point(point.x+1, point.y-1, 0))
+								|| answerList.contains(new Point(point.x+2, point.y-1, 0))))) {
 						answerList.remove(point);
 						addList.remove(new Point(point.x+1, point.y, 0));
 						addList.remove(new Point(point.x+1, point.y, 1));
