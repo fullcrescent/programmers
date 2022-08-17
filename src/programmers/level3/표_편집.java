@@ -18,8 +18,10 @@ public class 표_편집 {
 		
 		int start = k;
 		
-		for(String temp : cmd) {
+		for(int i=0; i<cmd.length; i++ ) {
+			String temp = cmd[i];
 			int value = 1;
+			
 			if(temp.length()>1) {
 				value = Integer.valueOf(temp.split(" ")[1]);
 			}
@@ -34,6 +36,11 @@ public class 표_편집 {
 					
 					break;
 				case 'C' :
+					if(i<cmd.length-1 && cmd[i+1].equals("Z")) {
+						i++;
+						break;
+					}
+					
 					stack.add(start);
 					remove[start] = true;
 					
