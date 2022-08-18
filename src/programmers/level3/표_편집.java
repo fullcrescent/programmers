@@ -15,10 +15,22 @@ public class 표_편집 {
 	public static String solution(int n, int k, String[] cmd) {
 		Stack<Integer> stack = new Stack<>();
 		boolean[] remove = new boolean[n];
+		boolean[] visit = new boolean[n];
+		
+		for(int i=0; i<cmd.length-1; i++) {
+			Character temp = cmd[i].charAt(0);
+			if(temp=='U' && cmd[i+1].charAt(0)=='D'
+					|| temp=='D' && cmd[i+1].charAt(0)=='U') {
+				visit[i] = true;
+				visit[i+1] = true;
+			}
+		}
 		
 		int start = k;
 		
 		for(int i=0; i<cmd.length; i++ ) {
+			if(visit[i]) continue;
+			
 			String temp = cmd[i];
 			int value = 1;
 			
@@ -36,11 +48,6 @@ public class 표_편집 {
 					
 					break;
 				case 'C' :
-					if(i<cmd.length-1 && cmd[i+1].equals("Z")) {
-						i++;
-						break;
-					}
-					
 					stack.add(start);
 					remove[start] = true;
 					
