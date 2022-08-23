@@ -31,6 +31,9 @@ public class 코딩_테스트_공부 {
 		
 		int index = 0;
 		
+		/* 1로 더하는 경우의 수까지 생각해야함 */
+		/* 모든 경우의 수를 생각하는건 1로 더하는 것으로 인해 가능할지 모르겟음 */
+		
 		while(index<list.size()) {
 			for(int i=index; i<list.size(); i++) {
 				int[] temp = list.get(i);
