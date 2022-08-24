@@ -17,6 +17,7 @@ public class 코딩_테스트_공부 {
 		int answer = 0;
 		
 		List<int[]> list = new ArrayList<>();
+		List<int[]> addList = new ArrayList<>();
 		
 		for(int[] temp : problems) {
 			list.add(temp);
@@ -43,6 +44,13 @@ public class 코딩_테스트_공부 {
 					alp += temp[2];
 					cop += temp[3];
 					answer += temp[4];
+					
+					addList.add(temp);
+				}else {
+					int difAlp = alp-temp[0];
+					int difCop = cop-temp[1];
+					
+					
 				}
 			}
 			index--;
