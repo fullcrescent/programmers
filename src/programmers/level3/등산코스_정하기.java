@@ -33,6 +33,10 @@ public class 등산코스_정하기 {
 			map.put(path[1], list);
 		}
 		
+		for(int key : map.keySet()) {
+			List<int[]> list = map.get(key);
+			list.sort((i1, i2) -> Integer.compare(i1[1], i2[1]));
+		}
 		
 		for(int gate : gates) {
 			visit[gate] = true;
@@ -48,6 +52,7 @@ public class 등산코스_정하기 {
 	static int min = Integer.MAX_VALUE;
 	static int end = Integer.MAX_VALUE;
 	
+	/* 게이트와 목적지를 뒤바꿔보기 */
 	private static void function(Map<Integer, List<int[]>> map, int[] summits, boolean[] visit, int current, int intensity) {
 		if(min<intensity) return;
 		
