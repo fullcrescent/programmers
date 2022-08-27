@@ -17,6 +17,7 @@ public class 등산코스_정하기 {
 		System.out.println(Arrays.toString(answer));
 	}
 	
+	/* summit 정렬 필요 */
 	public static int[] solution(int n, int[][] paths, int[] gates, int[] summits) {
 		Map<Integer, List<int[]>> map = new HashMap<>();
 		boolean[] visit = new boolean[n+1];
@@ -38,12 +39,12 @@ public class 등산코스_정하기 {
 			list.sort((i1, i2) -> Integer.compare(i1[1], i2[1]));
 		}
 		
-		for(int gate : gates) {
-			visit[gate] = true;
+		for(int summit : summits) {
+			visit[summit] = true;
 		}
 		
-		for(int gate : gates) {
-			function(map, summits, visit, gate, 0);
+		for(int summit : summits) {
+			function(map, gates, visit, summit, 0, summit);
 		}
 		
 		return new int[] {end, min};
@@ -52,18 +53,13 @@ public class 등산코스_정하기 {
 	static int min = Integer.MAX_VALUE;
 	static int end = Integer.MAX_VALUE;
 	
-	/* 게이트와 목적지를 뒤바꿔보기 */
-	private static void function(Map<Integer, List<int[]>> map, int[] summits, boolean[] visit, int current, int intensity) {
-		if(min<intensity) return;
+	private static void function(Map<Integer, List<int[]>> map, int[] gates, boolean[] visit, int current, int intensity, int summit) {
+		if(min<=intensity) return;
 		
-		for(int summit : summits) {
-			if(current==summit) {
-				if(min==intensity) {
-					end = Integer.min(end, current);
-				}else {
-					min = intensity;
-					end = current;
-				}
+		for(int gate : gates) {
+			if(current==gate) {
+				min = intensity;
+				end = summit;
 				return;
 			}
 		}
@@ -72,7 +68,7 @@ public class 등산코스_정하기 {
 			if(visit[temp[0]]) continue;
 			
 			visit[temp[0]] = true;
-			function(map, summits, visit, temp[0], Integer.max(intensity, temp[1]));
+			function(map, gates, visit, temp[0], Integer.max(intensity, temp[1]), summit);
 			visit[temp[0]] = false;
 		}
 	}
