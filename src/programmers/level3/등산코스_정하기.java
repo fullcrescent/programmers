@@ -17,7 +17,6 @@ public class 등산코스_정하기 {
 		System.out.println(Arrays.toString(answer));
 	}
 	
-	/* summit 정렬 필요 */
 	public static int[] solution(int n, int[][] paths, int[] gates, int[] summits) {
 		Map<Integer, List<int[]>> map = new HashMap<>();
 		boolean[] visit = new boolean[n+1];
@@ -38,6 +37,8 @@ public class 등산코스_정하기 {
 			List<int[]> list = map.get(key);
 			list.sort((i1, i2) -> Integer.compare(i1[1], i2[1]));
 		}
+		
+		Arrays.sort(summits);
 		
 		for(int summit : summits) {
 			visit[summit] = true;
