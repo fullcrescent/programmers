@@ -17,6 +17,7 @@ public class 등산코스_정하기 {
 		System.out.println(Arrays.toString(answer));
 	}
 	
+	/* 다익스트라로 풀어야함. 시간초과 */
 	public static int[] solution(int n, int[][] paths, int[] gates, int[] summits) {
 		Map<Integer, List<int[]>> map = new HashMap<>();
 		boolean[] visit = new boolean[n+1];
