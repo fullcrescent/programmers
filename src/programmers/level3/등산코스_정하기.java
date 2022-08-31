@@ -1,6 +1,5 @@
 package programmers.level3;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -19,60 +18,14 @@ public class 등산코스_정하기 {
 	
 	/* 다익스트라로 풀어야함. 시간초과 */
 	public static int[] solution(int n, int[][] paths, int[] gates, int[] summits) {
-		Map<Integer, List<int[]>> map = new HashMap<>();
+		int[] max = new int[] {n, 10000000};
+		int[][] distance = new int[n+1][2];
 		boolean[] visit = new boolean[n+1];
 		
-		for(int[] path : paths) {
-			List<int[]> list;
-			
-			list = map.getOrDefault(path[0], new ArrayList<int[]>());
-			list.add(new int[] {path[1], path[2]});
-			map.put(path[0], list);
-			
-			list = map.getOrDefault(path[1], new ArrayList<int[]>());
-			list.add(new int[] {path[0], path[2]});
-			map.put(path[1], list);
-		}
-		
-		for(int key : map.keySet()) {
-			List<int[]> list = map.get(key);
-			list.sort((i1, i2) -> Integer.compare(i1[1], i2[1]));
-		}
-		
 		Arrays.sort(summits);
+		Arrays.fill(distance, max);
 		
-		for(int summit : summits) {
-			visit[summit] = true;
-		}
-		
-		for(int summit : summits) {
-			function(map, gates, visit, summit, 0, summit);
-		}
-		
-		return new int[] {end, min};
-	}
-
-	static int min = Integer.MAX_VALUE;
-	static int end = Integer.MAX_VALUE;
-	
-	private static void function(Map<Integer, List<int[]>> map, int[] gates, boolean[] visit, int current, int intensity, int summit) {
-		if(min<=intensity) return;
-		
-		for(int gate : gates) {
-			if(current==gate) {
-				min = intensity;
-				end = summit;
-				return;
-			}
-		}
-	
-		for(int[] temp : map.get(current)) {
-			if(visit[temp[0]]) continue;
-			
-			visit[temp[0]] = true;
-			function(map, gates, visit, temp[0], Integer.max(intensity, temp[1]), summit);
-			visit[temp[0]] = false;
-		}
+		return null;
 	}
 	
 }
