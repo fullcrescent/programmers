@@ -2,7 +2,9 @@ package programmers.level3;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Queue;
 
@@ -29,16 +31,32 @@ public class 등산코스_정하기 {
 			visit[summit] = true;
 		}
 		
-		List<int[]> list = new ArrayList<>(Arrays.asList(paths));
+		Map<Integer, List<int[]>> map = new HashMap<>();
+		
+		for(int[] path : paths) {
+			List<int[]> list;
+			
+			list = map.getOrDefault(path[0], new ArrayList<int[]>());
+			list.add(new int[] {path[1], path[2]});
+			map.put(path[0], list);
+			
+			list = map.getOrDefault(path[1], new ArrayList<int[]>());
+			list.add(new int[] {path[0], path[2]});
+			map.put(path[1], list);
+		}
+		
 		Queue<int[]> queue = new PriorityQueue<>((i1, i2) -> {
-			if(i1[2]==i2[2]) {
-				return Integer.compare(i1[0], i2[0]);
+			int value1 = Integer.max(i1[2], distance[i1[0]][1]);
+			int value2 = Integer.max(i2[2], distance[i2[0]][1]);
+			
+			if(value1==value2) {
+				return Integer.compare(distance[i1[0]][0], distance[i2[0]][0]);
 			}
-			return Integer.compare(i1[2], i2[2]);
+			return Integer.compare(value1, value2);
 		});
 		
 		for(int summit : summits) {
-			queueAdd(queue, list, summit, visit);
+			queueAdd(queue, map, summit, visit);
 		}
 		
 		int start, next, value;
@@ -53,38 +71,25 @@ public class 등산코스_정하기 {
 			if(visit[next]) continue;
 			visit[next] = true;
 			
-			if(distance[next][1]>value || (distance[next][1]==value && distance[next][0]>distance[start][0]) ) {
-				distance[next] = new int[] {distance[start][0], value};
+			distance[next] = new int[] {distance[start][0], value};
+			
+			for(int gate : gates) {
+				if(next==gate) {
+					return distance[next];
+				}
 			}
 			
-			queueAdd(queue, list, next, visit);
+			queueAdd(queue, map, next, visit);
 		}
 		
-		int[] answer = max;
-		
-		Arrays.sort(gates);
-		
-		for(int gate : gates) {
-			int[] temp = distance[gate];
-			
-			if(answer[1]>temp[1]) {
-				answer = temp;
-			}
-		}
-		
-		return answer;
+		return null;
 	}
 
-	private static void queueAdd(Queue<int[]> queue, List<int[]> list, int value, boolean[] visit) {
-		for(int[] temp : list) {
-			if(temp[0]==value) {
-				queue.add(new int[] {temp[0], temp[1], temp[2]});
-				visit[value] = true;
-			}else if(temp[1]==value) {
-				queue.add(new int[] {temp[1], temp[0], temp[2]});
-				visit[value] = true;
-			}
+	private static void queueAdd(Queue<int[]> queue, Map<Integer, List<int[]>> map, int value, boolean[] visit) {
+		for(int[] temp : map.get(value)) {
+			if(visit[temp[0]]) continue;
+			
+			queue.add(new int[] {value, temp[0], temp[1]});
 		}
 	}
-	
 }
