@@ -2,7 +2,6 @@ package programmers.level3;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Queue;
@@ -21,11 +20,13 @@ public class 등산코스_정하기 {
 	public static int[] solution(int n, int[][] paths, int[] gates, int[] summits) {
 		int[] max = new int[] {n, 10000000};
 		int[][] distance = new int[n+1][2];
+		boolean[] visit = new boolean[n+1];
 		
 		Arrays.fill(distance, max);
 		
 		for(int summit : summits) {
-			distance[summit] = new int[] {summit, 0}; 
+			distance[summit] = new int[] {summit, 0};
+			visit[summit] = true;
 		}
 		
 		List<int[]> list = new ArrayList<>(Arrays.asList(paths));
@@ -37,7 +38,7 @@ public class 등산코스_정하기 {
 		});
 		
 		for(int summit : summits) {
-			queueAdd(queue, list, summit);
+			queueAdd(queue, list, summit, visit);
 		}
 		
 		int start, next, value;
@@ -49,11 +50,14 @@ public class 등산코스_정하기 {
 			next = pathValue[1];
 			value = Integer.max(pathValue[2], distance[start][1]);
 			
+			if(visit[next]) continue;
+			visit[next] = true;
+			
 			if(distance[next][1]>value || (distance[next][1]==value && distance[next][0]>distance[start][0]) ) {
 				distance[next] = new int[] {distance[start][0], value};
 			}
 			
-			queueAdd(queue, list, next);
+			queueAdd(queue, list, next, visit);
 		}
 		
 		int[] answer = max;
@@ -71,17 +75,14 @@ public class 등산코스_정하기 {
 		return answer;
 	}
 
-	private static void queueAdd(Queue<int[]> queue, List<int[]> list, int value) {
-		Iterator<int[]> iterator = list.iterator();
-		
-		while(iterator.hasNext()) {
-			int[] temp = iterator.next();
+	private static void queueAdd(Queue<int[]> queue, List<int[]> list, int value, boolean[] visit) {
+		for(int[] temp : list) {
 			if(temp[0]==value) {
 				queue.add(new int[] {temp[0], temp[1], temp[2]});
-				iterator.remove();
+				visit[value] = true;
 			}else if(temp[1]==value) {
 				queue.add(new int[] {temp[1], temp[0], temp[2]});
-				iterator.remove();
+				visit[value] = true;
 			}
 		}
 	}
