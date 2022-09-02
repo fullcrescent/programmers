@@ -5,22 +5,33 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.PriorityQueue;
+import java.util.Queue;
 
 public class 등산코스_정하기 {
 
 	public static void main(String[] args) {
 		int n = 7;
-		int[][] paths = {{1, 2, 5}, {1, 4, 1}, {2, 3, 1}, {2, 6, 7}, {4, 5, 1}, {5, 6, 1}, {6, 7, 1}};
-		int[] gates = {3, 7};
-		int[] summits = {1, 5};
+		int[][] paths = {{1, 4, 4}, {1, 6, 1}, {1, 7, 3}, {2, 5, 2}, {3, 7, 4}, {5, 6, 6}};
+		int[] gates = {1};
+		int[] summits = {2, 3, 4};
 		int[] answer = solution(n, paths, gates, summits);
 		System.out.println(Arrays.toString(answer));
 	}
 	
-	/* 다익스트라로 풀어야함. 시간초과 */
 	public static int[] solution(int n, int[][] paths, int[] gates, int[] summits) {
-		Map<Integer, List<int[]>> map = new HashMap<>();
+		int[] max = new int[] {n, 10000000};
+		int[][] distance = new int[n+1][2];
 		boolean[] visit = new boolean[n+1];
+		
+		Arrays.fill(distance, max);
+		
+		for(int summit : summits) {
+			distance[summit] = new int[] {summit, 0};
+			visit[summit] = true;
+		}
+		
+		Map<Integer, List<int[]>> map = new HashMap<>();
 		
 		for(int[] path : paths) {
 			List<int[]> list;
@@ -34,44 +45,51 @@ public class 등산코스_정하기 {
 			map.put(path[1], list);
 		}
 		
-		for(int key : map.keySet()) {
-			List<int[]> list = map.get(key);
-			list.sort((i1, i2) -> Integer.compare(i1[1], i2[1]));
-		}
-		
-		Arrays.sort(summits);
+		Queue<int[]> queue = new PriorityQueue<>((i1, i2) -> {
+			int value1 = Integer.max(i1[2], distance[i1[0]][1]);
+			int value2 = Integer.max(i2[2], distance[i2[0]][1]);
+			
+			if(value1==value2) {
+				return Integer.compare(distance[i1[0]][0], distance[i2[0]][0]);
+			}
+			return Integer.compare(value1, value2);
+		});
 		
 		for(int summit : summits) {
-			visit[summit] = true;
+			queueAdd(queue, map, summit, visit);
 		}
 		
-		for(int summit : summits) {
-			function(map, gates, visit, summit, 0, summit);
+		int start, next, value;
+		
+		while(!queue.isEmpty()) {
+			int[] pathValue = queue.poll();
+			
+			start = pathValue[0];
+			next = pathValue[1];
+			value = Integer.max(pathValue[2], distance[start][1]);
+			
+			if(visit[next]) continue;
+			visit[next] = true;
+			
+			distance[next] = new int[] {distance[start][0], value};
+			
+			for(int gate : gates) {
+				if(next==gate) {
+					return distance[next];
+				}
+			}
+			
+			queueAdd(queue, map, next, visit);
 		}
 		
-		return new int[] {end, min};
+		return null;
 	}
 
-	static int min = Integer.MAX_VALUE;
-	static int end = Integer.MAX_VALUE;
-	
-	private static void function(Map<Integer, List<int[]>> map, int[] gates, boolean[] visit, int current, int intensity, int summit) {
-		if(min<=intensity) return;
-		
-		for(int gate : gates) {
-			if(current==gate) {
-				min = intensity;
-				end = summit;
-				return;
-			}
-		}
-	
-		for(int[] temp : map.get(current)) {
+	private static void queueAdd(Queue<int[]> queue, Map<Integer, List<int[]>> map, int value, boolean[] visit) {
+		for(int[] temp : map.get(value)) {
 			if(visit[temp[0]]) continue;
 			
-			visit[temp[0]] = true;
-			function(map, gates, visit, temp[0], Integer.max(intensity, temp[1]), summit);
-			visit[temp[0]] = false;
+			queue.add(new int[] {value, temp[0], temp[1]});
 		}
 	}
 	
