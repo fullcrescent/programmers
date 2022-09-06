@@ -3,10 +3,12 @@ package programmers.level3;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Queue;
+import java.util.Set;
 
 public class 등산코스_정하기 {
 
@@ -17,6 +19,13 @@ public class 등산코스_정하기 {
 		int[] summits = {2, 3, 4};
 		int[] answer = solution(n, paths, gates, summits);
 		System.out.println(Arrays.toString(answer));
+		
+		int n1 = 7;
+		int[][] paths1 = {{1, 4, 4}, {1, 6, 1}, {1, 7, 3}, {2, 5, 2}, {3, 7, 4}, {5, 6, 6}};
+		int[] gates1 = {1};
+		int[] summits1 = {2, 3, 4};
+		int[] answer1 = solution(n1, paths1, gates1, summits1);
+		System.out.println(Arrays.toString(answer1));
 	}
 	
 	public static int[] solution(int n, int[][] paths, int[] gates, int[] summits) {
@@ -91,5 +100,15 @@ public class 등산코스_정하기 {
 			
 			queue.add(new int[] {value, temp[0], temp[1]});
 		}
+	}
+	
+	/* 다른 사람의 풀이 참고 */
+	public static int[] solution1(int n, int[][] paths, int[] gates, int[] summits) {
+		int max = 10000000;
+		int[] distance = new int[n+1];
+		Set<Integer> gateSet = new HashSet<>();
+		Set<Integer> summitSet = new HashSet<>();
+		
+		return null;
 	}
 }
