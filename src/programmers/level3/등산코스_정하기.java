@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class 등산코스_정하기 {
 
@@ -104,11 +105,61 @@ public class 등산코스_정하기 {
 	
 	/* 다른 사람의 풀이 참고 */
 	public static int[] solution1(int n, int[][] paths, int[] gates, int[] summits) {
-		int max = 10000000;
-		int[] distance = new int[n+1];
-		Set<Integer> gateSet = new HashSet<>();
-		Set<Integer> summitSet = new HashSet<>();
+		Set<Integer> gateSet = Arrays.stream(gates).boxed().collect(Collectors.toSet());
+		Set<Integer> summitSet = Arrays.stream(summits).boxed().collect(Collectors.toSet());
 		
-		return null;
+		Map<Integer, List<int[]>> map = new HashMap<>();
+		
+		for(int[] path : paths) {
+			List<int[]> list;
+			
+			list = map.getOrDefault(path[0], new ArrayList<int[]>());
+			list.add(new int[] {path[1], path[2]});
+			map.put(path[0], list);
+			
+			list = map.getOrDefault(path[1], new ArrayList<int[]>());
+			list.add(new int[] {path[0], path[2]});
+			map.put(path[1], list);
+		}
+		
+		int minSummit=n, minCost = 10000000;
+		for(int summit : summitSet) {
+			int cost = bfs(map, gateSet, summitSet, summit);
+			if(cost<minCost) {
+				minCost = cost;
+				minSummit = summit;
+			}else if(cost==minCost) {
+				minSummit = Math.min(minSummit, summit);
+			}
+		}
+		
+		return new int[] {minSummit, minCost};
+	}
+
+	private static int bfs(Map<Integer, List<int[]>> map, Set<Integer> gateSet, Set<Integer> summitSet, int summit) {
+		Set<Integer> set = new HashSet<>();
+		Queue<int[]> queue = new PriorityQueue<>((i1, i2) -> Integer.compare(i1[1], i2[1]));
+		queue.add(new int[] {summit, 0});
+		
+		while(queue.isEmpty()) {
+			int[] temp = queue.poll();
+			int next = temp[0];
+			int cost = temp[1];
+			
+			if(gateSet.contains(next)) return cost;
+			
+			if(summitSet.contains(next)) continue;
+			if(set.contains(next)) continue;
+			
+			set.add(next);
+			
+			for(int[] queueAdd : map.get(next)) {
+				if(set.contains(queueAdd[0])) continue;
+				
+				queue.add(new int[] {queueAdd[0], Math.max(queueAdd[0], cost)});
+			}
+		}
+		
+		return Integer.MAX_VALUE;
 	}
 }
