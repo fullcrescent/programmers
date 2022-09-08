@@ -25,7 +25,7 @@ public class 등산코스_정하기 {
 		int[][] paths1 = {{1, 4, 4}, {1, 6, 1}, {1, 7, 3}, {2, 5, 2}, {3, 7, 4}, {5, 6, 6}};
 		int[] gates1 = {1};
 		int[] summits1 = {2, 3, 4};
-		int[] answer1 = solution(n1, paths1, gates1, summits1);
+		int[] answer1 = solution1(n1, paths1, gates1, summits1);
 		System.out.println(Arrays.toString(answer1));
 	}
 	
@@ -106,7 +106,6 @@ public class 등산코스_정하기 {
 	/* 다른 사람의 풀이 참고 */
 	public static int[] solution1(int n, int[][] paths, int[] gates, int[] summits) {
 		Set<Integer> gateSet = Arrays.stream(gates).boxed().collect(Collectors.toSet());
-		Set<Integer> summitSet = Arrays.stream(summits).boxed().collect(Collectors.toSet());
 		
 		Map<Integer, List<int[]>> map = new HashMap<>();
 		
@@ -123,8 +122,12 @@ public class 등산코스_정하기 {
 		}
 		
 		int minSummit=n, minCost = 10000000;
-		for(int summit : summitSet) {
+		for(int summit : summits) {
+			Set<Integer> summitSet = Arrays.stream(summits).boxed().collect(Collectors.toSet());
+			summitSet.remove(summit);
+			
 			int cost = bfs(map, gateSet, summitSet, summit);
+			
 			if(cost<minCost) {
 				minCost = cost;
 				minSummit = summit;
@@ -141,7 +144,7 @@ public class 등산코스_정하기 {
 		Queue<int[]> queue = new PriorityQueue<>((i1, i2) -> Integer.compare(i1[1], i2[1]));
 		queue.add(new int[] {summit, 0});
 		
-		while(queue.isEmpty()) {
+		while(!queue.isEmpty()) {
 			int[] temp = queue.poll();
 			int next = temp[0];
 			int cost = temp[1];
@@ -156,7 +159,7 @@ public class 등산코스_정하기 {
 			for(int[] queueAdd : map.get(next)) {
 				if(set.contains(queueAdd[0])) continue;
 				
-				queue.add(new int[] {queueAdd[0], Math.max(queueAdd[0], cost)});
+				queue.add(new int[] {queueAdd[0], Math.max(queueAdd[1], cost)});
 			}
 		}
 		
