@@ -1,11 +1,18 @@
 package programmers.level3;
 
+import java.util.PriorityQueue;
+import java.util.Queue;
+
 public class 경주로_건설 {
 
 	public static void main(String[] args) {
 		int[][] board = {{0,0,1,0},{0,0,0,0},{0,1,0,1},{1,0,0,0}};
 		int answer = solution(board);
 		System.out.println(answer);
+		
+		int[][] board1 = {{0,0,1,0},{0,0,0,0},{0,1,0,1},{1,0,0,0}};
+		int answer1 = solution1(board1);
+		System.out.println(answer1);
 	}
 	
 	public static int solution(int[][] board) {
@@ -48,4 +55,24 @@ public class 경주로_건설 {
 			}
 		}
 	}
+	
+	// 다른 사람의 풀이 참고
+	public static int solution1(int[][] board) {
+		int[][] sum1 = new int[board.length][board[0].length];
+		sum1[0][0] = -1;
+		
+		int[] dx1 = {0, 0, 1, -1};   
+		int[] dy1 = {1, -1, 0, 0};   
+		int[] direct1 = {0, 1, 2, 3};
+		
+		Queue<Point> queue = new PriorityQueue<>();
+		
+		return min;
+	}
+}
+
+class Point{
+	int x;
+	int y;
+	int cost;
 }
