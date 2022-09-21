@@ -8,6 +8,12 @@ public class 보행자_천국 {
 		int[][] cityMap = {{0, 0, 0, 0, 0, 0}, {0, 2, 0, 2, 2, 2}, {1, 0, 0, 2, 2, 0}};
 		int answer = solution(m, n, cityMap);
 		System.out.println(answer);
+		
+		int m1 = 3;
+		int n1 = 6;
+		int[][] cityMap1 = {{0, 0, 0, 0, 0, 0}, {0, 2, 0, 2, 2, 2}, {1, 0, 0, 2, 2, 0}};
+		int answer1 = solution1(m1, n1, cityMap1);
+		System.out.println(answer1);
 	}
 	
 	static int MOD = 20170805;
@@ -59,4 +65,30 @@ public class 보행자_천국 {
 		
 		return (int)dp[m-1][n-1];
 	}
+	
+	public static int solution1(int m, int n, int[][] cityMap) {
+		// 바깥쪽을 구성해 연산을 더 쉽게 
+		int[][] right = new int[m+1][n+1];
+		int[][] down = new int[m+1][n+1];
+		
+		right[1][1] = 1;
+		down[1][1] = 1;
+		
+		for(int i=0; i<m; i++) {
+			for(int j=0; j<n; j++) {
+				if(cityMap[i][j]==0) {
+					int count = (right[i+1][j] + down[i][j+1])%MOD;
+					right[i+1][j+1] += count;
+					down[i+1][j+1] += count;
+				}else if(cityMap[i][j]==2) {
+					right[i+1][j+1] = right[i+1][j];
+					down[i+1][j+1] = down[i][j+1];
+				}
+			}
+		}
+		
+		return (right[m][n-1]+down[m-1][n])%MOD;
+	}
+	
+	
 }
