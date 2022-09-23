@@ -58,21 +58,60 @@ public class 경주로_건설 {
 	
 	// 다른 사람의 풀이 참고
 	public static int solution1(int[][] board) {
-		int[][] sum1 = new int[board.length][board[0].length];
-		sum1[0][0] = -1;
+		int answer = Integer.MAX_VALUE;
+		// dfs의 경우 방향성 고려 X, bfs의 경우 방향성에 따른 고려 O
+		int[][][] sum1 = new int[board.length][board[0].length][4];
+		sum1[0][0][0] = -1;
+		sum1[0][0][1] = -1;
+		sum1[0][0][2] = -1;
+		sum1[0][0][3] = -1;
 		
-		int[] dx1 = {0, 0, 1, -1};   
-		int[] dy1 = {1, -1, 0, 0};   
-		int[] direct1 = {0, 1, 2, 3};
+		int[] dx1 = {1, 0, -1, 0};   
+		int[] dy1 = {0, 1, 0, -1};   
+		int[] dir1 = {0, 1, 2, 3};
+		int curveCost = 600;   
+		int straightCost = 100;
 		
-		Queue<Point> queue = new PriorityQueue<>();
+		Queue<Point> queue = new PriorityQueue<>((i1, i2) -> Integer.compare(i1.cost, i2.cost));
 		
-		return min;
+		queue.add(new Point(0, 0, -1, -500));
+		
+		while(!queue.isEmpty()) {
+			Point point = queue.poll();
+			
+			if(point.x==board.length-1 && point.y==board[0].length-1) {
+				answer = Math.min(point.cost, answer);
+				break;
+			}
+			
+			for(int i=0; i<4; i++) {
+				int tempX = point.x+dx1[i];
+				int tempY = point.y+dy1[i];
+				
+				if(tempX<=board.length-1 && tempX>-1 && tempY<=board[tempX].length-1 && tempY>-1 && board[tempX][tempY] == 0) {
+					int tempCost = point.cost + (point.dir!=dir1[i] ? curveCost : straightCost);
+					if(sum1[tempX][tempY][dir1[i]]==0 || sum1[tempX][tempY][dir1[i]] >= tempCost) {						
+						sum1[tempX][tempY][dir1[i]] = tempCost;
+						queue.add(new Point(tempX, tempY, dir1[i], tempCost));
+					}
+				}
+			}
+		}
+		
+		return answer;
 	}
 }
 
 class Point{
 	int x;
 	int y;
+	int dir;
 	int cost;
+	
+	public Point(int x, int y, int dir, int cost) {
+		this.x = x;
+		this.y = y;
+		this.dir = dir;
+		this.cost = cost;
+	}
 }
