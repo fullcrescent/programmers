@@ -3,7 +3,7 @@ package programmers.level2;
 public class 타일링 {
 
 	public static void main(String[] args) {
-		int n = 8;
+		int n = 6;
 		int answer = solution(n);
 		System.out.println(answer);
 	}
@@ -13,6 +13,7 @@ public class 타일링 {
 		
 		int vertical = 1;
 		int horizontal = 1;
+		int fac = 1;
 		
 		int index = 2;
 		
@@ -20,12 +21,13 @@ public class 타일링 {
 			int temp = vertical;
 			vertical = ((vertical + horizontal) % divide);
 			horizontal = temp;
+			fac = (fac * (fac+1)) %divide ;
 		}
 		
 		int n2 = (vertical + horizontal) % divide;
 		
-		int add = (int) (Math.pow(2, n/2) -2);
-		int answer = (n2*2 + add) % divide;
+//		int add = Math.pow(3, fac-2);
+		int answer = (n2*2) % divide;
 		
 		return answer-1;
 	}
