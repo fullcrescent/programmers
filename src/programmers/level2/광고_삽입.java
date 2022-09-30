@@ -1,15 +1,10 @@
 package programmers.level2;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
 
 public class 광고_삽입 {
 
-	public static void main(String[] args) throws ParseException {
+	public static void main(String[] args) {
 		String play_time = "02:03:55";
 		String adv_time = "00:14:15";
 		String[] logs = {"01:20:15-01:45:14", "00:25:50-00:48:29", "00:40:31-01:00:00", "01:37:44-02:02:30", "01:30:59-01:53:29"};
@@ -17,49 +12,54 @@ public class 광고_삽입 {
 		System.out.println(answer);
 	}
 	
-	public static String solution(String play_time, String adv_time, String[] logs) throws ParseException {
+	public static String solution(String play_time, String adv_time, String[] logs) {
 		String answer = null;
 		
 		Arrays.sort(logs);
 		
-		String dateformat = "HH:mm:ss";
-		SimpleDateFormat sdf = new SimpleDateFormat(dateformat);
-		List<Date> list = new ArrayList<>();
-		list.add(sdf.parse("00:00:00"));
-		
-		Date[] start = new Date[logs.length];
-		Date[] end= new Date[logs.length];
-		Date addTime = sdf.parse(adv_time);
+		long[] start = new long[logs.length];
+		long[] end= new long[logs.length];
+		long addTime = convertSeconds(adv_time);
 		
 		for(int i=0; i<logs.length; i++) {
-			start[i] = sdf.parse(logs[i].split("-")[0]);
-			end[i] = sdf.parse(logs[i].split("-")[1]);
-			list.add(start[i]);
+			start[i] = convertSeconds(logs[i].split("-")[0]);
+			end[i] = convertSeconds(logs[i].split("-")[1]);
 		}
 		
-		long max = 0;
+		long max = 0L;
 		
 		for(int i=0; i<logs.length; i++) {
-			Date temp = list.get(i);
-			long tempSum = 0;
+			long temp = start[i];
+			long tempSum = 0L;
 			
 			for(int j=0; j<logs.length; j++) {
-				long startTime = temp.getTime()<start[j].getTime() ? start[j].getTime() : temp.getTime();
-				long endTime = temp.getTime()+(addTime.getTime()+32400000)<end[j].getTime() ?  temp.getTime()+(addTime.getTime()+32400000) : end[j].getTime();
-				
-				startTime += 32400000;
-				endTime += 32400000;
-				
-				if(startTime<endTime) tempSum += endTime-startTime;
+				long endTime = temp+addTime;
+				if(start[j]<endTime) {
+					long startTime = temp<start[j] ? start[j] : temp;
+					endTime = endTime<end[j] ?  endTime : end[j];
+					
+					if(startTime<endTime) tempSum += endTime-startTime;
+				}else {
+					break;
+				}
 			}
 			
 			if(max<tempSum) {
 				max = tempSum;
-				answer = sdf.format(temp);
+				answer = convertTime(temp);
 			}
 		}
 		
 		return answer;
+	}
+
+	private static String convertTime(long temp) {
+		return String.format("%02d:%02d:%02d", temp/3600, temp%3600/60, temp%60);
+	}
+
+	private static long convertSeconds(String time) {
+		String[] temp = time.split(":");
+		return Long.valueOf(temp[0])*3600 +  Long.valueOf(temp[1])*60 +  Long.valueOf(temp[2]);
 	}
 
 }
