@@ -1,5 +1,7 @@
 package programmers.level3;
 
+import java.util.Arrays;
+
 public class 스티커_모으기 {
 
 	public static void main(String[] args) {
@@ -9,31 +11,22 @@ public class 스티커_모으기 {
 	}
 	
 	public static int solution(int[] sticker) {
-		return Math.max(sum(sticker, 0, sticker.length-5), sum(sticker, 1, sticker.length-4));
+		if(sticker.length<4) return Arrays.stream(sticker).max().getAsInt();
+		
+		return Math.max(sum(Arrays.copyOfRange(sticker, 0, sticker.length-1)), sum(Arrays.copyOfRange(sticker, 1, sticker.length)));
 	}
 	
-	private static int sum(int[] sticker, int index, int length) {
-		int answer = sticker[index];
+	private static int sum(int[] temp) {
+		int[] sum = new int[temp.length];
 		
-		while(index<length) {
-			if((sticker[index+2]) + (sticker[index+4]) > sticker[index+3]) {
-				index += 2;
-				
-			}else {
-				if(sticker[index]<sticker[index+1]) {
-					answer += sticker[index+1]-sticker[index];
-				}
-				
-				index += 3;
-			}
-			
-			answer += sticker[index];
+		sum[0] = temp[0];
+		sum[1] = temp[1];
+		sum[2] = sum[0] + temp[2];
+		
+		for(int i=3; i<temp.length; i++) {
+			sum[i] = temp[i] + Math.max(sum[i-2], sum[i-3]);
 		}
 		
-		if(index+2<=sticker.length-2+index) {
-			answer += sticker[index+2];
-		}
-		
-		return answer;
+		return Math.max(sum[temp.length-1], sum[temp.length-2]);
 	}
 }
