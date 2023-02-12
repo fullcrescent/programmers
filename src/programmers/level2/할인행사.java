@@ -1,44 +1,49 @@
 package programmers.level2;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
 public class 할인행사 {
 
 	public static void main(String[] args) {
-		String[] want = {"banana", "apple", "rice", "pork", "pot"};
-		int[] number = {3, 2, 2, 2, 1};
-		String[] discount = {"chicken", "apple", "apple", "banana", "rice", "apple", "pork", "banana", "pork", "rice", "pot", "banana", "apple", "banana"};
+		String[] want = {"banana"};
+		int[] number = {10};
+		String[] discount = {"apple", "banana","banana","banana","banana","banana","banana","banana","banana","banana","banana","banana","banana"};
 		int answer = solution(want, number, discount);
 		System.out.println(answer);
 	}
 	
 	public static int solution(String[] want, int[] number, String[] discount) {
-		Map<String, Integer> countMap = new HashMap<>();
-		
-		for(int i=0; i<want.length; i++) {
-			countMap.put(want[i], countMap.getOrDefault(want[i], 0)+number[i]);
+		int count = 0;
+		int length = 10;
+		Map<String, Integer> wantMap = new HashMap<>();
+		Map<String, Integer> discountMap = new HashMap<>();
+
+		for(int i=0; i<want.length; i++){
+			wantMap.put(want[i], number[i]);
 		}
-		
-		int start = -1;
-		int sum = Arrays.stream(number).sum();
-		
-		Loop :
-		while(++start<discount.length-10) {
-			Map<String, Integer> tempMap = new HashMap<>();
-			
-			for(int i=start; i<start+sum; i++) {
-				String discountItem = discount[i];
-				
-				tempMap.put(discountItem, tempMap.getOrDefault(discountItem, 0)+1);
-				
-				if(tempMap.get(discountItem)>countMap.getOrDefault(discountItem, 0)) continue Loop;
-			}
-			
-			return start+1;
+
+		for(int i=0; i<length; i++){
+			discountMap.put(discount[i], discountMap.getOrDefault(discount[i], 0)+1);
 		}
-		
-		return 0;
+
+		if(compare(wantMap, discountMap)) count++;
+
+		for(int i=0; i<discount.length-10; i++){
+			discountMap.put(discount[i], discountMap.get(discount[i])-1);
+			discountMap.put(discount[i+10], discountMap.getOrDefault(discount[i+10], 0)+1);
+
+			if(compare(wantMap, discountMap)) count++;
+		}
+
+		return count;
+	}
+
+	private static boolean compare(Map<String, Integer> wantMap, Map<String, Integer> discountMap) {
+		for(String key : wantMap.keySet()){
+			if(!wantMap.get(key).equals(discountMap.get(key)))	return false;
+		}
+
+		return true;
 	}
 }
