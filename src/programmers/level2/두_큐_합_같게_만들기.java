@@ -1,8 +1,8 @@
 package programmers.level2;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class 두_큐_합_같게_만들기 {
 
@@ -16,9 +16,14 @@ public class 두_큐_합_같게_만들기 {
 	public static int solution(int[] queue1, int[] queue2) {
 		int answer = 0;
 		
-		List<Integer> list1 = Arrays.stream(queue1).boxed().collect(Collectors.toList());
-		List<Integer> list2 = Arrays.stream(queue2).boxed().collect(Collectors.toList());
-		
+		List<Long> list1 = new ArrayList<>();
+		List<Long> list2 = new ArrayList<>();
+
+		for(int i=0; i<queue1.length; i++){
+			list1.add((long) queue1[i]);
+			list2.add((long) queue2[i]);
+		}
+
 		long sum1 = Arrays.stream(queue1).sum();
 		long sum2 = Arrays.stream(queue2).sum();
 		
@@ -29,7 +34,7 @@ public class 두_큐_합_같게_만들기 {
 			
 			while(answer<2*(queue1.length+queue2.length)) {
 				answer++;
-				int add = 0;
+				Long add;
 				if(sum1>sum2) {
 					add = list1.get(index1);
 					list2.add(add);
@@ -46,7 +51,7 @@ public class 두_큐_합_같게_만들기 {
 				
 				if(sum1==sum2) break;
 				
-				if(sum1==0 || sum2==0) return -1;
+				if(sum1==0 || sum2==0) return 0;
 			}
 			
 			return answer==2*(queue1.length+queue2.length) ? -1 : answer;
