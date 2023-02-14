@@ -1,8 +1,6 @@
 package programmers.level2;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 public class 두_큐_합_같게_만들기 {
 
@@ -11,8 +9,13 @@ public class 두_큐_합_같게_만들기 {
 		int[] queue2 = {24, 12};
 		int answer = solution(queue1, queue2);
 		System.out.println(answer);
+
+		int[] queue1_1 = {24, 12};
+		int[] queue2_1 = {24, 12};
+		int answer1 = solution1(queue1_1, queue2_1);
+		System.out.println(answer1);
 	}
-	
+
 	public static int solution(int[] queue1, int[] queue2) {
 		int answer = 0;
 		
@@ -60,5 +63,40 @@ public class 두_큐_합_같게_만들기 {
 		}else {
 			return -1;
 		}
+	}
+
+	/*다른 사람의 풀이 참고*/
+	private static int solution1(int[] queue1, int[] queue2) {
+		int answer = 0;
+
+		Queue<Integer> q1 = new LinkedList<>(Arrays.asList(Arrays.stream(queue1).boxed().toArray(Integer[]::new)));
+		Queue<Integer> q2 = new LinkedList<>(Arrays.asList(Arrays.stream(queue2).boxed().toArray(Integer[]::new)));
+
+		long sum1 = q1.stream().mapToLong(i -> i).sum();
+		long sum2 = q2.stream().mapToLong(i -> i).sum();
+
+		if(sum1==sum2)	return 0;
+		else if((sum1+sum2)%2==1)	return -1;
+
+		while(answer<2*(queue1.length+queue2.length)){
+			if(q1.isEmpty() || q2.isEmpty()) break;
+			answer++;
+
+			if(sum1>sum2){
+				Integer temp = q1.poll();
+				q2.add(temp);
+				sum1 -= temp;
+				sum2 += temp;
+			}else{
+				Integer temp = q2.poll();
+				q1.add(temp);
+				sum1 += temp;
+				sum2 -= temp;
+			}
+
+			if(sum1==sum2) break;
+		}
+
+		return answer==2*(queue1.length+queue2.length) ? -1 : answer;
 	}
 }
