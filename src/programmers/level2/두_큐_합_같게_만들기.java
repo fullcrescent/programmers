@@ -7,8 +7,8 @@ import java.util.List;
 public class 두_큐_합_같게_만들기 {
 
 	public static void main(String[] args) {
-		int[] queue1 = {24};
-		int[] queue2 = {24, 10};
+		int[] queue1 = {24, 12};
+		int[] queue2 = {24, 12};
 		int answer = solution(queue1, queue2);
 		System.out.println(answer);
 	}
@@ -26,7 +26,9 @@ public class 두_큐_합_같게_만들기 {
 
 		long sum1 = Arrays.stream(queue1).sum();
 		long sum2 = Arrays.stream(queue2).sum();
-		
+
+		if(sum1==sum2)  return 0;
+
 		int index1 = 0;
 		int index2 = 0;
 		
