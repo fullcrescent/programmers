@@ -1,6 +1,7 @@
 package programmers.level2;
 
 import java.util.Arrays;
+import java.util.Stack;
 
 public class 뒤에_있는_큰_수_찾기 {
     public static void main(String[] args){
@@ -11,22 +12,18 @@ public class 뒤에_있는_큰_수_찾기 {
 
     public static int[] solution(int[] numbers) {
         int[] answer = new int[numbers.length];
-        int max = numbers[numbers.length-1];
+        Stack<int[]> stack = new Stack<>();
 
-        for(int i=numbers.length-1; i>-1; i--){
-            if(numbers[i]>=max){
-                max = numbers[i];
-                answer[i] = -1;
-                continue;
+        for(int i=0; i<numbers.length; i++){
+            while(!stack.isEmpty() && stack.peek()[0]<numbers[i]){
+                int[] temp = stack.pop();
+                answer[temp[1]] = numbers[i];
             }
 
-            int j = i;
-            while(j++<numbers.length){
-                if(numbers[i]<numbers[j])   break;
-            }
-
-            answer[i] = numbers[j];
+            stack.add(new int[] {numbers[i], i});
         }
+
+        for(int[] temp : stack) answer[temp[1]] = -1;
 
         return answer;
     }
