@@ -10,6 +10,10 @@ public class 연속_부분_수열_합의_개수 {
         int[] elements = {7,9,1,1,4};
         int answer = solution(elements);
         System.out.println(answer);
+
+        int[] elements1 = {7,9,1,1,4};
+        int answer1 = solution1 (elements1);
+        System.out.println(answer1);
     }
 
     public static int solution(int[] elements) {
@@ -33,5 +37,30 @@ public class 연속_부분_수열_합의_개수 {
         }
 
         return set.size()+1;
+    }
+
+    /*다른 사람의 풀이 참고*/
+    public static int solution1(int[] elements) {
+        Set<Integer> set = new HashSet<>();
+
+        for(int length = 0; length < elements.length; length++){
+            int startIdx = 0;
+            int endIdx = startIdx + length;
+            int sum = 0;
+
+            for(int i = 0; i <= endIdx; i++){
+                sum += elements[i];
+            }
+
+            while(startIdx != elements.length){
+                set.add(sum);
+                sum -= elements[startIdx++];
+                endIdx++;
+                if(endIdx == elements.length) endIdx = 0;
+                sum += elements[endIdx];
+            }
+        }
+
+        return set.size();
     }
 }
