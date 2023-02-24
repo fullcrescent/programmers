@@ -6,7 +6,7 @@ import java.util.Queue;
 
 public class 표현_가능한_이진트리 {
     public static void main(String[] args){
-        long[] numbers = {682, 7, 42, 5, 63, 111, 95};
+        long[] numbers = {21};
         int[] answer = solution(numbers);
         System.out.println(Arrays.toString(answer));
     }
@@ -17,33 +17,43 @@ public class 표현_가능한_이진트리 {
 
         for(long number : numbers){
             String s = Long.toBinaryString(number);
-            if(s.length()%2==0) s = "0" + s;
-            System.out.println(s);
 
-            if(Integer.toBinaryString(s.length()).contains("0")){
-                i++;
-                continue;
-            }
+            String[] sArray = {s, "0"+s, s+"0", "0"+s+"0"};
 
-            Queue<int[]> queue = new LinkedList<>();
-            queue.add(new int[] {0, s.length()});
-
-            while(!queue.isEmpty()){
-                int[] temp = queue.poll();
-
-                if(temp[0]+1==temp[1]){
-                    answer[i++] = 1;
-                    break;
-                }else if(s.charAt((temp[0]+temp[1])/2)=='0'){
-                    i++;
+            for(String temp : sArray){
+                if(valid(temp)){
+                    answer[i] = 1;
                     break;
                 }
-
-                queue.add(new int[] {temp[0], (temp[0]+temp[1])/2});
-                queue.add(new int[] {(temp[0]+temp[1])/2+1, temp[1]});
             }
+
+            i++;
         }
 
         return answer;
+    }
+
+    private static boolean valid(String s) {
+        if(Integer.toBinaryString(s.length()).contains("0")){
+            return false;
+        }
+
+        Queue<int[]> queue = new LinkedList<>();
+        queue.add(new int[] {0, s.length()});
+
+        while(!queue.isEmpty()){
+            int[] temp = queue.poll();
+
+            if(temp[0]+1==temp[1]){
+                return true;
+            }else if(s.charAt((temp[0]+temp[1])/2)=='0'){
+                return false;
+            }
+
+            queue.add(new int[] {temp[0], (temp[0]+temp[1])/2});
+            queue.add(new int[] {(temp[0]+temp[1])/2+1, temp[1]});
+        }
+
+        return true;
     }
 }
