@@ -6,7 +6,7 @@ import java.util.Queue;
 
 public class 표현_가능한_이진트리 {
     public static void main(String[] args){
-        long[] numbers = {21};
+        long[] numbers = {42};
         int[] answer = solution(numbers);
         System.out.println(Arrays.toString(answer));
     }
@@ -17,8 +17,8 @@ public class 표현_가능한_이진트리 {
 
         for(long number : numbers){
             String s = Long.toBinaryString(number);
-
-            String[] sArray = {s, "0"+s, s+"0", "0"+s+"0"};
+            System.out.println(s);
+            String[] sArray = {s, "0"+s};
 
             for(String temp : sArray){
                 if(valid(temp)){
@@ -38,20 +38,20 @@ public class 표현_가능한_이진트리 {
             return false;
         }
 
-        Queue<int[]> queue = new LinkedList<>();
-        queue.add(new int[] {0, s.length()});
+        Queue<long[]> queue = new LinkedList<>();
+        queue.add(new long[] {0, s.length()});
 
         while(!queue.isEmpty()){
-            int[] temp = queue.poll();
+            long[] temp = queue.poll();
 
             if(temp[0]+1==temp[1]){
                 return true;
-            }else if(s.charAt((temp[0]+temp[1])/2)=='0'){
+            }else if(s.charAt((int) ((temp[0]+temp[1])/2))=='0'){
                 return false;
             }
 
-            queue.add(new int[] {temp[0], (temp[0]+temp[1])/2});
-            queue.add(new int[] {(temp[0]+temp[1])/2+1, temp[1]});
+            queue.add(new long[] {temp[0], (temp[0]+temp[1])/2});
+            queue.add(new long[] {(temp[0]+temp[1])/2+1, temp[1]});
         }
 
         return true;
