@@ -1,9 +1,6 @@
 package programmers.level2;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
+import java.util.*;
 import java.util.function.Function;
 
 public class 숫자_변환하기 {
@@ -19,10 +16,14 @@ public class 숫자_변환하기 {
         Queue<int[]> queue = new LinkedList<>();
         queue.add(new int[] {0, x});
 
+        Set<Integer> set = new HashSet<>();
+        set.add(x);
+
         List<Function<Integer, Integer>> list = new ArrayList<>();
         list.add(i -> i*2);
         list.add(i -> i*3);
         list.add(i -> i+n);
+
 
         while(!queue.isEmpty()){
             int[] temp = queue.poll();
@@ -33,7 +34,10 @@ public class 숫자_변환하기 {
                 int input = f.apply(temp[1]);
 
                 if(input<=y){
-                    queue.add(new int[] {temp[0]+1, input});
+                    if(!set.contains(input)){
+                        queue.add(new int[] {temp[0]+1, input});
+                        set.add(input);
+                    }
                 }
             }
 
@@ -42,3 +46,4 @@ public class 숫자_변환하기 {
         return -1;
     }
 }
+
