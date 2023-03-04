@@ -4,7 +4,7 @@ import java.util.Stack;
 
 public class 택배상자 {
     public static void main(String[] args){
-        int[] order = {5, 4, 3, 2, 1};
+        int[] order = {1,2,4,3,5};
         int answer = solution(order);
         System.out.println(answer);
     }
@@ -12,31 +12,27 @@ public class 택배상자 {
     public static int solution(int[] order) {
         Stack<Integer> stack = new Stack<>();
 
-        int count = 0, index1 = 0, index2 = 0;
+        int index = 1, orderIndex = 0;
 
-        while(index1<order.length){
-            if(!stack.isEmpty() && stack.peek()==order[index2]){
+        while(index<=order.length){
+            if(index==order[orderIndex]){
+                orderIndex++;
+                index++;
+            }else if(!stack.isEmpty() && stack.peek()==order[orderIndex]){
+                orderIndex++;
                 stack.pop();
-                index2++;
-                count++;
-            }else if(index1+1==order[index2]){
-                index2++;
-                count++;
             }else{
-                stack.add(index1+1);
+                stack.add(index++);
             }
-
-            index1++;
         }
 
         while(!stack.isEmpty()){
-            if(stack.peek()==order[index2]){
-                count++;
-            }else{
-                break;
-            }
+            if(stack.peek()!=order[orderIndex]) break;
+
+            stack.pop();
+            orderIndex++;
         }
 
-        return count;
+        return orderIndex;
     }
 }
