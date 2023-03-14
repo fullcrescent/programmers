@@ -1,11 +1,10 @@
 package programmers.level3;
 
 import java.util.*;
-import java.util.stream.IntStream;
 
 public class 모두_0으로_만들기 {
     public static void main(String[] args){
-        int[] a = {-5,0,2,1,2};
+        int[] a = {-5,0,1,3,1};
         int[][] edges = {{0,1},{3,4},{2,3},{0,3}};
         int answer = solution(a, edges);
         System.out.println(answer);
@@ -18,7 +17,6 @@ public class 모두_0으로_만들기 {
 
         Map<Integer, Integer> countMap = new HashMap<>();
         Map<Integer, List<Integer>> listMap = new HashMap<>();
-        boolean[] visit = new boolean[a.length];
 
         for(var temp : edges){
             List<Integer> list;
@@ -37,19 +35,25 @@ public class 모두_0으로_만들기 {
         }
 
         while(true){
-            for(var key : countMap.keySet()){
-                if(!visit[key] && countMap.get(key)==1){
-                    visit[key] = true;
+            Iterator<Integer> iterator = countMap.keySet().iterator();
+
+            while(iterator.hasNext()){
+                Integer key = iterator.next();
+
+                if(countMap.get(key)==1){
+                    iterator.remove();
                     answer += Math.abs(a[key]);
 
-                    var link = listMap.get(key).get(0);
+                    if(countMap.size()==1) return answer;
+
+                    var link = -1;
+
+                    for(var temp : listMap.get(key)){
+                        if(countMap.containsKey(temp))  link = temp;
+                    }
+
                     a[link] += a[key];
                     countMap.put(link, countMap.get(link)-1);
-
-                    if(IntStream
-                            .range(0, visit.length)
-                            .filter(i -> visit[i])
-                            .count()==visit.length-1) return answer;
                 }
             }
         }
