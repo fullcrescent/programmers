@@ -17,22 +17,16 @@ public class 풍선_터트리기 {
 		for(int i=2; i<a.length; i++) right = Math.min(right, a[i]);
 		
 		for(int i=1; i<a.length-1; i++) {
-			int temp = 0;
 			int value = a[i];
 			
 			left = Math.min(left, a[i-1]);
 			
-			if(left<value)	temp++;
-			
-			if(value>right)	temp++;
-			
-			if(right==a[i+1]) {
+			if(left<value)	{
 				right = 1000000000;
-				
-				for(int j=i+2; j<a.length; j++) right = Math.min(right, a[j]);
+				for(int j=i+1; j<a.length; j++) right = Math.min(right, a[j]);
+
+				if(value>right)	answer--;
 			}
-			
-			if(temp==2) answer--;
 		}
 		
 		return answer;
