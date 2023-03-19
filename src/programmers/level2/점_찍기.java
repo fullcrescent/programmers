@@ -12,7 +12,7 @@ public class 점_찍기 {
         long answer = 0;
 
         for(int i=0; i<=d; i=i+k){
-            answer += Math.sqrt((long)Math.pow(d, 2) - (long)Math.pow(i, 2))/k +1;
+            answer += (long) (Math.sqrt((long)Math.pow(d, 2) - (long)Math.pow(i, 2))/k +1);
         }
 
         return answer;
