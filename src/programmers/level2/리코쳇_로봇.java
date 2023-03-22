@@ -1,5 +1,6 @@
 package programmers.level2;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -22,10 +23,22 @@ public class 리코쳇_로봇 {
         }
 
         while(!queue.isEmpty()){
-            int[] temp = queue.poll();
+            int[] start = queue.poll();
 
             for(int[] d : distance){
+                int[] temp = start.clone();
+                temp[0] += d[0];
+                temp[1] += d[1];
 
+                while(-1<temp[0] && temp[0]<board.length
+                        && -1<temp[1] && temp[1]<board[0].length()
+                        && board[temp[0]].charAt(temp[1])=='.'){
+                    temp[0] += d[0];
+                    temp[1] += d[1];
+                }
+
+                System.out.println(temp[0]);
+                System.out.println(temp[1]);
             }
         }
 
