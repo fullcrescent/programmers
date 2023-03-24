@@ -8,6 +8,10 @@ public class 리코쳇_로봇 {
         String[] board = {"...D..R", ".D.G...", "....D.D", "D....D.", "..D...."};
         int answer = solution(board);
         System.out.println(answer);
+
+        String[] board1 = {"...D..R", ".D.G...", "....D.D", "D....D.", "..D...."};
+        int answer1 = solution1(board1);
+        System.out.println(answer1);
     }
 
     public static int solution(String[] board) {
@@ -55,5 +59,48 @@ public class 리코쳇_로봇 {
     private static void add(int[] value, int[] d, int mul) {
         value[0] += d[0]*mul;
         value[1] += d[1]*mul;
+    }
+
+    /*다른 사람의 풀이 참고 - 개선*/
+    public static int solution1(String[] board) {
+        int[][] distance = {{0, 1}, {0, -1}, {1, 0}, {-1, 0}};
+        int[][] countArray = new int[board.length][board[0].length()];
+        Queue<int[]> queue = new LinkedList<>();
+
+        Loop :
+        for(int i=0; i<board.length; i++){
+            for(int j=0; j<board[i].length(); j++){
+                if(board[i].charAt(j)=='R') {
+                    queue.add(new int[] {i, j});
+                    countArray[i][j] = 1;
+                    break Loop;
+                }
+            }
+        }
+
+        while(!queue.isEmpty()){
+            int[] start = queue.poll();
+            int count = countArray[start[0]][start[1]];
+
+            for(int[] d : distance){
+                int[] temp = start.clone();
+
+                while(-1<temp[0]+d[0] && temp[0]+d[0]<board.length
+                        && -1<temp[1]+d[1] && temp[1]+d[1]<board[0].length()
+                        && board[temp[0]+d[0]].charAt(temp[1]+d[1])!='D'){
+                    temp[0] = temp[0]+d[0];
+                    temp[1] = temp[1]+d[1];
+                }
+
+                if(countArray[temp[0]][temp[1]]==0) {
+                    if(board[temp[0]].charAt(temp[1])=='G') return count;
+
+                    countArray[temp[0]][temp[1]] = count + 1;
+                    queue.add(new int[]{temp[0], temp[1]});
+                }
+            }
+        }
+
+        return -1;
     }
 }
