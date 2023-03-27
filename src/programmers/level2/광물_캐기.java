@@ -2,7 +2,6 @@ package programmers.level2;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.List;
 
 public class 광물_캐기 {
@@ -16,56 +15,41 @@ public class 광물_캐기 {
     public static int solution(int[] picks, String[] minerals) {
         int answer = 0;
         int max = Math.min(Arrays.stream(picks).sum()*5, minerals.length);
-        List<Integer> list = new ArrayList<>();
-        int temp = 0;
+        List<int[]> list = new ArrayList<>();
+        int[] temp = new int[3];
 
         for(int i=0; i<max; i++){
             if(minerals[i].equals("diamond")){
-                temp += 25;
+                temp[0] += 1;
+                temp[1] += 5;
+                temp[2] += 25;
             }else if(minerals[i].equals("iron")){
-                temp += 5;
+                temp[0] += 1;
+                temp[1] += 1;
+                temp[2] += 5;
             }else {
-                temp += 1;
+                temp[0] += 1;
+                temp[1] += 1;
+                temp[2] += 1;
             }
 
             if((i+1)%5==0 || i==max-1){
                 list.add(temp);
-                temp = 0;
+                temp = new int[3];
             }
         }
 
-        list.sort(Comparator.reverseOrder());
+        list.sort((i1, i2) -> -Integer.compare(i1[2], i2[2]));
 
-        for(int value : list){
+        for(int[] value : list){
             if(picks[0]!=0){
-                while(25<value){
-                    answer++;
-                    value -= 25;
-                }
-
-                while(5<value){
-                    answer++;
-                    value -= 5;
-                }
-
-                answer += value;
-
+                answer += value[0];
                 picks[0] -= 1;
             }else if(picks[1]!=0){
-                while(25<value){
-                    answer += 5;
-                    value -= 25;
-                }
-
-                while(5<value){
-                    answer += 1;
-                    value -= 5;
-                }
-
-                answer += value;
+                answer += value[1];
                 picks[1] -= 1;
             }else{
-                answer += value;
+                answer += value[2];
             }
         }
 
