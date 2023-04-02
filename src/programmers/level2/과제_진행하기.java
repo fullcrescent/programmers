@@ -9,6 +9,10 @@ public class 과제_진행하기 {
         String[][] plans = {{"science", "12:40", "50"}, {"music", "12:20", "40"}, {"history", "14:00", "30"}, {"computer", "12:30", "100"}};
         String[] answer = solution(plans);
         System.out.println(Arrays.toString(answer));
+
+        String[][] plans1 = {{"science", "12:40", "50"}, {"music", "12:20", "40"}, {"history", "14:00", "30"}, {"computer", "12:30", "100"}};
+        String[] answer1 = solution1(plans1);
+        System.out.println(Arrays.toString(answer1));
     }
 
     public static String[] solution(String[][] plans) throws ParseException {
@@ -47,5 +51,42 @@ public class 과제_진행하기 {
         }
 
         return list.toArray(new String[0]);
+    }
+
+    /*다른 사람의 풀이 참고*/
+    private static String[] solution1(String[][] plans) {
+        List<Plan> list = new ArrayList<>();
+
+        Arrays.sort(plans, Comparator.comparing(i -> i[1]));
+
+        for(String[] plan : plans){
+            list.add(new Plan(plan[0], plan[1], plan[2]));
+        }
+
+        for(int i=0; i<list.size(); i++){
+            for(int j=0; j<i; j++){
+                if(list.get(i).startTime<list.get(j).endTime){
+                    list.get(j).endTime += list.get(i).addTime;
+                }
+            }
+        }
+
+        list.sort(Comparator.comparingInt(i -> i.endTime));
+
+        return list.stream().map(i -> i.name).toArray(String[]::new);
+    }
+
+    private static class Plan{
+        String name;
+        int startTime;
+        int addTime;
+        int endTime;
+
+        public Plan(String name, String startTime, String addTime) {
+            this.name = name;
+            this.startTime = Integer.parseInt(startTime.substring(0,2))*60 + Integer.parseInt(startTime.substring(3,5));
+            this.addTime = Integer.parseInt(addTime);
+            this.endTime = this.startTime + this.addTime;
+        }
     }
 }
