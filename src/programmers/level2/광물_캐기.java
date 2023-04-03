@@ -3,6 +3,7 @@ package programmers.level2;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.IntStream;
 
 public class 광물_캐기 {
     public static void main(String[] args){
@@ -10,6 +11,11 @@ public class 광물_캐기 {
         String[] minerals = {"diamond", "diamond", "diamond", "iron", "iron", "diamond", "iron", "stone"};
         int answer = solution(picks, minerals);
         System.out.println(answer);
+
+        int[] picks1 = {1, 3, 2};
+        String[] minerals1 = {"diamond", "diamond", "diamond", "iron", "iron", "diamond", "iron", "stone"};
+        int answer1 = solution1(picks1, minerals1);
+        System.out.println(answer1);
     }
 
     public static int solution(int[] picks, String[] minerals) {
@@ -54,5 +60,18 @@ public class 광물_캐기 {
         }
 
         return answer;
+    }
+
+    /*다른 사람의 풀이 참고*/
+    private static int solution1(int[] picks, String[] minerals) {
+        return IntStream.iterate(0, i -> i<Math.min(Arrays.stream(picks).sum()*5, minerals.length), i -> i+5)
+                .mapToObj(i -> Arrays.stream(Arrays.copyOfRange(minerals, i, Math.min(i+5, minerals.length)))
+                        .mapToInt(s -> s.equals("diamond") ? 25 : s.equals("iron") ? 5 : 1).toArray())
+                .sorted((a, b) -> Arrays.stream(b).sum()-Arrays.stream(a).sum())
+                .mapToInt(arr -> {
+                    int n = picks[0]-- > 0 ? 25 : picks[1]-- > 0 ? 5 : 1;
+                    return Arrays.stream(arr).map(i -> Math.max(i/n, 1)).sum();
+                })
+                .sum();
     }
 }
