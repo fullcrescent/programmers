@@ -1,7 +1,8 @@
 package programmers.level2;
 
-import java.util.LinkedList;
-import java.util.Queue;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class 리코쳇_로봇 {
     public static void main(String[] args){
@@ -61,46 +62,82 @@ public class 리코쳇_로봇 {
         value[1] += d[1]*mul;
     }
 
-    /*다른 사람의 풀이 참고 - 개선*/
+    /*다른 사람의 풀이 참고*/
     public static int solution1(String[] board) {
-        int[][] distance = {{0, 1}, {0, -1}, {1, 0}, {-1, 0}};
-        int[][] countArray = new int[board.length][board[0].length()];
-        Queue<int[]> queue = new LinkedList<>();
+        return new Board(board).calculateMoveCount();
+    }
+}
 
-        Loop :
-        for(int i=0; i<board.length; i++){
-            for(int j=0; j<board[i].length(); j++){
-                if(board[i].charAt(j)=='R') {
-                    queue.add(new int[] {i, j});
-                    countArray[i][j] = 1;
-                    break Loop;
-                }
-            }
+class Board{
+    private static final int[][] d = {{1,0}, {0,-1}, {-1, 0}, {0, 1}};
+    private final List<List<Token>> board;
+
+    public Board(String[] board) {
+        this(IntStream.range(0, board.length)
+                .mapToObj(i -> IntStream.range(0, board[i].length())
+                        .mapToObj(j -> new Token(Point.of(j, i),
+                                TokenType.findType(Character.toString(board[i].charAt(j)))))
+                        .collect(Collectors.toList()))
+                .collect(Collectors.toList()));
+    }
+
+    public Board(List<List<Token>> board) {
+        this.board = board;
+    }
+
+    public int calculateMoveCount() {
+        return 0;
+    }
+}
+
+class Token{
+    private final Point point;
+    private final TokenType tokenType;
+    private int count;
+
+    public Token(Point point, TokenType tokenType) {
+        this.point = point;
+        this.tokenType = tokenType;
+        this.count = 0;
+    }
+}
+
+enum TokenType{
+    ROBOT("R"),
+    GOAL("G"),
+    OBSTACLE("D"),
+    EMPTY(".");
+
+    private final String type;
+
+    TokenType(String type) {
+        this.type = type;
+    }
+
+    public static TokenType findType(String type) {
+        return Arrays.stream(values())
+                .filter(token -> token.type.equals(type))
+                .findAny()
+                .orElseThrow();
+    }
+}
+
+class Point{
+    private static final Point[][] CACHE = new Point[101][101];
+    private final int x;
+    private final int y;
+
+    public Point(int x, int y) {
+        this.x = x;
+        this.y = y;
+    }
+
+    public static Point of(int x, int y){
+        if(Objects.isNull(CACHE[y][x])){
+            Point point = new Point(x, y);
+            CACHE[y][x] = point;
         }
 
-        while(!queue.isEmpty()){
-            int[] start = queue.poll();
-            int count = countArray[start[0]][start[1]];
-
-            for(int[] d : distance){
-                int[] temp = start.clone();
-
-                while(-1<temp[0]+d[0] && temp[0]+d[0]<board.length
-                        && -1<temp[1]+d[1] && temp[1]+d[1]<board[0].length()
-                        && board[temp[0]+d[0]].charAt(temp[1]+d[1])!='D'){
-                    temp[0] = temp[0]+d[0];
-                    temp[1] = temp[1]+d[1];
-                }
-
-                if(countArray[temp[0]][temp[1]]==0) {
-                    if(board[temp[0]].charAt(temp[1])=='G') return count;
-
-                    countArray[temp[0]][temp[1]] = count + 1;
-                    queue.add(new int[]{temp[0], temp[1]});
-                }
-            }
-        }
-
-        return -1;
+        return CACHE[y][x];
     }
 }
