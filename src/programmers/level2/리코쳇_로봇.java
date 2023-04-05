@@ -86,7 +86,63 @@ class Board{
     }
 
     public int calculateMoveCount() {
-        return 0;
+        Token start = board
+                .stream()
+                .flatMap(Collection::stream)
+                .filter(token -> token.getTokenType().isRobot())
+                .findAny()
+                .orElseThrow();
+
+        Token end = board
+                .stream()
+                .flatMap(Collection::stream)
+                .filter(token -> token.getTokenType().isGoal())
+                .findAny()
+                .orElseThrow();
+
+        return calculateMoveCount(start, end);
+    }
+
+    private int calculateMoveCount(Token start, Token end) {
+        int maxY = board.size();
+        int maxX = board.get(0).size();
+
+        boolean[][] visited = new boolean[maxY][maxX];
+
+        Queue<Token> tokens = new LinkedList<>();
+        tokens.add(start);
+        int count = Integer.MAX_VALUE;
+        visited[start.getPoint().getY()][start.getPoint().getX()] = true;
+
+        while(!tokens.isEmpty()){
+            Token current = tokens.poll();
+            Point currentPoint = current.getPoint();
+
+            if(current.equals(end)){
+                count = Integer.min(count, current.getCount());
+            }
+
+            for(int i=0; i<4; i++){
+                int dx = d[i][0];
+                int dy = d[i][1];
+
+                Point nextPoint = currentPoint;
+
+                while (nextPoint.increasable(dx, dy, 0, 0, maxX-1, maxY-1)
+                        && board.get(nextPoint.getY()+dy).get(nextPoint.getX()+dx).getTokenType().movable()){
+                    nextPoint = nextPoint.increase(dx, dy);
+                }
+
+                if(!visited[nextPoint.getY()][nextPoint.getX()]){
+                    Token token = board.get(nextPoint.getY()).get(nextPoint.getX());
+                    token.updateCount(current.getCount()+1);
+                    tokens.add(token);
+                    visited[nextPoint.getY()][nextPoint.getX()] = true;
+                }
+            }
+        }
+
+        return Integer.MAX_VALUE == count ? -1 : count;
     }
 }
 
@@ -99,6 +155,22 @@ class Token{
         this.point = point;
         this.tokenType = tokenType;
         this.count = 0;
+    }
+
+    public Point getPoint() {
+        return point;
+    }
+
+    public TokenType getTokenType() {
+        return tokenType;
+    }
+
+    public int getCount() {
+        return count;
+    }
+
+    public void updateCount(int count){
+        this.count = count;
     }
 }
 
@@ -120,6 +192,26 @@ enum TokenType{
                 .findAny()
                 .orElseThrow();
     }
+
+    public boolean isRobot(){
+        return ROBOT.equals(this);
+    }
+
+    public boolean isGoal(){
+        return GOAL.equals(this);
+    }
+
+    public boolean isObstacle(){
+        return OBSTACLE.equals(this);
+    }
+
+    public boolean isEmpty(){
+        return EMPTY.equals(this);
+    }
+
+    public boolean movable(){
+        return !isObstacle();
+    }
 }
 
 class Point{
@@ -139,5 +231,22 @@ class Point{
         }
 
         return CACHE[y][x];
+    }
+
+    public Point increase(int x, int y){
+        return Point.of(this.x + x, this.y + y);
+    }
+
+    public boolean increasable(int x, int y, int minX, int minY, int maxX, int maxY){
+        return this.x + x >= minX && this.x + x <= maxX
+                && this.y + y >= minY && this.y + y <= maxY;
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
     }
 }
