@@ -3,6 +3,9 @@ package programmers.level2;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class 광물_캐기 {
@@ -16,6 +19,11 @@ public class 광물_캐기 {
         String[] minerals1 = {"diamond", "diamond", "diamond", "iron", "iron", "diamond", "iron", "stone"};
         int answer1 = solution1(picks1, minerals1);
         System.out.println(answer1);
+
+        int[] picks2 = {1, 3, 2};
+        String[] minerals2 = {"diamond", "diamond", "diamond", "iron", "iron", "diamond", "iron", "stone"};
+        int answer2 = solution2(picks2, minerals2);
+        System.out.println(answer2);
     }
 
     public static int solution(int[] picks, String[] minerals) {
@@ -73,5 +81,74 @@ public class 광물_캐기 {
                     return Arrays.stream(arr).map(i -> Math.max(i/n, 1)).sum();
                 })
                 .sum();
+    }
+
+    private static int solution2(int[] picks, String[] minerals) {
+//        return Minerals.of(minerals).digInMinFatigue(Picks.of(picks));
+        return 0;
+    }
+}
+
+class Minerals{
+    private final List<Mineral> minerals;
+
+    public Minerals(List<Mineral> minerals) {
+        this.minerals = minerals;
+    }
+
+    public static Minerals of(String[] minerals){
+        return Arrays
+                .stream(minerals)
+                .map(MineralType::findType)
+                .map(Mineral::new)
+                .collect(Collectors.collectingAndThen(Collectors.toList(), Minerals::new));
+    }
+
+
+}
+
+class Mineral{
+    private static final Map<MineralType, Function<Pick, Integer>> DIGGING = Map
+            .of(
+                    MineralType.DIAMOND, Pick::digDIAMOND
+                    ,MineralType.IRON, Pick::digIRON
+                    ,MineralType.STONE, Pick::digStone
+            );
+    private final MineralType mineralType;
+
+    public Mineral(MineralType mineralType) {
+        this.mineralType = mineralType;
+    }
+}
+
+interface Pick{
+    int digDIAMOND();
+    int digIRON();
+    int digStone();
+}
+
+enum MineralType{
+    DIAMOND("diamond", 25),
+    IRON("iron", 5),
+    STONE("stone", 1);
+
+    private final String type;
+    private final int weight;
+
+    MineralType(String type, int weight){
+        this.type = type;
+        this.weight = weight;
+    }
+
+    public static MineralType findType(String type){
+        return Arrays
+                .stream(values())
+                .filter(mineralType -> mineralType.type.equals(type))
+                .findAny()
+                .orElseThrow();
+    }
+
+    public int getWeight() {
+        return weight;
     }
 }
