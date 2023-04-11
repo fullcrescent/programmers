@@ -58,3 +58,12 @@ class Dijkstra{
 		return -1;
 	}
 }
+
+class Info{
+	int vertex1;
+	int vertex2;
+	int distance;
+	List<Integer> pathList;
+
+
+}
