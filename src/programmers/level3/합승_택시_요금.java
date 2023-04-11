@@ -16,16 +16,15 @@ public class 합승_택시_요금 {
 	
 	public static int solution(int n, int s, int a, int b, int[][] fares) {
 		Dijkstra dijkstra = new Dijkstra(n, fares);
-		int min = dijkstra.algorithm(a, b);
 
-		return 0;
+		return dijkstra.algorithm(a, b) + dijkstra.pathList.stream().map(end -> dijkstra.algorithm(s, end)).min(Integer::compare).orElseThrow();
 	}
 }
 
 class Dijkstra{
 	int vertexCount;
 	int[][] fares;
-	int[] path;
+	List<Integer> pathList = new ArrayList<>();
 
 	public Dijkstra(int vertexCount, int[][] fares) {
 		this.vertexCount = vertexCount;
@@ -33,29 +32,37 @@ class Dijkstra{
 	}
 
 	public int algorithm(int start, int end){
-		Queue<int[]> queue = new PriorityQueue<>((i1, i2) -> Integer.compare(i1[2], i2[2]));
-		Arrays.stream(fares).filter(i -> i[0]==start || i[1]==start).forEach(i -> queue.add(i));
+		Queue<Info> queue = new PriorityQueue<>(Comparator.comparingInt(i -> i.distance));
+		Arrays.stream(fares).filter(i -> i[0]==start || i[1]==start).forEach(i -> queue.add(new Info(i[0], i[1], i[2], new ArrayList<>())));
 
 		boolean[] visit = new boolean[vertexCount+1];
 		visit[start] = true;
 
 		while(!queue.isEmpty()){
-			int[] link = queue.poll();
-			int next = visit[link[0]] ? link[1] : link[0];
-			if(next==end)	return link[2];
+			Info info = queue.poll();
+			int next = visit[info.vertex1] ? info.vertex2 : info.vertex1;
+			int distance = info.distance;
+
+			if(next==end){
+				this.pathList = info.pathList;
+				this.pathList.add(start);
+				this.pathList.add(end);
+				return distance;
+			}
 
 			if(visit[next]) continue;
 			visit[next] = true;
 
 			Arrays.stream(fares).filter(i -> i[0]==next || i[1]==next).forEach(i -> {
 				if(!visit[i[0]==next ? i[1] : i[0]]){
-					i[2] = i[2]+link[2];
-					queue.add(i);
+					List<Integer> tempList = new ArrayList<>(info.pathList);
+					tempList.add(next);
+					queue.add(new Info(i[0], i[1], i[2]+distance, tempList));
 				}
 			});
 		}
 
-		return -1;
+		return 0;
 	}
 }
 
@@ -65,5 +72,10 @@ class Info{
 	int distance;
 	List<Integer> pathList;
 
-
+	public Info(int vertex1, int vertex2, int distance, List<Integer> pathList) {
+		this.vertex1 = vertex1;
+		this.vertex2 = vertex2;
+		this.distance = distance;
+		this.pathList = pathList;
+	}
 }
