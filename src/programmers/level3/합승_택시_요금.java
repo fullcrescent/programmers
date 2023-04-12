@@ -1,6 +1,7 @@
 package programmers.level3;
 
 import java.util.*;
+import java.util.stream.IntStream;
 
 public class 합승_택시_요금 {
 
@@ -15,67 +16,27 @@ public class 합승_택시_요금 {
 	}
 	
 	public static int solution(int n, int s, int a, int b, int[][] fares) {
-		Dijkstra dijkstra = new Dijkstra(n, fares);
+		int[][] floydWarshall = new int[n][n];
+		IntStream.range(0, n).forEach(i -> Arrays.fill(floydWarshall[i], Integer.MAX_VALUE));
+		IntStream.range(0, n).forEach(i -> floydWarshall[i][i] = 0);
 
-		return dijkstra.algorithm(a, b) + dijkstra.pathList.stream().map(end -> dijkstra.algorithm(s, end)).min(Integer::compare).orElseThrow();
-	}
-}
+		Arrays.stream(fares).forEach(i -> {
+			floydWarshall[i[0]-1][i[1]-1] = i[2];
+			floydWarshall[i[1]-1][i[0]-1] = i[2];
+		});
 
-class Dijkstra{
-	int vertexCount;
-	int[][] fares;
-	List<Integer> pathList = new ArrayList<>();
+		for(int k=0; k<n; k++){
+			for(int i=0; i<n; i++){
+				for(int j=0; j<n; j++){
+					if(floydWarshall[i][k]==Integer.MAX_VALUE || floydWarshall[k][j]==Integer.MAX_VALUE) continue;
 
-	public Dijkstra(int vertexCount, int[][] fares) {
-		this.vertexCount = vertexCount;
-		this.fares = fares;
-	}
-
-	public int algorithm(int start, int end){
-		Queue<Info> queue = new PriorityQueue<>(Comparator.comparingInt(i -> i.distance));
-		Arrays.stream(fares).filter(i -> i[0]==start || i[1]==start).forEach(i -> queue.add(new Info(i[0], i[1], i[2], new ArrayList<>())));
-
-		boolean[] visit = new boolean[vertexCount+1];
-		visit[start] = true;
-
-		while(!queue.isEmpty()){
-			Info info = queue.poll();
-			int next = visit[info.vertex1] ? info.vertex2 : info.vertex1;
-			int distance = info.distance;
-
-			if(next==end){
-				this.pathList = info.pathList;
-				this.pathList.add(start);
-				this.pathList.add(end);
-				return distance;
-			}
-
-			if(visit[next]) continue;
-			visit[next] = true;
-
-			Arrays.stream(fares).filter(i -> i[0]==next || i[1]==next).forEach(i -> {
-				if(!visit[i[0]==next ? i[1] : i[0]]){
-					List<Integer> tempList = new ArrayList<>(info.pathList);
-					tempList.add(next);
-					queue.add(new Info(i[0], i[1], i[2]+distance, tempList));
+					if(floydWarshall[i][k] + floydWarshall[k][j] < floydWarshall[i][j]){
+						floydWarshall[i][j] = floydWarshall[i][k] + floydWarshall[k][j];
+					}
 				}
-			});
+			}
 		}
 
-		return 0;
-	}
-}
-
-class Info{
-	int vertex1;
-	int vertex2;
-	int distance;
-	List<Integer> pathList;
-
-	public Info(int vertex1, int vertex2, int distance, List<Integer> pathList) {
-		this.vertex1 = vertex1;
-		this.vertex2 = vertex2;
-		this.distance = distance;
-		this.pathList = pathList;
+		return Arrays.stream(floydWarshall).map(i -> i[s-1]+i[a-1]+i[b-1]).min(Integer::compare).orElseThrow();
 	}
 }
