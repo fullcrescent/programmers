@@ -3,6 +3,7 @@ package programmers.level2;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.stream.IntStream;
 
 public class 과제_진행하기 {
     public static void main(String[] args) throws ParseException {
@@ -59,17 +60,14 @@ public class 과제_진행하기 {
 
         Arrays.sort(plans, Comparator.comparing(i -> i[1]));
 
-        for(String[] plan : plans){
-            list.add(new Plan(plan[0], plan[1], plan[2]));
-        }
+        Arrays.stream(plans).forEach(i -> list.add(new Plan(i[0], i[1], i[2])));
 
-        for(int i=0; i<list.size(); i++){
-            for(int j=0; j<i; j++){
-                if(list.get(i).startTime<list.get(j).endTime){
-                    list.get(j).endTime += list.get(i).addTime;
-                }
-            }
-        }
+        IntStream
+                .range(0, list.size())
+                .forEach(i -> IntStream
+                        .range(0, i)
+                        .filter(j -> list.get(i).startTime<list.get(j).endTime)
+                        .forEach(j -> list.get(j).endTime += list.get(i).addTime));
 
         list.sort(Comparator.comparingInt(i -> i.endTime));
 
