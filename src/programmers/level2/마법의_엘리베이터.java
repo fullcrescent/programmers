@@ -1,7 +1,5 @@
 package programmers.level2;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.stream.Stream;
 
 public class 마법의_엘리베이터 {
@@ -12,13 +10,19 @@ public class 마법의_엘리베이터 {
     }
 
     public static int solution(int storey) {
-        int[] array = Stream.of(String.valueOf(storey).split("")).mapToInt(Integer::parseInt).toArray();
+        int answer = 0;
 
-        for(int i : array){
-            System.out.println(i);
+        int[] array = Stream.of(("0"+storey).split("")).mapToInt(Integer::parseInt).toArray();
+
+        for(int i=array.length-1; i>-1; i--){
+            if(array[i]>4){
+                answer += 10-array[i];
+                array[i-1] += 1;
+            }else{
+                answer += array[i];
+            }
         }
 
-
-        return 0;
+        return answer;
     }
 }
