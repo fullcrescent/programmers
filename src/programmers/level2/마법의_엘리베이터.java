@@ -2,7 +2,6 @@ package programmers.level2;
 
 import java.util.LinkedList;
 import java.util.Queue;
-import java.util.stream.Stream;
 
 public class 마법의_엘리베이터 {
     public static void main(String[] args){
@@ -12,26 +11,29 @@ public class 마법의_엘리베이터 {
     }
 
     public static int solution(int storey) {
+        int answer = Integer.MAX_VALUE;
         Queue<Test> queue = new LinkedList<>();
         queue.add(new Test(0, storey, 0));
 
         while(!queue.isEmpty()){
             Test temp = queue.poll();
 
-            int digit = (int) (temp.value/Math.pow(10, temp.depth)%10);
-
-            if(digit!=5){
-                int add = Math.min(digit, digit-10);
-                queue.add(new Test(temp.depth+1, temp.value+add, temp.count+add));
-            }else{
-
+            if(temp.value==0){
+                answer = Math.min(answer, temp.count);
+                continue;
             }
 
-            System.out.println(digit);
+            int digit = (int) (temp.value/Math.pow(10, temp.depth)%10);
+            int add = digit<5 ? -digit : 10-digit;
+
+            queue.add(new Test(temp.depth+1, temp.value+(int)(add*Math.pow(10, temp.depth)), temp.count+Math.abs(add)));
+
+            if (digit == 5) {
+                queue.add(new Test(temp.depth + 1, temp.value - (int) (add*Math.pow(10, temp.depth)), temp.count + Math.abs(add)));
+            }
         }
 
-
-        return 0;
+        return answer;
     }
 
     static class Test{
