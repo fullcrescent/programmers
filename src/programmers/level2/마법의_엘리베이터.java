@@ -8,6 +8,10 @@ public class 마법의_엘리베이터 {
         int storey = 545;
         int answer = solution(storey);
         System.out.println(answer);
+
+        int storey1 = 545;
+        int answer1 = solution1(storey1);
+        System.out.println(answer1);
     }
 
     public static int solution(int storey) {
@@ -46,5 +50,24 @@ public class 마법의_엘리베이터 {
             this.value = value;
             this.count = count;
         }
+    }
+
+    /*다른 사람의 풀이 참고*/
+    public static int solution1(int storey) {
+        int answer = 0;
+        while(storey!=0){
+            int upperDigit = (storey%100)/10;
+            int digit = storey%10;
+
+            if(digit>5 || digit==5 && upperDigit>=5){
+                storey += 10;
+                answer += (10-digit);
+            }else {
+                answer += digit;
+            }
+
+            storey /= 10;
+        }
+        return answer;
     }
 }
