@@ -6,7 +6,7 @@ import java.util.Queue;
 
 public class 요격_시스템 {
      public static void main(String[] args){
-         int[][] targets = {{2,3},{2,3},{2,3}};
+         int[][] targets = {{0,4},{5,10},{6,8},{8,9}};
          int answer = solution(targets);
          System.out.println(answer);
      }
@@ -20,7 +20,7 @@ public class 요격_시스템 {
              Section section = queue.poll();
 
              while (!queue.isEmpty() && queue.peek().start<section.end) {
-                queue.poll();
+                 section.end = Math.min(section.end, queue.poll().end);
              }
              count++;
         }
