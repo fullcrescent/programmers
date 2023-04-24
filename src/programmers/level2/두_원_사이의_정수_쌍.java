@@ -11,21 +11,11 @@ public class 두_원_사이의_정수_쌍 {
     public static long solution(int r1, int r2) {
         long count = 0;
 
-        long in = (long) Math.pow(r1, 2);
-        long out = (long) Math.pow(r2, 2);
-
         for(int i=0; i<r2; i++){
-            for(int j=r2; j>0; j--){
-                long point = (long) Math.pow(i, 2) + (long) Math.pow(j, 2);
+            long out = (long) Math.floor(Math.sqrt(Math.pow(r2, 2) - Math.pow(i, 2)));
+            long in = (long) Math.ceil(Math.sqrt(Math.pow(r1, 2) - Math.pow(i, 2)));
 
-                if(out < point){
-                    continue;
-                }else if(in <= point){
-                    count++;
-                }else {
-                    break;
-                }
-            }
+            count += out - (in==0 ? 0 : in - 1);
         }
 
         return count*4;
