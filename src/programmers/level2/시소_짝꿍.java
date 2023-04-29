@@ -35,7 +35,7 @@ public class 시소_짝꿍 {
 
     private static boolean valid(int w1, int w2) {
         for(int i=2; i<=4; i++){
-            if(w1*i%w2==0)  return true;
+            if(w1*i==w2*2 || w1*i==w2*3 || w1*i==w2*4)  return true;
         }
         return false;
     }
