@@ -8,6 +8,10 @@ public class 시소_짝꿍 {
         int[] weights = {111, 222, 333, 444, 555};
         long answer = solution(weights);
         System.out.println(answer);
+
+        int[] weights1 = {111, 222, 333, 444, 555};
+        long answer1 = solution1(weights1);
+        System.out.println(answer1);
     }
 
     public static long solution(int[] weights) {
@@ -38,5 +42,24 @@ public class 시소_짝꿍 {
             if(w1*i==w2*2 || w1*i==w2*3 || w1*i==w2*4)  return true;
         }
         return false;
+    }
+
+    /*다른 사람의 풀이 참고*/
+    public static long solution1(int[] weights) {
+        long answer = 0;
+        Arrays.sort(weights);
+
+        Map<Double, Integer> map = new HashMap<>();
+
+        for(double w : weights){
+            if(map.containsKey(w)) answer += map.get(w);
+
+            map.put(w, map.getOrDefault(w, 0)+1);
+            map.put(w*4/3, map.getOrDefault(w*4/3, 0)+1);
+            map.put(w*1.5, map.getOrDefault(w*1.5, 0)+1);
+            map.put(w*2, map.getOrDefault(w*2, 0)+1);
+        }
+
+        return answer;
     }
 }
