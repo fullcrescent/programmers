@@ -1,33 +1,37 @@
 package programmers.level3;
 
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.Queue;
+import java.util.*;
 
 public class 표현_가능한_이진트리 {
     public static void main(String[] args){
-        long[] numbers = {42};
+        long[] numbers = {32};
         int[] answer = solution(numbers);
         System.out.println(Arrays.toString(answer));
     }
 
     public static int[] solution(long[] numbers) {
         int[] answer = new int[numbers.length];
-        int i = 0;
+        int index = 0;
 
         for(long number : numbers){
             String s = Long.toBinaryString(number);
-            System.out.println(s);
-            String[] sArray = {s, "0"+s};
 
-            for(String temp : sArray){
+            List<String> list = new ArrayList<>();
+            String zeroAdd = "";
+
+            for(int i=0; i<s.length(); i++){
+                list.add(zeroAdd + s);
+                zeroAdd += "0";
+            }
+
+            for(String temp : list){
                 if(valid(temp)){
-                    answer[i] = 1;
+                    answer[index] = 1;
                     break;
                 }
             }
 
-            i++;
+            index++;
         }
 
         return answer;
