@@ -4,7 +4,7 @@ import java.util.*;
 
 public class 표현_가능한_이진트리 {
     public static void main(String[] args){
-        long[] numbers = {32};
+        long[] numbers = {5};
         int[] answer = solution(numbers);
         System.out.println(Arrays.toString(answer));
     }
@@ -17,15 +17,17 @@ public class 표현_가능한_이진트리 {
             String s = Long.toBinaryString(number);
 
             List<String> list = new ArrayList<>();
-            String zeroAdd = "";
+            StringBuilder zeroAdd = new StringBuilder();
 
             for(int i=0; i<s.length(); i++){
                 list.add(zeroAdd + s);
-                zeroAdd += "0";
+                zeroAdd.append("0");
             }
 
             for(String temp : list){
-                if(valid(temp)){
+                if(Math.log10(temp.length()+1)/Math.log10(2)%1!=0) continue;
+
+                if(valid(temp, false)){
                     answer[index] = 1;
                     break;
                 }
@@ -37,27 +39,16 @@ public class 표현_가능한_이진트리 {
         return answer;
     }
 
-    private static boolean valid(String s) {
-        if(Integer.toBinaryString(s.length()).contains("0")){
-            return false;
+    private static boolean valid(String s, boolean zeroExists) {
+        if(zeroExists){
+            if(s.charAt(s.length()/2)=='1') return false;
         }
 
-        Queue<long[]> queue = new LinkedList<>();
-        queue.add(new long[] {0, s.length()});
+        if(s.length()==1)   return true;
 
-        while(!queue.isEmpty()){
-            long[] temp = queue.poll();
+        boolean value = zeroExists || s.charAt(s.length()/2)=='0';
 
-            if(temp[0]+1==temp[1]){
-                return true;
-            }else if(s.charAt((int) ((temp[0]+temp[1])/2))=='0'){
-                return false;
-            }
-
-            queue.add(new long[] {temp[0], (temp[0]+temp[1])/2});
-            queue.add(new long[] {(temp[0]+temp[1])/2+1, temp[1]});
-        }
-
-        return true;
+        return valid(s.substring(0, s.length()/2), value)
+                && valid(s.substring(s.length()/2+1), value);
     }
 }
