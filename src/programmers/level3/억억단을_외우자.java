@@ -3,7 +3,6 @@ package programmers.level3;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.stream.IntStream;
 
 public class 억억단을_외우자 {
     public static void main(String[] args) {
@@ -23,7 +22,7 @@ public class 억억단을_외우자 {
             int value = 0;
 
             for(int i=start; i<=e; i++){
-                if(map.get(i)==null)    map.put(i, divisorCount(i));
+                map.computeIfAbsent(i, 억억단을_외우자::divisorCount);
 
                 if(max<map.get(i)){
                     max = map.get(i);
