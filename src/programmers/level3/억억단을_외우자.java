@@ -15,22 +15,31 @@ public class 억억단을_외우자 {
     public static int[] solution(int e, int[] starts) {
         int[] answer = new int[starts.length];
         int index = 0;
-        Map<Integer, Integer> map = new HashMap<>();
+        Map<Integer, Info> map = new HashMap<>();
 
         for(int start : starts){
-            int max = 0;
-            int value = 0;
+            Info info = new Info();
 
             for(int i=start; i<=e; i++){
-                map.computeIfAbsent(i, 억억단을_외우자::divisorCount);
+                Info tempInfo = map.get(i);
 
-                if(max<map.get(i)){
-                    max = map.get(i);
-                    value=i;
+                if(tempInfo!=null){
+                    if(info.divisorCount<tempInfo.divisorCount){
+                        info.divisorCount = tempInfo.divisorCount;
+                        info.value = tempInfo.value;
+                    }
+                    break;
+                }
+
+                if(info.divisorCount<divisorCount(i)){
+                    info.divisorCount = divisorCount(i);
+                    info.value=i;
                 }
             }
 
-            answer[index++] = value;
+            map.put(start, info);
+
+            answer[index++] = info.value;
         }
 
         return answer;
@@ -48,5 +57,10 @@ public class 억억단을_외우자 {
         }
 
         return count;
+    }
+
+    static class Info{
+        int value;
+        int divisorCount;
     }
 }
