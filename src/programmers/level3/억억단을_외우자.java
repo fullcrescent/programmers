@@ -14,32 +14,52 @@ public class 억억단을_외우자 {
 
     public static int[] solution(int e, int[] starts) {
         int[] answer = new int[starts.length];
+
         int index = 0;
+        int max = Integer.MAX_VALUE;
+
         Map<Integer, Info> map = new HashMap<>();
 
         for(int start : starts){
             Info info = new Info();
 
-            for(int i=start; i<=e; i++){
-                Info tempInfo = map.get(i);
+            if(start<max){
+                for(int i=start; i<=e; i++){
+                    if(max<=i){
+                        Info tempInfo = map.get(i);
 
-                if(tempInfo!=null){
-                    if(info.divisorCount<tempInfo.divisorCount){
-                        info.divisorCount = tempInfo.divisorCount;
-                        info.value = tempInfo.value;
+                        if(info.divisorCount<tempInfo.divisorCount){
+                            info.divisorCount = tempInfo.divisorCount;
+                            info.value = tempInfo.value;
+                        }
+
+                        break;
                     }
-                    break;
+
+                    if(info.divisorCount<divisorCount(i)){
+                        info.divisorCount = divisorCount(i);
+                        info.value=i;
+                    }
                 }
 
-                if(info.divisorCount<divisorCount(i)){
-                    info.divisorCount = divisorCount(i);
-                    info.value=i;
+                map.put(start, info);
+
+                answer[index++] = info.value;
+                max = start;
+            }else{
+                for(int i=start; i<=e; i++){
+                    if(info.divisorCount<divisorCount(i)){
+                        info.divisorCount = divisorCount(i);
+                        info.value=i;
+                    }
                 }
+
+                map.put(start, info);
+
+                answer[index++] = info.value;
+                max = start;
             }
 
-            map.put(start, info);
-
-            answer[index++] = info.value;
         }
 
         return answer;
