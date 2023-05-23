@@ -9,6 +9,10 @@ public class N_Queen {
         int n = 4;
         int answer = solution(n);
         System.out.println(answer);
+
+        int n1 = 4;
+        int answer1 = solution1(n1);
+        System.out.println(answer1);
     }
 
     public static int solution(int n) throws CloneNotSupportedException {
@@ -91,5 +95,34 @@ public class N_Queen {
 
     enum Direction{
         North, South
+    }
+
+    /*다른 사람의 풀이 참고*/
+    public static int solution1(int n){
+        return backTracking(0, new int[n], n);
+    }
+
+    private static int backTracking(int row, int[] cols, int n) {
+        int sum = 0;
+
+        if(row==n) return 1;
+
+        for(int i=0; i<n; i++){
+            cols[row] = i;
+            if(validate(row, cols)){
+                sum += backTracking(row+1, cols, n);
+            }
+        }
+
+        return sum;
+    }
+
+    private static boolean validate(int row, int[] cols) {
+        for(int i=0; i<row; i++){
+            if(cols[i]==cols[row] || Math.abs(row-i)==Math.abs(cols[i]-cols[row])){
+                return false;
+            }
+        }
+        return true;
     }
 }
