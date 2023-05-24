@@ -31,7 +31,6 @@ public class 부대복귀 {
 
         Queue<Info> queue = new LinkedList<>();
         queue.add(new Info(destination, 0));
-        map.put(destination, 0);
 
         boolean[] visit = new boolean[n+1];
 
@@ -40,6 +39,8 @@ public class 부대복귀 {
 
             if(visit[temp.source])  continue;
             visit[temp.source] = true;
+
+            map.put(temp.source, temp.count);
 
             List<Integer> tempList = roadMap.getOrDefault(temp.source, new ArrayList<>());
             for(int value : tempList){
