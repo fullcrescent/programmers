@@ -13,47 +13,47 @@ public class 부대복귀 {
     }
 
     public static int[] solution(int n, int[][] roads, int[] sources, int destination) {
-        Map<Integer, List<Integer>> map = new HashMap<>();
+        Map<Integer, List<Integer>> roadMap = new HashMap<>();
 
         for(int[] road : roads){
             List<Integer> list;
 
-            list = map.getOrDefault(road[0], new ArrayList<>());
+            list = roadMap.getOrDefault(road[0], new ArrayList<>());
             list.add(road[1]);
-            map.put(road[0], list);
+            roadMap.put(road[0], list);
 
-            list = map.getOrDefault(road[1], new ArrayList<>());
+            list = roadMap.getOrDefault(road[1], new ArrayList<>());
             list.add(road[0]);
-            map.put(road[1], list);
+            roadMap.put(road[1], list);
         }
 
-        return Arrays.stream(sources)
-                .map(i -> search(i, n, destination, map))
-                .toArray();
-    }
+        Map<Integer, Integer> map = new HashMap<>();
 
-    private static int search(int i, int n, int destination, Map<Integer, List<Integer>> map) {
         Queue<Info> queue = new LinkedList<>();
-        queue.add(new Info(i, 0));
+        queue.add(new Info(destination, 0));
+        map.put(destination, 0);
 
         boolean[] visit = new boolean[n+1];
 
         while(!queue.isEmpty()){
             Info temp = queue.poll();
 
-            if(temp.source==destination)    return temp.count;
-
             if(visit[temp.source])  continue;
-
             visit[temp.source] = true;
 
-            List<Integer> tempList = map.getOrDefault(temp.source, new ArrayList<>());
+            List<Integer> tempList = roadMap.getOrDefault(temp.source, new ArrayList<>());
             for(int value : tempList){
+                if(visit[value]) continue;
+
                 queue.add(new Info(value, temp.count+1));
+                map.put(value, temp.count+1);
             }
         }
 
-        return -1;
+        return Arrays
+                .stream(sources)
+                .map(i -> map.getOrDefault(i, -1))
+                .toArray();
     }
 
     static class Info{
