@@ -1,8 +1,6 @@
 package programmers.level3;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class 억억단을_외우자 {
     public static void main(String[] args) {
@@ -19,47 +17,34 @@ public class 억억단을_외우자 {
         int max = Integer.MAX_VALUE;
 
         Map<Integer, Info> map = new HashMap<>();
+        Arrays.sort(starts);
 
-        for(int start : starts){
+        for(int i=starts.length-1; i>-1; i--){
+            int start = starts[i];
             Info info = new Info();
 
-            if(start<max){
-                for(int i=start; i<=e; i++){
-                    if(max<=i){
-                        Info tempInfo = map.get(i);
+            for(int j=start; j<=e; j++){
+                if(max<=j){
+                    Info tempInfo = map.get(j);
 
-                        if(info.divisorCount<tempInfo.divisorCount){
-                            info.divisorCount = tempInfo.divisorCount;
-                            info.value = tempInfo.value;
-                        }
-
-                        break;
+                    if(info.divisorCount<tempInfo.divisorCount){
+                        info.divisorCount = tempInfo.divisorCount;
+                        info.value = tempInfo.value;
                     }
 
-                    if(info.divisorCount<divisorCount(i)){
-                        info.divisorCount = divisorCount(i);
-                        info.value=i;
-                    }
+                    break;
                 }
 
-                map.put(start, info);
-
-                answer[index++] = info.value;
-                max = start;
-            }else{
-                for(int i=start; i<=e; i++){
-                    if(info.divisorCount<divisorCount(i)){
-                        info.divisorCount = divisorCount(i);
-                        info.value=i;
-                    }
+                if(info.divisorCount<divisorCount(j)){
+                    info.divisorCount = divisorCount(j);
+                    info.value=j;
                 }
-
-                map.put(start, info);
-
-                answer[index++] = info.value;
-                max = start;
             }
 
+            map.put(start, info);
+
+            answer[index++] = info.value;
+            max = start;
         }
 
         return answer;
