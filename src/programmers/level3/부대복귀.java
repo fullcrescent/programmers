@@ -10,6 +10,13 @@ public class 부대복귀 {
         int destination = 5;
         int[] answer = solution(n, roads, sources, destination);
         System.out.println(Arrays.toString(answer));
+
+        int n1 = 5;
+        int[][] roads1 = {{1,2}, {1,4}, {2,4}, {2,5}, {4,5}};
+        int[] sources1 = {1, 3, 5};
+        int destination1 = 5;
+        int[] answer1 = solution1(n1, roads1, sources1, destination1);
+        System.out.println(Arrays.toString(answer1));
     }
 
     public static int[] solution(int n, int[][] roads, int[] sources, int destination) {
@@ -65,5 +72,20 @@ public class 부대복귀 {
             this.source = source;
             this.count = count;
         }
+    }
+
+    /*다른 사람의 풀이 참고*/
+    public static int[] solution1(int n, int[][] roads, int[] sources, int destination) {
+        int[] distance = new int[n+1];
+        Map<Integer, Info> map = new HashMap<>();
+
+        Arrays.fill(distance, Integer.MAX_VALUE);
+
+        for(int[] road : roads){
+            map.put(road[0], new Info(road[1], 1));
+            map.put(road[1], new Info(road[0], 1));
+        }
+
+        return null;
     }
 }
