@@ -1,6 +1,7 @@
 package programmers.level3;
 
 import java.util.*;
+import java.util.stream.IntStream;
 
 public class 부대복귀 {
     public static void main(String[] args) {
@@ -77,15 +78,35 @@ public class 부대복귀 {
     /*다른 사람의 풀이 참고*/
     public static int[] solution1(int n, int[][] roads, int[] sources, int destination) {
         int[] distance = new int[n+1];
-        Map<Integer, Info> map = new HashMap<>();
+        Map<Integer, List<Info>> map = new HashMap<>();
 
         Arrays.fill(distance, Integer.MAX_VALUE);
+        IntStream.range(1, n+1).forEach(key -> map.put(key, new ArrayList<>()));
 
         for(int[] road : roads){
-            map.put(road[0], new Info(road[1], 1));
-            map.put(road[1], new Info(road[0], 1));
+            map.get(road[0]).add(new Info(road[1], 1));
+            map.get(road[1]).add(new Info(road[0], 1));
         }
 
+        bfs(distance, map, destination);
+
         return null;
+    }
+
+    private static void bfs(int[] distance, Map<Integer, List<Info>> map, int start) {
+        Queue<Info> queue = new PriorityQueue<>((i1, i2) -> i1.count-i2.count);
+        distance[start] = 0;
+        queue.add(new Info(start, 0));
+
+        while(!queue.isEmpty()){
+            Info current = queue.poll();
+
+            for(Info next : map.get(current.source)){
+
+            }
+
+        }
+
+
     }
 }
