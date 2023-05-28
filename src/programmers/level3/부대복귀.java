@@ -78,35 +78,53 @@ public class 부대복귀 {
     /*다른 사람의 풀이 참고*/
     public static int[] solution1(int n, int[][] roads, int[] sources, int destination) {
         int[] distance = new int[n+1];
-        Map<Integer, List<Info>> map = new HashMap<>();
+        Map<Integer, List<Info1>> map = new HashMap<>();
 
         Arrays.fill(distance, Integer.MAX_VALUE);
         IntStream.range(1, n+1).forEach(key -> map.put(key, new ArrayList<>()));
 
         for(int[] road : roads){
-            map.get(road[0]).add(new Info(road[1], 1));
-            map.get(road[1]).add(new Info(road[0], 1));
+            map.get(road[0]).add(new Info1(road[1], 1));
+            map.get(road[1]).add(new Info1(road[0], 1));
         }
 
         bfs(distance, map, destination);
 
-        return null;
+        return Arrays
+                .stream(sources)
+                .map(i -> {
+                    if(distance[i]==Integer.MAX_VALUE)  return -1;
+
+                    return distance[i];
+                })
+                .toArray();
     }
 
-    private static void bfs(int[] distance, Map<Integer, List<Info>> map, int start) {
-        Queue<Info> queue = new PriorityQueue<>((i1, i2) -> i1.count-i2.count);
+    private static void bfs(int[] distance, Map<Integer, List<Info1>> map, int start) {
+        Queue<Info1> queue = new PriorityQueue<>(Comparator.comparingInt(i -> i.count));
         distance[start] = 0;
-        queue.add(new Info(start, 0));
+        queue.add(new Info1(start, 0));
 
         while(!queue.isEmpty()){
-            Info current = queue.poll();
+            Info1 current = queue.poll();
 
-            for(Info next : map.get(current.source)){
-
+            for(Info1 next : map.get(current.source)){
+                if(distance[next.source] > current.count+next.count){
+                    distance[next.source] = current.count+next.count;
+                    queue.add(new Info1(next.source, distance[next.source]));
+                }
             }
 
         }
+    }
 
+    static class Info1{
+        int source;
+        int count;
 
+        public Info1(int source, int count) {
+            this.source = source;
+            this.count = count;
+        }
     }
 }
