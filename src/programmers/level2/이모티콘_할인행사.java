@@ -11,17 +11,17 @@ public class 이모티콘_할인행사 {
     }
 
     public static int[] solution(int[][] users, int[] emoticons) {
+        int[] discount = {10, 20, 30, 40};
         int count = 0;
-        for(int[] user : users){
-            int sum = 0;
-            for(int emoticon : emoticons){
-                sum += (100-user[0])*emoticon/100;
-            }
 
-            if(user[1]<sum) count++;
+        boolean[] subscription = new boolean[users.length];
+        int sum = Arrays.stream(emoticons).sum();
+
+        for(int i=0; i< users.length; i++){
+            subscription[i] = users[i][1] < (100-Math.ceil(users[i][0]/10)*10) * sum/100;
         }
 
-        System.out.println(count);
+
         return null;
     }
 }
