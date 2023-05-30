@@ -1,8 +1,6 @@
 package programmers.level2;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 public class 이모티콘_할인행사 {
     public static void main(String[] args) {
@@ -29,7 +27,7 @@ public class 이모티콘_할인행사 {
                 for(int j=0; j<discount.length; j++){
                     if(discount[j]<user[0]) continue;
 
-                    temp += emoticons[j] * (100-discount[j]);
+                    temp += emoticons[j] * (100-discount[j])/100;
                 }
 
                 if(user[1]<=temp){
@@ -44,7 +42,7 @@ public class 이모티콘_할인행사 {
             add(discount);
         }
 
-        Arrays.sort(answer, (i1, i2) -> i1[0]==i2[0] ? i1[1]-i2[1] : i1[0]-i2[0]);
+        Arrays.sort(answer, (i1, i2) -> i1[0]==i2[0] ? i2[1]-i1[1] : i2[0]-i1[0]);
 
         return answer[0];
     }
@@ -57,7 +55,6 @@ public class 이모티콘_할인행사 {
                 array[i] += 10;
                 return;
             }
-
         }
     }
 }
