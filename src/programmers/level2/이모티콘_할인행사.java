@@ -1,6 +1,8 @@
 package programmers.level2;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class 이모티콘_할인행사 {
     public static void main(String[] args) {
@@ -11,17 +13,51 @@ public class 이모티콘_할인행사 {
     }
 
     public static int[] solution(int[][] users, int[] emoticons) {
-        int[] discount = {10, 20, 30, 40};
-        int count = 0;
+        int[] discount = new int[emoticons.length];
+        Arrays.fill(discount, 10);
 
-        boolean[] subscription = new boolean[users.length];
-        int sum = Arrays.stream(emoticons).sum();
+        double max = Math.pow(4, emoticons.length);
+        int[][] answer = new int[(int) max][2];
 
-        for(int i=0; i< users.length; i++){
-            subscription[i] = users[i][1] < (100-Math.ceil(users[i][0]/10)*10) * sum/100;
+        for(int index=0; index<max; index++){
+            int count = 0;
+            int sum = 0;
+
+            for(int[] user : users){
+                int temp = 0;
+
+                for(int j=0; j<discount.length; j++){
+                    if(discount[j]<user[0]) continue;
+
+                    temp += emoticons[j] * (100-discount[j]);
+                }
+
+                if(user[1]<=temp){
+                    count++;
+                }else{
+                    sum += temp;
+                }
+            }
+
+            answer[index] = new int[] {count, sum};
+
+            add(discount);
         }
 
+        Arrays.sort(answer, (i1, i2) -> i1[0]==i2[0] ? i1[1]-i2[1] : i1[0]-i2[0]);
 
-        return null;
+        return answer[0];
+    }
+
+    private static void add(int[] array) {
+        for(int i=0; i< array.length; i++){
+            if(array[i]==40){
+                array[i] = 10;
+            }else{
+                array[i] += 10;
+                return;
+            }
+
+        }
     }
 }
