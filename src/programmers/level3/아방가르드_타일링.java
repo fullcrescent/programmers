@@ -1,5 +1,7 @@
 package programmers.level3;
 
+import java.util.stream.IntStream;
+
 public class 아방가르드_타일링 {
     public static void main(String[] args){
         int n = 9;
@@ -18,21 +20,21 @@ public class 아방가르드_타일링 {
         dp[2] = 3;
 
         for(int i=3; i<=n; i++){
+            // 1 > 1 : 1
+            // 2 > 1+1>1 / 2>2 : 3
+            // 3 > 1+1+1>1 / 1+2>2 / 2+1>2 / 3>5 : 10
+            // 4 > 1+1+1+1>1 / 1+1+2>2 / 1+2+1>2 / 1+3>5 || 2+1+1>2 / 2+2>4 || 3+1>5 || 질문하기 테스트 케이스 참고>2 : 21 + 2
             dp[i] = (dp[i-1] + dp[i-2]*2 + dp[i-3]*5 + add(dp, i-4))%1000000007;
         }
 
         return (int) dp[n];
     }
 
-    private static long add(long[] dp, int i) {
-        long sum = 0;
+    private static long add(long[] dp, int end) {
         int[] array = new int[] {2, 2, 4};
-        int index = 0;
 
-        while(i>-1){
-            sum += dp[i--]*array[index++%3];
-        }
-
-        return sum;
+        return IntStream.range(0, end+1)
+                .mapToLong(i -> dp[i]*array[(end-i)%3])
+                .sum();
     }
 }
