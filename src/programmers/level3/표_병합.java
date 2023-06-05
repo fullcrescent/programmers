@@ -22,13 +22,10 @@ public class 표_병합 {
             String action = temp[0];
 
             if(!isNumber(temp[1])){
-                array = Arrays.stream(array).map(i -> {
-                    if(i.equals(temp[1])){
-                        return temp[2];
-                    }
-
-                    return i;
-                }).toArray(String[][]::new);
+                array = Arrays.stream(array).map(i -> Arrays.stream(i).map(j -> {
+                    if(j==null) return null;
+                    return j.replace(temp[1], temp[2]);
+                }).toArray(String[]::new)).toArray(String[][]::new);
                 continue;
             }
 
