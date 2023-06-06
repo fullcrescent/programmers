@@ -1,9 +1,6 @@
 package programmers.level3;
 
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
+import java.util.*;
 
 public class 표_병합 {
     public static void main(String[] args) {
@@ -14,7 +11,8 @@ public class 표_병합 {
 
     public static String[] solution(String[] commands) {
         List<String> answer = new LinkedList<>();
-        String[][] array = new String[max][max];
+        List<Info> infoList = new ArrayList<>();
+        Info[][] array = new Info[max][max];
 
         for(String command : commands){
             String[] temp = command.split(" ");
@@ -22,32 +20,49 @@ public class 표_병합 {
             String action = temp[0];
 
             if(!isNumber(temp[1])){
-                array = Arrays.stream(array).map(i -> Arrays.stream(i).map(j -> {
-                    if(j==null) return null;
-                    return j.replace(temp[1], temp[2]);
-                }).toArray(String[]::new)).toArray(String[][]::new);
+                infoList.stream().filter(i -> i.value.equals(temp[1])).forEach(i -> i.value=temp[2]);
                 continue;
             }
 
             int x = Integer.parseInt(temp[1]);
             int y = Integer.parseInt(temp[2]);
 
+            Info info;
+
             switch (action) {
                 case "UPDATE":
-                    array[x][y] = temp[3];
+                    info = new Info(temp[3]);
+                    info.addPoint(new Point(x, y));
+                    array[x][y] = info;
+
+                    infoList.add(info);
+
                     break;
                 case "MERGE":
                     int mergeX = Integer.parseInt(temp[3]);
                     int mergeY = Integer.parseInt(temp[4]);
 
-                    mergeFunction(array, mergeX, mergeY, array[x][y], array[x][y]);
-                    array[mergeX][mergeY] = array[x][y];
+                    if(array[mergeX][mergeY]!=null){
+                        array[mergeX][mergeY].list.forEach(i -> array[i.x][i.y]=array[x][y]);
+                    }else{
+                        array[mergeX][mergeY] = array[x][y];
+                    }
+                    array[x][y].addPoint(new Point(mergeX, mergeY));
+
                     break;
                 case "UNMERGE":
-                    mergeFunction(array, x, y, array[x][y], null);
+                    info = new Info(array[x][y].value);
+                    info.addPoint(new Point(x, y));
+
+                    infoList.remove(array[x][y]);
+                    array[x][y].list.forEach(i -> array[i.x][i.y]=null);
+
+                    array[x][y] = info;
+
                     break;
                 case "PRINT":
-                    answer.add(array[x][y] == null ? "EMPTY" : array[x][y]);
+                    answer.add(array[x][y] == null ? "EMPTY" : array[x][y].value);
+
                     break;
             }
         }
@@ -56,43 +71,30 @@ public class 표_병합 {
     }
 
     private static final int max = 51;
-    private static final int[][] distance = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
-
     private static boolean isNumber(String s) {
         return s!=null && s.matches("[0-9]+");
     }
 
-    private static void mergeFunction(String[][] array, int x, int y, String s, String replace) {
-        boolean[][] visit = new boolean[max][max];
-        visit[x][y] = true;
+    static class Info{
+        private String value;
 
-        Queue<Info> queue = new LinkedList<>();
-        queue.add(new Info(x, y));
+        private final List<Point> list;
 
-        while(!queue.isEmpty()){
-            Info info = queue.poll();
-
-            for(int[] d : distance){
-                int moveX = info.x+d[0];
-                int moveY = info.y+d[1];
-
-                if(visit[moveX][moveY]) continue;
-                visit[moveX][moveY] = true;
-
-                if(s.equals(array[moveX][moveY])){
-                    array[moveX][moveY] = replace;
-                    queue.add(new Info(moveX, moveY));
-                }
-            }
+        public Info(String value) {
+            this.value = value;
+            this.list = new ArrayList<>();
         }
 
+        public void addPoint(Point point){
+            list.add(point);
+        }
     }
 
-    static class Info{
+    static class Point{
         int x;
         int y;
 
-        public Info(int x, int y) {
+        public Point(int x, int y) {
             this.x = x;
             this.y = y;
         }
