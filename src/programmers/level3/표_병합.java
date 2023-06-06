@@ -31,11 +31,15 @@ public class 표_병합 {
 
             switch (action) {
                 case "UPDATE":
-                    info = new Info(temp[3]);
-                    info.addPoint(new Point(x, y));
-                    array[x][y] = info;
+                    if(array[x][y]==null){
+                        info = new Info(temp[3]);
+                        info.addPoint(new Point(x, y));
+                        array[x][y] = info;
 
-                    infoList.add(info);
+                        infoList.add(info);
+                    }else{
+                        array[x][y].value = temp[3];
+                    }
 
                     break;
                 case "MERGE":
@@ -76,9 +80,9 @@ public class 표_병합 {
     }
 
     static class Info{
-        private String value;
+        String value;
 
-        private final List<Point> list;
+        List<Point> list;
 
         public Info(String value) {
             this.value = value;
