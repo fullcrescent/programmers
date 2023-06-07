@@ -43,9 +43,19 @@ public class 표_병합 {
                     int mergeX = Integer.parseInt(temp[3]);
                     int mergeY = Integer.parseInt(temp[4]);
 
-                    if(array[mergeX][mergeY]!=array[x][y]){
-                        array[mergeX][mergeY].list.forEach(i -> array[x][y].addPoint(new Point(i.x, i.y)));
-                        array[mergeX][mergeY].list.forEach(i -> array[i.x][i.y]=array[x][y]);
+                    if(array[x][y]!=array[mergeX][mergeY]){
+                        Info merging, merged;
+
+                        if(array[x][y].value==null){
+                            merging = array[mergeX][mergeY];
+                            merged = array[x][y];
+                        }else{
+                            merging = array[x][y];
+                            merged = array[mergeX][mergeY];
+                        }
+
+                        merged.list.forEach(i -> merging.addPoint(new Point(i.x, i.y)));
+                        merged.list.forEach(i -> array[i.x][i.y]=merging);
                     }
 
                     break;
