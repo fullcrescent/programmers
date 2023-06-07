@@ -11,8 +11,14 @@ public class 표_병합 {
 
     public static String[] solution(String[] commands) {
         List<String> answer = new LinkedList<>();
-        List<Info> infoList = new ArrayList<>();
         Info[][] array = new Info[max][max];
+
+        for(int x=0; x<array.length; x++){
+            for(int y=0; y<array[x].length; y++){
+                array[x][y] = new Info(null);
+                array[x][y].addPoint(new Point(x, y));
+            }
+        }
 
         for(String command : commands){
             String[] temp = command.split(" ");
@@ -20,55 +26,42 @@ public class 표_병합 {
             String action = temp[0];
 
             if(action.equals("UPDATE")&&temp.length==3){
-                infoList.stream().filter(i -> i.value.equals(temp[1])).forEach(i -> i.value=temp[2]);
+                Arrays.stream(array).forEach(i -> Arrays.stream(i).filter(j -> temp[1].equals(j.value)).forEach(j -> j.value=temp[2]));
+
                 continue;
             }
 
             int x = Integer.parseInt(temp[1]);
             int y = Integer.parseInt(temp[2]);
 
-            Info info;
-
             switch (action) {
                 case "UPDATE":
-                    if(array[x][y]==null){
-                        info = new Info(temp[3]);
-                        info.addPoint(new Point(x, y));
-                        array[x][y] = info;
-
-                        infoList.add(info);
-                    }else{
-                        array[x][y].value = temp[3];
-                    }
+                    array[x][y].value = temp[3];
 
                     break;
                 case "MERGE":
                     int mergeX = Integer.parseInt(temp[3]);
                     int mergeY = Integer.parseInt(temp[4]);
 
-                    if(array[mergeX][mergeY]!=null){
-                        infoList.remove(array[mergeX][mergeY]);
+                    if(array[mergeX][mergeY]!=array[x][y]){
+                        array[mergeX][mergeY].list.forEach(i -> array[x][y].addPoint(new Point(i.x, i.y)));
                         array[mergeX][mergeY].list.forEach(i -> array[i.x][i.y]=array[x][y]);
-                    }else{
-                        array[mergeX][mergeY] = array[x][y];
                     }
-
-                    array[x][y].addPoint(new Point(mergeX, mergeY));
 
                     break;
                 case "UNMERGE":
-                    info = new Info(array[x][y].value);
-                    info.addPoint(new Point(x, y));
+                    String value = array[x][y].value;
 
-                    infoList.remove(array[x][y]);
-                    array[x][y].list.forEach(i -> array[i.x][i.y]=null);
+                    array[x][y].list.forEach(i -> {
+                        array[i.x][i.y]=new Info(null);
+                        array[i.x][i.y].addPoint(new Point(i.x, i.y));
+                    });
 
-                    array[x][y] = info;
-                    infoList.add(info);
+                    array[x][y].value = value;
 
                     break;
                 case "PRINT":
-                    answer.add(array[x][y] == null ? "EMPTY" : array[x][y].value);
+                    answer.add(array[x][y].value == null ? "EMPTY" : array[x][y].value);
 
                     break;
             }
