@@ -5,8 +5,8 @@ import java.util.stream.LongStream;
 
 public class 숫자_블록 {
     public static void main(String[] args) {
-        long begin = 999999500;
-        long end = 1000000000;
+        long begin = 1;
+        long end = 10;
         int[] answer = solution(begin, end);
         System.out.println(Arrays.toString(answer));
     }
@@ -20,12 +20,14 @@ public class 숫자_블록 {
                 .toArray();
     }
 
-    private static long divisor(long input){
-        long start = input/10000000<2 ? 2 : input/10000000;
+    static int max = 10000000;
 
-        for(long i=start; i<=Math.sqrt(input); i++){
+    private static long divisor(long input){
+        long start = input/2<max ? input/2 : max;
+
+        for(long i=start; i<=input; i--){
             if(input%i==0) {
-                return input/i;
+                return i;
             }
         }
 
