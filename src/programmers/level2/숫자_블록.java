@@ -1,6 +1,5 @@
 package programmers.level2;
 
-import java.math.BigInteger;
 import java.util.Arrays;
 
 public class 숫자_블록 {
