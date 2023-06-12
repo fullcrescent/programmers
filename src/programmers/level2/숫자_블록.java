@@ -1,7 +1,7 @@
 package programmers.level2;
 
+import java.math.BigInteger;
 import java.util.Arrays;
-import java.util.stream.LongStream;
 
 public class 숫자_블록 {
     public static void main(String[] args) {
@@ -12,25 +12,41 @@ public class 숫자_블록 {
     }
 
     public static int[] solution(long begin, long end) {
-        return LongStream.range(begin, end+1)
-                .mapToInt(i -> {
-                    if(i==1) return 0;
-                    return (int) divisor(i);
-                })
-                .toArray();
-    }
+        int length = (int) (end-begin+1);
+        int[] array = new int[length];
 
-    static int max = 10000000;
+        int index = 0;
 
-    private static long divisor(long input){
-        long start = input/2<max ? input/2 : max;
+        if(begin==1){
+            array[index++] = 0;
+            begin++;
+        }
 
-        for(long i=start; i<=input; i--){
-            if(input%i==0) {
-                return i;
+        int max = end/2<10000000 ? (int) end/2 : 10000000;
+
+        for(long i=begin; i<=end; i++){
+            if(isPrime(i)){
+                array[index++] = 1;
+            }else{
+                for(int j=max; j>0; j--){
+                    if(i%j==0 && j!=i){
+                        array[index++] = j;
+                        break;
+                    }
+                }
             }
         }
 
-        return 1;
+        return array;
+    }
+
+    private static boolean isPrime(long value) {
+        for(long i=2; i<=Math.sqrt(value); i++) {
+            if(value%i==0) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }
