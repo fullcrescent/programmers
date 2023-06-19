@@ -26,12 +26,12 @@ public class 풍선_터트리기 {
 				while(a[rightIndex]>minRight){
 					rightIndex--;
 				}
-				minRight=a[rightIndex];
+				minRight=a[rightIndex--];
 			}else if(minRight<minLeft){
 				while(a[leftIndex]>minLeft){
 					leftIndex++;
 				}
-				minLeft=a[leftIndex];
+				minLeft=a[leftIndex++];
 			}
 
 			if(minLeft==minRight) count--;
