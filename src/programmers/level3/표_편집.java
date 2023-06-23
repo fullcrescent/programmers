@@ -17,24 +17,59 @@ public class 표_편집 {
 		boolean[] remove = new boolean[n];
 
 		for(String command : cmd) {
-			Character temp = command.charAt(0);
+			char temp = command.charAt(0);
+
+			int value = 1;
+			if(command.length()>1) {
+				value = Integer.parseInt(command.split(" ")[1]);
+			}
+
+			int count = 0;
 
 			switch(temp) {
 				case 'U' :
+					while(count<value){
+						count++;
+						k--;
+						if(remove[k]) count--;
+					}
 
 					break;
 				case 'D' :
+					while(count<value){
+						count++;
+						k++;
+						if(remove[k]) count--;
+					}
 
 					break;
 				case 'C' :
+					stack.add(k);
+					remove[k] = true;
+					k++;
+
+					if(k==n){
+						k--;
+						while(remove[k]){
+							k--;
+						}
+					}
 
 					break;
 				case 'Z' :
+					remove[stack.pop()] = false;
 
 					break;
 			}
 		}
 
-		return null;
+		StringBuilder sb = new StringBuilder();
+
+		for(int i=0; i<n; i++) {
+			if(remove[i])	sb.append("X");
+			else 			sb.append("O");
+		}
+
+		return sb.toString();
 	}
 }
