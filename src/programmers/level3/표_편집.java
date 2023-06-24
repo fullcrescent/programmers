@@ -1,5 +1,7 @@
 package programmers.level3;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Stack;
 
 public class 표_편집 {
@@ -16,44 +18,49 @@ public class 표_편집 {
 		Stack<Integer> stack = new Stack<>();
 		boolean[] remove = new boolean[n];
 
-		for(String command : cmd) {
-			char temp = command.charAt(0);
+		List<String> list = new ArrayList<>();
+		Info info = new Info();
 
+		for(int i=0; i<cmd.length-1; i++){
+			char prev = cmd[i].charAt(0);
+			char next = cmd[i+1].charAt(0);
+
+			if(prev=='U' || prev=='D'){
+				if(next=='D' || next=='U'){
+//					info.add(cmd[i+1]);
+				}else{
+					info = new Info();
+					list.add(cmd[i]);
+				}
+			}else{
+
+			}
+		}
+
+		int start = k;
+
+		for(int i=0; i<cmd.length; i++ ) {
+			String temp = cmd[i];
 			int value = 1;
-			if(command.length()>1) {
-				value = Integer.parseInt(command.split(" ")[1]);
+
+			if(temp.length()>1) {
+				value = Integer.valueOf(temp.split(" ")[1]);
 			}
 
-			int count = 0;
-
-			switch(temp) {
+			switch(temp.charAt(0)) {
 				case 'U' :
-					while(count<value){
-						count++;
-						k--;
-						if(remove[k]) count--;
-					}
+					start = binarySearch(remove, 0, start-1, value);
 
 					break;
 				case 'D' :
-					while(count<value){
-						count++;
-						k++;
-						if(remove[k]) count--;
-					}
+					start = binarySearch(remove, start+1, n, value);
 
 					break;
 				case 'C' :
-					stack.add(k);
-					remove[k] = true;
-					k++;
+					stack.add(start);
+					remove[start] = true;
 
-					if(k==n){
-						k--;
-						while(remove[k]){
-							k--;
-						}
-					}
+					start = binarySearch(remove, start+1, n, value);
 
 					break;
 				case 'Z' :
@@ -71,5 +78,59 @@ public class 표_편집 {
 		}
 
 		return sb.toString();
+	}
+
+	private static int binarySearch(boolean[] array, int left, int right, int value) {
+		int mid = 0, index = 0, weight = 0, answer = 0;
+
+		if(left==0) {
+			index = right;
+			weight = -1;
+		}
+		else{
+			index = left;
+			weight = 1;
+		}
+
+		while(left<=right){
+			int count = 0;
+
+			mid = (left+right)/2;
+
+			for(int i=index; i!=mid+weight; i += weight) {
+				if(i==array.length) return binarySearch(array, 0, left-2, value);
+
+				if(!array[i]) count++;
+
+				if(count==value) break;
+			}
+
+			if(weight==1) {
+				if(count==value) {
+					answer = mid;
+					right = mid-1;
+				}else {
+					left = mid+1;
+				}
+			}else {
+				if(count==value) {
+					answer = mid;
+					left = mid+1;
+				}else {
+					right = mid-1;
+				}
+			}
+		}
+
+		return answer;
+	}
+
+	static class Info{
+		char direction;
+		int value;
+
+		public Info() {}
+
+
 	}
 }
