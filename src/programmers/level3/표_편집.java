@@ -18,7 +18,7 @@ public class 표_편집 {
 		Stack<Integer> stack = new Stack<>();
 		boolean[] remove = new boolean[n];
 
-		List<String> list = new ArrayList<>();
+		List<Info> list = new ArrayList<>();
 		Info info = new Info();
 
 		for(int i=0; i<cmd.length-1; i++){
@@ -28,39 +28,30 @@ public class 표_편집 {
 			if(prev=='U' || prev=='D'){
 				if(next=='D' || next=='U'){
 //					info.add(cmd[i+1]);
-				}else{
-					info = new Info();
-					list.add(cmd[i]);
 				}
 			}else{
-
+				list.add(info);
+				info = new Info();
 			}
 		}
 
 		int start = k;
 
-		for(int i=0; i<cmd.length; i++ ) {
-			String temp = cmd[i];
-			int value = 1;
-
-			if(temp.length()>1) {
-				value = Integer.valueOf(temp.split(" ")[1]);
-			}
-
-			switch(temp.charAt(0)) {
+		for(Info temp : list) {
+			switch(temp.direction) {
 				case 'U' :
-					start = binarySearch(remove, 0, start-1, value);
+					start = binarySearch(remove, 0, start-1, temp.value);
 
 					break;
 				case 'D' :
-					start = binarySearch(remove, start+1, n, value);
+					start = binarySearch(remove, start+1, n, temp.value);
 
 					break;
 				case 'C' :
 					stack.add(start);
 					remove[start] = true;
 
-					start = binarySearch(remove, start+1, n, value);
+					start = binarySearch(remove, start+1, n, temp.value);
 
 					break;
 				case 'Z' :
