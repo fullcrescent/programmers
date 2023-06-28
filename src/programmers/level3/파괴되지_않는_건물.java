@@ -11,6 +11,22 @@ public class 파괴되지_않는_건물 {
     }
 
     public static int solution(int[][] board, int[][] skills) {
+        int row = board.length;
+        int column = board[0].length;
+
+        int[] temp = new int[row*column];
+
+        Arrays.stream(skills)
+                .parallel()
+                .forEach(skill -> {
+                    for(int i=skill[1]; i<=skill[2]; i++){
+                        for(int j=skill[3]; j<=skill[4]; j++){
+                            temp[i*column + j] = skill[5];
+                        }
+                    }
+                });
+
+
         for(int[] skill : skills){
             if(skill[0]==1){
                 function(board, skill[1], skill[2], skill[3], skill[4], -skill[5]);
