@@ -16,36 +16,23 @@ public class 파괴되지_않는_건물 {
 
         int[] temp = new int[row*column];
 
+        for(int i=0; i<row; i++){
+            System.arraycopy(board[i], 0, temp, i * column, column);
+        }
+
         Arrays.stream(skills)
-                .parallel()
                 .forEach(skill -> {
-                    for(int i=skill[1]; i<=skill[2]; i++){
-                        for(int j=skill[3]; j<=skill[4]; j++){
-                            temp[i*column + j] = skill[5];
+                    int add = skill[0]==1 ? -skill[5] : skill[5];
+
+                    for(int a=skill[1]; a<=skill[3]; a++){
+                        for(int b=skill[2]; b<=skill[4]; b++){
+                            temp[a*column + b] += add;
                         }
                     }
                 });
 
-
-        for(int[] skill : skills){
-            if(skill[0]==1){
-                function(board, skill[1], skill[2], skill[3], skill[4], -skill[5]);
-            }else{
-                function(board,skill[1], skill[2], skill[3], skill[4], skill[5]);
-            }
-        }
-
-        return (int) Arrays.stream(board)
-                .flatMapToInt(array -> Arrays.stream(array))
+        return (int) Arrays.stream(temp)
                 .filter(i -> i>0)
                 .count();
-    }
-
-    private static void function(int[][] board, int x1, int y1, int x2, int y2, int value) {
-        for(int i=x1; i<=x2; i++){
-            for(int j=y1; j<=y2; j++){
-                board[i][j] += value;
-            }
-        }
     }
 }
