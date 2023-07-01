@@ -22,8 +22,8 @@ public class 파괴되지_않는_건물 {
             if(temp[0]==1) value*=-1;
 
             sum[x1][y1] += value;
-            sum[x1][y2 + 1] -= value;
-            sum[x2 + 1][y1] -= value;
+            sum[x1][y2+1] -= value;
+            sum[x2+1][y1] -= value;
             sum[x2+1][y2+1] += value;
         }
 
