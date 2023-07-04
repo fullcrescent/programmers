@@ -1,6 +1,8 @@
 package programmers.level3;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class 일일공_옮기기 {
     public static void main(String[] args) {
@@ -10,23 +12,24 @@ public class 일일공_옮기기 {
     }
 
     public static String[] solution(String[] s) {
-        StringBuffer sb = new StringBuffer();
+        List<String> list = new ArrayList<>();
+        StringBuilder sb = new StringBuilder();
 
         for(String temp : s){
             sb.append(temp);
 
-            while(sb.indexOf("111")>=0 && sb.indexOf("110")>=0){
+            while(sb.indexOf("111")>=0 && sb.lastIndexOf("110")>=0 && sb.indexOf("111")<sb.lastIndexOf("110")){
                 int insert = sb.indexOf("111");
-                int delete = sb.indexOf("110");
+                int delete = sb.lastIndexOf("110");
 
                 sb.delete(delete, delete+3);
                 sb.insert(insert, "110");
             }
 
+            list.add(sb.toString());
             sb.delete(0, sb.length());
         }
 
-
-        return null;
+        return list.toArray(String[]::new);
     }
 }
