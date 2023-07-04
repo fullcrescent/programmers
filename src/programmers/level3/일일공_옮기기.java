@@ -6,19 +6,26 @@ import java.util.List;
 
 public class 일일공_옮기기 {
     public static void main(String[] args) {
-        String[] s = {"100111100","0111111010"};
+        String[] s = {"1100111011101001"};
         String[] answer = solution(s);
         System.out.println(Arrays.toString(answer));
     }
 
     public static String[] solution(String[] s) {
         List<String> list = new ArrayList<>();
-        StringBuilder sb = new StringBuilder();
 
         for(String temp : s){
-            sb.append(temp);
+            int length = temp.length();
 
-            while(sb.indexOf("111")>=0 && sb.lastIndexOf("110")>=0 && sb.indexOf("111")<sb.lastIndexOf("110")){
+            while(temp.contains("110")){
+                temp = temp.replaceAll("110", "");
+            }
+
+            StringBuilder sb = new StringBuilder(temp);
+
+            sb.append("110".repeat((length-sb.length())/3));
+
+            while(sb.indexOf("111")>=0 && sb.indexOf("111")<sb.lastIndexOf("110")){
                 int insert = sb.indexOf("111");
                 int delete = sb.lastIndexOf("110");
 
@@ -27,7 +34,6 @@ public class 일일공_옮기기 {
             }
 
             list.add(sb.toString());
-            sb.delete(0, sb.length());
         }
 
         return list.toArray(String[]::new);
