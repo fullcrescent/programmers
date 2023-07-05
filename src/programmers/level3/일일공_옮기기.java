@@ -15,22 +15,26 @@ public class 일일공_옮기기 {
         List<String> list = new ArrayList<>();
 
         for(String temp : s){
-            int length = temp.length();
-
-            while(temp.contains("110")){
-                temp = temp.replaceAll("110", "");
-            }
-
             StringBuilder sb = new StringBuilder(temp);
 
-            sb.append("110".repeat((length-sb.length())/3));
+            while(true){
+                String prev = sb.toString();
 
-            while(sb.indexOf("111")>=0 && sb.indexOf("111")<sb.lastIndexOf("110")){
-                int insert = sb.indexOf("111");
-                int delete = sb.lastIndexOf("110");
+                int index_110 = sb.indexOf("110");
+                int lastIndex_110 = sb.lastIndexOf("110");
+                int index_111 = sb.indexOf("111");
 
-                sb.delete(delete, delete+3);
-                sb.insert(insert, "110");
+                if(index_110!=-1){
+                    if(index_111==-1){
+                        sb.delete(index_110, index_110+3);
+                        sb.insert(sb.lastIndexOf("0")+1, "110");
+                    }else if(lastIndex_110>index_111){
+                        sb.delete(lastIndex_110, lastIndex_110+3);
+                        sb.insert(index_111, "110");
+                    }
+                }
+
+                if(prev.equals(sb.toString()))  break;
             }
 
             list.add(sb.toString());
