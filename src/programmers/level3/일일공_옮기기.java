@@ -3,6 +3,7 @@ package programmers.level3;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Stack;
 
 public class 일일공_옮기기 {
     public static void main(String[] args) {
@@ -15,13 +16,28 @@ public class 일일공_옮기기 {
         List<String> list = new ArrayList<>();
 
         for(String temp : s){
-            StringBuilder sb = new StringBuilder(temp);
             StringBuilder add = new StringBuilder();
+            Stack<Character> stack = new Stack<>();
 
-            while(sb.indexOf("110")!=-1){
-                int index_110 = sb.indexOf("110");
-                sb.delete(index_110, index_110+3);
-                add.append("110");
+            for(Character c : temp.toCharArray()){
+                if(!stack.isEmpty() && stack.peek()=='1' && c=='0'){
+                    stack.pop();
+
+                    if(!stack.isEmpty() && stack.peek()=='1'){
+                        stack.pop();
+                        add.append("110");
+                    }else{
+                        stack.add('1');
+                        stack.add(c);
+                    }
+                }else{
+                    stack.add(c);
+                }
+            }
+
+            StringBuilder sb = new StringBuilder();
+            while(!stack.isEmpty()){
+                sb.insert(0, stack.pop());
             }
 
             sb.insert(sb.lastIndexOf("0")+1, add);
