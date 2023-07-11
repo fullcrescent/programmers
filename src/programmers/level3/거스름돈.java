@@ -1,8 +1,5 @@
 package programmers.level3;
 
-import java.util.HashSet;
-import java.util.Set;
-
 public class 거스름돈 {
     public static void main(String[] args) {
         int n = 5;
@@ -12,10 +9,23 @@ public class 거스름돈 {
     }
 
     public static int solution(int n, int[] money) {
-        Set<Integer> set = new HashSet<>();
+        return function(n, money, 0);
+    }
 
+    private static int function(int n, int[] money, int index) {
+        if(n==0){
+            return 1;
+        }else if(n<0){
+            return 0;
+        }
 
+        int answer = 0;
 
-        return 0;
+        for(int i=index; i<money.length; i++){
+            answer += function(n-money[index], money, index);
+            index++;
+        }
+
+        return answer;
     }
 }
