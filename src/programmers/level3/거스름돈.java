@@ -9,23 +9,20 @@ public class 거스름돈 {
     }
 
     public static int solution(int n, int[] money) {
-        return function(n, money, 0);
-    }
+        int[] dp = new int[n+1];
 
-    private static int function(int n, int[] money, int index) {
-        if(n==0){
-            return 1;
-        }else if(n<0){
-            return 0;
+        for(int temp : money){
+            dp[temp] = 1;
         }
 
-        int answer = 0;
+        for(int i=1; i<=n; i++){
+            if(dp[i]==0)    continue;
 
-        for(int i=index; i<money.length; i++){
-            answer += function(n-money[index], money, index);
-            index++;
+            for(int j=2*i; j<=n; j+=i){
+                dp[j] += dp[i];
+            }
         }
 
-        return answer;
+        return dp[n];
     }
 }
