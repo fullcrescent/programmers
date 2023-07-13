@@ -1,27 +1,27 @@
 package programmers.level3;
 
+import java.util.Arrays;
+
 public class 거스름돈 {
     public static void main(String[] args) {
-        int n = 5;
+        int n = 6;
         int[] money = {1,2,5};
         int answer = solution(n, money);
         System.out.println(answer);
     }
 
     public static int solution(int n, int[] money) {
+        int mod = 1000000007;
+
         int[] dp = new int[n+1];
+        dp[0] = 1;
 
-        for(int temp : money){
-            dp[temp] = 1;
-        }
-
-        for(int i=1; i<=n; i++){
-            if(dp[i]==0)    continue;
-
-            for(int j=2*i; j<=n; j+=i){
-                dp[j] += dp[i];
-            }
-        }
+        Arrays.stream(money)
+                .forEach(i -> {
+                    for(int j=i; j<=n; j++){
+                        dp[j] += dp[j-i]%mod;
+                    }
+                });
 
         return dp[n];
     }
