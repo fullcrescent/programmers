@@ -20,14 +20,14 @@ public class 길_찾기_게임 {
             map.put(nodeInfo[i][1], temp);
         }
 
-
-
-        function(nodeInfo, 0, 0, 100001);
+        int[] prev = function1(nodeInfo, map, 0, 0, 100001);
 
         return nodeInfo;
     }
 
-    private static void function(int[][] nodeInfo, int i, int start, int end) {
+    private static int[] function1(int[][] nodeInfo, Map<Integer, List<Info>> map, int i, int start, int end) {
+
+        return null;
     }
 
     static class Info{
