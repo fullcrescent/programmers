@@ -20,14 +20,35 @@ public class 길_찾기_게임 {
             map.put(nodeInfo[i][1], temp);
         }
 
-        int[] prev = function1(nodeInfo, map, 0, 0, 100001);
+        int end = map.keySet().stream().max(Integer::compareTo).get();
+
+        Node node = function1(map, end, -1, 100001);
 
         return nodeInfo;
     }
 
-    private static int[] function1(int[][] nodeInfo, Map<Integer, List<Info>> map, int i, int start, int end) {
+    private static Node function1(Map<Integer, List<Info>> map, int y, int start, int end) {
+        while(map.get(y)==null && -1<y){
+            y--;
+        }
 
-        return null;
+        if(y<0){
+            return null;
+        }
+
+        Node node = null;
+
+        List<Info> list = map.get(y);
+
+        for (Info info : list) {
+            int x = info.x;
+
+            if (start < x && x < end) {
+                node = new Node(info.value, function1(map, y - 1, start, x), function1(map, y - 1, x, end));
+            }
+        }
+
+        return node;
     }
 
     static class Info{
@@ -37,6 +58,18 @@ public class 길_찾기_게임 {
         public Info(int x, int value) {
             this.x = x;
             this.value = value;
+        }
+    }
+
+    static class Node{
+        int value;
+        Node left;
+        Node right;
+
+        public Node(int value, Node left, Node right) {
+            this.value = value;
+            this.left = left;
+            this.right = right;
         }
     }
 }
