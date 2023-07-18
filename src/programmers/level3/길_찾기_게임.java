@@ -20,11 +20,13 @@ public class 길_찾기_게임 {
             map.put(nodeInfo[i][1], temp);
         }
 
-        int end = map.keySet().stream().max(Integer::compareTo).get();
+        int end = map.keySet().stream().max(Integer::compareTo).orElse(0);
 
         Node node = function1(map, end, -1, 100001);
 
-        return nodeInfo;
+        if(node==null)  return new int[nodeInfo.length][2];
+
+        return new int[][] {node.getPreOrderArray(), node.getPostOrderArray()};
     }
 
     private static Node function1(Map<Integer, List<Info>> map, int y, int start, int end) {
@@ -70,6 +72,34 @@ public class 길_찾기_게임 {
             this.value = value;
             this.left = left;
             this.right = right;
+        }
+
+        public List<Integer> getPreOrder() {
+            List<Integer> list = new LinkedList<>();
+
+            list.add(value);
+            if(left!=null)  list.addAll(left.getPreOrder());
+            if(right!=null) list.addAll(right.getPreOrder());
+
+            return list;
+        }
+
+        public int[] getPreOrderArray(){
+            return getPreOrder().stream().mapToInt(i -> i).toArray();
+        }
+
+        public List<Integer> getPostOrder() {
+            List<Integer> list = new LinkedList<>();
+
+            if(left!=null)  list.addAll(left.getPostOrder());
+            if(right!=null) list.addAll(right.getPostOrder());
+            list.add(value);
+
+            return list;
+        }
+
+        public int[] getPostOrderArray(){
+            return getPostOrder().stream().mapToInt(i -> i).toArray();
         }
     }
 }
