@@ -8,6 +8,11 @@ public class 길_찾기_게임 {
         int[][] answer = solution(nodeInfo);
         Arrays.stream(answer)
                 .forEach(i -> System.out.println(Arrays.toString(i)));
+
+        int[][] nodeInfo1 = {{5,3},{11,5},{13,3},{3,5},{6,1},{1,3},{8,6},{7,2},{2,2}};
+        int[][] answer1 = solution1(nodeInfo1);
+        Arrays.stream(answer1)
+                .forEach(i -> System.out.println(Arrays.toString(i)));
     }
 
     public static int[][] solution(int[][] nodeInfo) {
@@ -22,14 +27,14 @@ public class 길_찾기_게임 {
 
         int end = map.keySet().stream().max(Integer::compareTo).orElse(0);
 
-        Node node = function1(map, end, -1, 100001);
+        Node node = function(map, end, -1, 100001);
 
         if(node==null)  return new int[nodeInfo.length][2];
 
         return new int[][] {node.getPreOrderArray(), node.getPostOrderArray()};
     }
 
-    private static Node function1(Map<Integer, List<Info>> map, int y, int start, int end) {
+    private static Node function(Map<Integer, List<Info>> map, int y, int start, int end) {
         while(map.get(y)==null && -1<y){
             y--;
         }
@@ -46,7 +51,7 @@ public class 길_찾기_게임 {
             int x = info.x;
 
             if (start < x && x < end) {
-                node = new Node(info.value, function1(map, y - 1, start, x), function1(map, y - 1, x, end));
+                node = new Node(info.value, function(map, y - 1, start, x), function(map, y - 1, x, end));
             }
         }
 
@@ -100,6 +105,40 @@ public class 길_찾기_게임 {
 
         public int[] getPostOrderArray(){
             return getPostOrder().stream().mapToInt(i -> i).toArray();
+        }
+    }
+
+    /*다른 사람의 풀이 참고*/
+    public static int[][] solution1(int[][] nodeInfo) {
+        List<Info1> list = new ArrayList<>();
+
+        for(int i=0; i<nodeInfo.length; i++){
+            list.add(new Info1(nodeInfo[i][0], nodeInfo[i][1], i+1));
+        }
+
+        list.sort((i1, i2) -> {
+            if(i1.y==i2.y)  return i1.x-i2.x;
+            return i1.y-i2.y;
+        });
+
+
+
+        for(Info1 info : list){
+
+        }
+
+        return null;
+    }
+
+    static class Info1{
+        int x;
+        int y;
+        int value;
+
+        public Info1(int x, int y, int value) {
+            this.x = x;
+            this.y = y;
+            this.value = value;
         }
     }
 }
