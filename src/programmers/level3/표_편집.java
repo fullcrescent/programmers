@@ -1,7 +1,5 @@
 package programmers.level3;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Stack;
 
 public class 표_편집 {
@@ -18,43 +16,42 @@ public class 표_편집 {
 		Stack<Integer> stack = new Stack<>();
 		boolean[] remove = new boolean[n];
 
-		List<Info> list = new ArrayList<>();
-		Info info = new Info();
-
-		for(int i=0; i<cmd.length-1; i++){
-			char prev = cmd[i].charAt(0);
-			char next = cmd[i+1].charAt(0);
-
-			if(prev=='U' || prev=='D'){
-				if(next=='D' || next=='U'){
-//					info.add(cmd[i+1]);
-				}
-			}else{
-				list.add(info);
-				info = new Info();
-			}
-		}
-
 		int start = k;
 
-		for(Info temp : list) {
-			switch(temp.direction) {
+		int value = 0;
+
+		for(int i=0; i<cmd.length; i++){
+			char c = cmd[i].charAt(0);
+
+			switch(c) {
 				case 'U' :
-					start = binarySearch(remove, 0, start-1, temp.value);
+					value += Integer.parseInt(cmd[i].split(" ")[1]);
 
 					break;
 				case 'D' :
-					start = binarySearch(remove, start+1, n, temp.value);
+					value -= Integer.parseInt(cmd[i].split(" ")[1]);
 
 					break;
 				case 'C' :
+					if(value<0){
+						start = binarySearch(remove, start+1, n, -value);
+					}else if(value>0){
+						start = binarySearch(remove, 0, start-1, value);
+					}
+
 					stack.add(start);
 					remove[start] = true;
 
-					start = binarySearch(remove, start+1, n, temp.value);
+					start = binarySearch(remove, start+1, n, 1);
 
 					break;
 				case 'Z' :
+					if(value<0){
+						start = binarySearch(remove, start+1, n, -value);
+					}else if(value>0){
+						start = binarySearch(remove, 0, start-1, value);
+					}
+
 					remove[stack.pop()] = false;
 
 					break;
@@ -72,7 +69,7 @@ public class 표_편집 {
 	}
 
 	private static int binarySearch(boolean[] array, int left, int right, int value) {
-		int mid = 0, index = 0, weight = 0, answer = 0;
+		int mid, index, weight, answer = 0;
 
 		if(left==0) {
 			index = right;
@@ -114,14 +111,5 @@ public class 표_편집 {
 		}
 
 		return answer;
-	}
-
-	static class Info{
-		char direction;
-		int value;
-
-		public Info() {}
-
-
 	}
 }
