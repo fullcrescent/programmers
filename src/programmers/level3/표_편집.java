@@ -7,7 +7,7 @@ public class 표_편집 {
 	public static void main(String[] args) {
 		int n = 8;
 		int k = 2;
-		String[] cmd = {"D 2", "C", "U 3", "C", "D 4", "C", "U 2", "Z", "Z", "U 1", "C"};
+		String[] cmd = {"D 2", "C", "U 3", "C", "D 4", "C", "C", "U 2", "Z", "Z", "U 1", "C"};
 		String answer = solution(n, k, cmd);
 		System.out.println(answer);
 	}
@@ -20,37 +20,39 @@ public class 표_편집 {
 
 		int value = 0;
 
-		for(int i=0; i<cmd.length; i++){
-			char c = cmd[i].charAt(0);
+		for (String s : cmd) {
+			char c = s.charAt(0);
 
-			switch(c) {
-				case 'U' :
-					value += Integer.parseInt(cmd[i].split(" ")[1]);
-
-					break;
-				case 'D' :
-					value -= Integer.parseInt(cmd[i].split(" ")[1]);
+			switch (c) {
+				case 'U':
+					value -= Integer.parseInt(s.split(" ")[1]);
 
 					break;
-				case 'C' :
-					if(value<0){
-						start = binarySearch(remove, start+1, n, -value);
-					}else if(value>0){
-						start = binarySearch(remove, 0, start-1, value);
+				case 'D':
+					value += Integer.parseInt(s.split(" ")[1]);
+
+					break;
+				case 'C':
+					if (value < 0) {
+						start = binarySearch(remove, 0, start - 1, -value);
+					} else if (value > 0) {
+						start = binarySearch(remove, start + 1, n, value);
 					}
+					value = 0;
 
 					stack.add(start);
 					remove[start] = true;
 
-					start = binarySearch(remove, start+1, n, 1);
+					start = binarySearch(remove, start + 1, n, 1);
 
 					break;
-				case 'Z' :
-					if(value<0){
-						start = binarySearch(remove, start+1, n, -value);
-					}else if(value>0){
-						start = binarySearch(remove, 0, start-1, value);
+				case 'Z':
+					if (value < 0) {
+						start = binarySearch(remove, 0, start - 1, -value);
+					} else if (value > 0) {
+						start = binarySearch(remove, start + 1, n, value);
 					}
+					value = 0;
 
 					remove[stack.pop()] = false;
 
