@@ -26,38 +26,34 @@ public class 표_편집 {
 			list.add(i);
 		}
 
-		int start = k;
 		Stack<Integer> stack = new Stack<>();
-		int value = 0;
+		Cell cCell = list.get(k);
 
 		for (String s : cmd) {
 			char c = s.charAt(0);
 
 			switch (c) {
 				case 'U':
-					value -= Integer.parseInt(s.split(" ")[1]);
+					cCell = prev(cCell, Integer.parseInt(s.split(" ")[1]));
 
 					break;
 				case 'D':
-					value += Integer.parseInt(s.split(" ")[1]);
+					cCell = next(cCell, Integer.parseInt(s.split(" ")[1]));
 
 					break;
 				case 'C':
-					Cell cCell = list.get(start);
-
-					if(value<0){
-						cCell = prev(cCell, -value);
-					}else if(value>0){
-						cCell = next(cCell, value);
-					}
-
 					stack.add(cCell.value);
 
-					if(cCell.prev!=null)	cCell.prev.next = cCell.next;
-					if(cCell.next!=null)	cCell.next.prev = cCell.prev;
+					if(cCell.prev!=null){
+						cCell.prev.next = cCell.next;
+					}
 
-					start = cCell.next==null ? cCell.prev.value : cCell.next.value;
-					value = 0;
+					if(cCell.next!=null){
+						cCell.next.prev = cCell.prev;
+						cCell = cCell.next;
+					}else{
+						cCell = cCell.prev;
+					}
 
 					break;
 				case 'Z':
@@ -113,26 +109,19 @@ public class 표_편집 {
 	}
 
 	static class CellList{
-		private final Cell root;
 		private final Cell[] array;
 
 		public CellList(int n) {
-			root = new Cell(0);
+			Cell root = new Cell(0);
 			array = new Cell[n];
 			array[0] = root;
 		}
 
 		public void add(int value){
-			Cell temp = root;
+			array[value] = new Cell(value);
 
-			while(temp.next!=null){
-				temp = temp.next;
-			}
-
-			temp.next = new Cell(value);
-			temp.next.prev = temp;
-
-			array[value] = temp.next;
+			array[value-1].next = array[value];
+			array[value].prev = array[value-1];
 		}
 
 		public Cell get(int i){
