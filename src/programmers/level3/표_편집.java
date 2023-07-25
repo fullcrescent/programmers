@@ -11,6 +11,13 @@ public class 표_편집 {
 		String answer = solution(n, k, cmd);
 		System.out.println(answer);
 
+		int n1 = 8;
+		int k1 = 2;
+		String[] cmd1 = {"D 2", "C", "U 3", "C", "D 4", "C", "C", "U 2", "Z", "Z", "U 1", "C"};
+		String answer1 = solution1(n1, k1, cmd1);
+		System.out.println(answer1);
+
+
 		int n3 = 8;
 		int k3 = 2;
 		String[] cmd3 = {"D 2", "C", "U 3", "C", "D 4", "C", "C", "U 2", "Z", "Z", "U 1", "C"};
@@ -231,5 +238,47 @@ public class 표_편집 {
 		}
 
 		return answer;
+	}
+
+	/*다른 사람의 풀이 참고*/
+	public static String solution1(int n, int k, String[] cmd) {
+		int size = n;
+		Stack<Integer> stack = new Stack<>();
+
+		for (String s : cmd) {
+			char c = s.charAt(0);
+
+			switch (c) {
+				case 'U':
+					k -= Integer.parseInt(s.split(" ")[1]);
+					if(k<0)	k = 0;
+
+					break;
+				case 'D':
+					k += Integer.parseInt(s.split(" ")[1]);
+					if(k>size-1)	k = size-1;
+
+					break;
+				case 'C':
+					stack.add(k);
+					size--;
+					if(k==size)	k--;
+
+					break;
+				case 'Z':
+					if(k>=stack.pop())	k++;
+					size++;
+
+					break;
+			}
+		}
+
+		StringBuilder sb = new StringBuilder("O".repeat(size));
+
+		while(!stack.empty()){
+			sb.insert(stack.pop().intValue(),'X');
+		}
+
+		return sb.toString();
 	}
 }
