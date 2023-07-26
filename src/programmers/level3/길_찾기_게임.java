@@ -110,35 +110,104 @@ public class 길_찾기_게임 {
 
     /*다른 사람의 풀이 참고*/
     public static int[][] solution1(int[][] nodeInfo) {
-        List<Info1> list = new ArrayList<>();
+        List<Node1> list = new ArrayList<>();
 
         for(int i=0; i<nodeInfo.length; i++){
-            list.add(new Info1(nodeInfo[i][0], nodeInfo[i][1], i+1));
+            list.add(new Node1(nodeInfo[i][0], nodeInfo[i][1], i+1));
         }
 
         list.sort((i1, i2) -> {
             if(i1.y==i2.y)  return i1.x-i2.x;
-            return i1.y-i2.y;
+            return i2.y-i1.y;
         });
 
+        Tree tree = new Tree();
 
-
-        for(Info1 info : list){
-
+        for(Node1 node : list){
+            tree.insert(node);
         }
 
-        return null;
+        return new int[][] {tree.root.getPreOrderArray(), tree.root.getPostOrderArray()};
     }
 
-    static class Info1{
+    static class Node1 {
         int x;
         int y;
         int value;
+        Node1 left;
+        Node1 right;
 
-        public Info1(int x, int y, int value) {
+        public Node1(int x, int y, int value) {
             this.x = x;
             this.y = y;
             this.value = value;
+            left = null;
+            right = null;
+        }
+
+        public List<Integer> getPreOrder() {
+            List<Integer> list = new LinkedList<>();
+
+            list.add(value);
+            if(left!=null)  list.addAll(left.getPreOrder());
+            if(right!=null) list.addAll(right.getPreOrder());
+
+            return list;
+        }
+
+        public int[] getPreOrderArray(){
+            return getPreOrder().stream().mapToInt(i -> i).toArray();
+        }
+
+        public List<Integer> getPostOrder() {
+            List<Integer> list = new LinkedList<>();
+
+            if(left!=null)  list.addAll(left.getPostOrder());
+            if(right!=null) list.addAll(right.getPostOrder());
+            list.add(value);
+
+            return list;
+        }
+
+        public int[] getPostOrderArray(){
+            return getPostOrder().stream().mapToInt(i -> i).toArray();
+        }
+    }
+
+    static class Tree{
+        Node1 root = null;
+
+        public void insert(Node1 node) {
+            if(root==null) {
+                root = node;
+            }
+            else{
+                Node1 head = root;
+                Node1 currentNode;
+
+                while(true){
+                    currentNode = head;
+
+                    if(node.x<currentNode.x){
+                        if(currentNode.left==null){
+                            currentNode.left = node;
+                            break;
+                        }
+                        else{
+                            head = currentNode.left;
+                        }
+                    }
+                    else{
+                        if(currentNode.right==null){
+                            currentNode.right = node;
+                            break;
+                        }
+                        else{
+                            head = currentNode.right;
+                        }
+                    }
+                }
+            }
         }
     }
 }
