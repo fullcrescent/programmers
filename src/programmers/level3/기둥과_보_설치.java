@@ -14,31 +14,42 @@ public class 기둥과_보_설치 {
 	}
 	
 	public static int[][] solution(int n, int[][] build_frame) {
-		Point[][] array = new Point[n][n];
+		Point[][] array = new Point[n+1][n+1];
 
-		for(int[] temp : build_frame){
-			int x = temp[0];
-			int y = temp[1];
+		for(int i=0; i<array.length; i++){
+			for(int j=0; j<array[i].length; j++){
+				array[i][j]	= new Point();
+			}
+		}
 
-			Point point = array[x][y];
+		for(int[] build : build_frame){
+			int x = build[0];
+			int y = build[1];
 
-			if(temp[3]==0){				// 삭제
-				if(temp[2]==0){			// 기둥
+			Point point1 = array[x][y];
+			Point point2 = build[2]==0 ? array[x][y+1] : build[2]==1 ? array[x+1][y] : null;
 
-				}else if(temp[2]==1){	// 보
-
+			if(build[3]==0){				// 삭제
+				if(build[2]==0){			// 기둥
+					if((array[x][y+2].column &&!(point2.leftBeam^point2.rightBeam))
+							|| (point2.leftBeam && !point2.rightBeam && array[x-1][y+1].column)
+							|| (point2.rightBeam && !point2.leftBeam && array[x+1][y+1].column)
+							|| (point2.leftBeam && point2.rightBeam && (array[x-1][y+1].column || array[x-1][y+1].leftBeam) && (array[x+1][y+1].column || array[x+1][y+1].leftBeam))){
+						point2.column =false;
+					}
+				}else if(build[2]==1){	// 보
 				}
 			}
-			else if(temp[3]==1){		// 설치
-				if(temp[2]==0){			// 기둥
-					if(y==0 || (point!=null && point.beamCount==1) || (point!=null && point.columnCount==1)){
-						if(array[x][y+1]==null){
-							array[x][y+1] = new Point(x, y+1);
-							array[x][y+1].columnCount = 1;
-						}
+			else if(build[3]==1){		// 설치
+				if(build[2]==0){			// 기둥
+					if(y==0 || (point1.leftBeam^point1.rightBeam) || point1.column){
+						point2.column = true;
 					}
-				}else if(temp[2]==1){	// 보
-
+				}else if(build[2]==1){	// 보
+					if(point1.column || point2.column || (point1.leftBeam && point2.rightBeam)){
+						point1.rightBeam = true;
+						point2.leftBeam = true;
+					}
 				}
 			}
 
@@ -48,14 +59,8 @@ public class 기둥과_보_설치 {
 	}
 
 	public static class Point{
-		int x;
-		int y;
-		int columnCount;
-		int beamCount;
-
-		public Point(int x, int y) {
-			this.x = x;
-			this.y = y;
-		}
+		boolean column;
+		boolean leftBeam;
+		boolean rightBeam;
 	}
 }
