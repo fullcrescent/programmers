@@ -31,10 +31,10 @@ public class 기둥과_보_설치 {
 
 			if(build[3]==0){				// 삭제
 				if(build[2]==0){			// 기둥
-					if(array[x][y+2].column && point2.leftBeam==point2.rightBeam){
+					if(array[x][y+2].column && !point2.leftBeam && !point2.rightBeam){
 						continue;
 					}
-					if(point2.leftBeam && (!array[x-1][y+1].column && !(point2.rightBeam && array[x-1][y+1].leftBeam))){
+					if(point2.leftBeam && (!array[x-1][y+1].column && !(array[x-1][y+1].leftBeam && point2.rightBeam))){
 						continue;
 					}
 					if(point2.rightBeam && (!array[x+1][y+1].column && !(point2.leftBeam && array[x+1][y+1].rightBeam))){
@@ -43,16 +43,16 @@ public class 기둥과_보_설치 {
 
 					point2.column = false;
 				}else if(build[2]==1){	// 보
-					if(array[x][y+1].column && !point1.column){
+					if(array[x][y+1].column && (!point1.column && !point1.leftBeam)){
 						continue;
 					}
-					if(point1.leftBeam && !array[x-1][y].column){
+					if(point1.leftBeam && (!point1.column && !array[x-1][y].column)){
 						continue;
 					}
-					if(array[x+1][y+1].column && !point2.column){
+					if(array[x+1][y+1].column && (!point2.column && !point2.rightBeam)){
 						continue;
 					}
-					if(point2.rightBeam && !array[x+2][y].column){
+					if(point2.rightBeam && (!point2.column && !array[x+2][y].column)){
 						continue;
 					}
 
@@ -62,7 +62,7 @@ public class 기둥과_보_설치 {
 			}
 			else if(build[3]==1){		// 설치
 				if(build[2]==0){			// 기둥
-					if(y==0 || (point1.leftBeam^point1.rightBeam) || point1.column){
+					if(y==0 || (point1.leftBeam || point1.rightBeam) || point1.column){
 						point2.column = true;
 					}
 				}else if(build[2]==1){	// 보
