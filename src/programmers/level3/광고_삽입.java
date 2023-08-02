@@ -1,14 +1,15 @@
 package programmers.level3;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 
 public class 광고_삽입 {
     public static void main(String[] args) {
-        String play_time = "99:59:59";
-        String adv_time = "25:00:00";
-        String[] logs = {"69:59:59-89:59:59", "01:00:00-21:00:00", "79:59:59-99:59:59", "01:00:00-31:00:00"};
+        String play_time = "02:03:55";
+        String adv_time = "00:14:15";
+        String[] logs = {"01:20:15-01:45:14", "00:40:31-01:00:00", "00:25:50-00:48:29", "01:30:59-01:53:29", "01:37:44-02:02:30"};
         String answer = solution(play_time, adv_time, logs);
         System.out.println(answer);
 
@@ -17,51 +18,49 @@ public class 광고_삽입 {
     }
 
     public static String solution(String play_time, String adv_time, String[] logs) {
-        List<ViewTime> viewTimeList = new ArrayList<>();
+        int total = convertInt(play_time);
+        int[] viewCountArray = new int[total];
 
-        for(String temp : logs) {
-            String[] array = temp.split("-");
-            viewTimeList.add(new ViewTime(new Time(array[0]), new Time(array[1])));
-        }
+        for(String log : logs){
+            String[] array = log.split("-");
+            int start = convertInt(array[0]);
+            int end = convertInt(array[1]);
 
-        viewTimeList.sort((i1, i2) -> {
-            if(i1.startTime.value==i2.startTime.value){
-                return i1.endTime.value-i2.endTime.value;
+            for(int i=start; i<end; i++){
+                viewCountArray[i] += 1;
             }
-            return i1.startTime.value-i2.startTime.value;
-        });
-
-
-
-        return "";
-    }
-    static class ViewTime{
-        Time startTime;
-        Time endTime;
-        int userCount;
-
-        public ViewTime(Time startTime, Time endTime) {
-            this.startTime = startTime;
-            this.endTime = endTime;
         }
+
+        String answer = "00:00:00";
+
+        int advTime = convertInt(adv_time);
+        long sum = Arrays.stream(viewCountArray, 0, advTime).sum();
+        long max = sum;
+
+        for(int i=1; i<total-advTime; i++){
+            sum -= viewCountArray[i];
+            sum += viewCountArray[i+advTime];
+
+            if(max<sum){
+                max = sum;
+                answer = convertTime(i+1);
+            }
+        }
+
+        return answer;
     }
 
-    static class Time {
-        String time;
-        int hour;
-        int minute;
-        int second;
-        int value;
+    private static int convertInt(String time) {
+        String[] array = time.split(":");
+        int hour = Integer.parseInt(array[0]);
+        int minute = Integer.parseInt(array[1]);
+        int second = Integer.parseInt(array[2]);
 
-        public Time(String time) {
-            this.time = time;
-            String[] array = time.split(":");
+        return hour*3600 + minute*60 + second;
+    }
 
-            this.hour = Integer.parseInt(array[0]);
-            this.minute = Integer.parseInt(array[1]);
-            this.second = Integer.parseInt(array[2]);
-            this.value = this.hour*3600 + this.minute*60 + this.second;
-        }
+    private static String convertTime(int temp) {
+        return String.format("%02d:%02d:%02d", temp/3600, temp%3600/60, temp%60);
     }
 
     /*시간초과*/
