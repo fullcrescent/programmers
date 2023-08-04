@@ -13,6 +13,9 @@ public class 광고_삽입 {
         String answer = solution(play_time, adv_time, logs);
         System.out.println(answer);
 
+        String answer1 = solution1(play_time, adv_time, logs);
+        System.out.println(answer);
+
         String answer3 = solution3(play_time, adv_time, logs);
         System.out.println(answer3);
     }
@@ -60,6 +63,37 @@ public class 광고_삽입 {
     }
 
     private static String convertTime(int temp) {
+        return String.format("%02d:%02d:%02d", temp/3600, temp%3600/60, temp%60);
+    }
+
+    /*다른 사람의 풀이 참고*/
+    public static String solution1(String play_time, String adv_time, String[] logs) {
+        int playTime = convertInt1(play_time);
+        long[] playCount = new long[playTime+1];
+
+        for(String log : logs){
+            String[] array = log.split("-");
+            int start = convertInt(array[0]);
+            int end = convertInt(array[1]);
+
+            playCount[start]++;
+            playCount[end]--;
+        }
+
+        return convertTime1(0);
+
+    }
+
+    private static int convertInt1(String time) {
+        String[] array = time.split(":");
+        int hour = Integer.parseInt(array[0]);
+        int minute = Integer.parseInt(array[1]);
+        int second = Integer.parseInt(array[2]);
+
+        return hour*3600 + minute*60 + second;
+    }
+
+    private static String convertTime1(int temp) {
         return String.format("%02d:%02d:%02d", temp/3600, temp%3600/60, temp%60);
     }
 
