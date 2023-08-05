@@ -14,7 +14,7 @@ public class 광고_삽입 {
         System.out.println(answer);
 
         String answer1 = solution1(play_time, adv_time, logs);
-        System.out.println(answer);
+        System.out.println(answer1);
 
         String answer3 = solution3(play_time, adv_time, logs);
         System.out.println(answer3);
@@ -73,15 +73,33 @@ public class 광고_삽입 {
 
         for(String log : logs){
             String[] array = log.split("-");
-            int start = convertInt(array[0]);
-            int end = convertInt(array[1]);
+            int start = convertInt1(array[0]);
+            int end = convertInt1(array[1]);
 
             playCount[start]++;
             playCount[end]--;
         }
 
-        return convertTime1(0);
+        for(int i=0; i<playCount.length-1; i++){
+            playCount[i+1] += playCount[i];
+        }
 
+        String answer = "00:00:00";
+        int advTime = convertInt1(adv_time);
+        long sum = Arrays.stream(playCount, 0, advTime).sum();
+        long max = sum;
+
+        for(int i=1; i<playTime-advTime; i++){
+            sum -= playCount[i];
+            sum += playCount[i+advTime];
+
+            if(max<sum){
+                max = sum;
+                answer = convertTime1(i+1);
+            }
+        }
+
+        return answer;
     }
 
     private static int convertInt1(String time) {
