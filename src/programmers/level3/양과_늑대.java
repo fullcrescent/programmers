@@ -1,5 +1,9 @@
 package programmers.level3;
 
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+
 public class 양과_늑대 {
     public static void main(String[] args) {
         int[] info = {0,0,1,1,1,0,1,0,1,0,1,1};
@@ -9,10 +13,20 @@ public class 양과_늑대 {
     }
 
     public static int solution(int[] info, int[][] edges) {
-        Node root = new Node(0);
+        Map<Integer, Node> map = new HashMap();
+
+        for(int i=0; i<info.length; i++){
+            map.put(i, new Node(i, info[i]==0 ? Type.SHEEP : Type.WOLF));
+        }
 
         for(int[] edge : edges){
+            Node parent = map.get(edge[0]);
 
+            if(parent.left==null){
+                parent.left = map.get(edge[1]);
+            }else{
+                parent.right = map.get(edge[1]);
+            }
         }
 
         return 0;
@@ -22,9 +36,15 @@ public class 양과_늑대 {
         Node left;
         Node right;
         int value;
+        Type type;
 
-        public Node(int value) {
+        public Node(int value, Type type) {
             this.value = value;
+            this.type = type;
         }
+    }
+
+    static enum Type{
+        SHEEP, WOLF;
     }
 }
