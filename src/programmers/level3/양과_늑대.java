@@ -1,9 +1,6 @@
 package programmers.level3;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Map;
-import java.util.Queue;
+import java.util.*;
 
 public class 양과_늑대 {
     public static void main(String[] args) {
@@ -30,39 +27,26 @@ public class 양과_늑대 {
             child.parent = parent;
         }
 
-        Queue<Node> queue = new LinkedList<>();
-        queue.add(map.get(0));
-        int sheepCount = 0;
+        int answer = map.get(0).count();
+        int wolfCount = 0;
 
-        while(!queue.isEmpty()){
-            Node temp = queue.poll();
-            sheepCount++;
-            temp.visit = true;
-
-            Node leftNode = temp.left;
-            Node rightNode = temp.right;
-
-            if(leftNode!=null && leftNode.type==Type.SHEEP){
-                queue.add(leftNode);
-            }
-            if(rightNode!=null && rightNode.type==Type.SHEEP){
-                queue.add(rightNode);
-            }
-        }
+        Queue<Node> queue = new PriorityQueue<>();
 
         for(int key : map.keySet()){
             Node temp = map.get(key);
 
-            if(temp.visit)  continue;
-
-            if(temp.parent.type==Type.WOLF){
+            if(!temp.visit && temp.type==Type.SHEEP && temp.parent.type==Type.WOLF){
                 queue.add(temp);
             }
         }
 
+        while(!queue.isEmpty()){
+            Node temp = queue.poll();
 
 
-        return sheepCount;
+        }
+
+        return answer;
     }
 
     static class Node{
@@ -84,7 +68,17 @@ public class 양과_늑대 {
             }
         }
 
+        public int count() {
+            if(visit || type==Type.WOLF) return 0;
 
+            int sum = 1;
+
+            visit = true;
+            sum += left==null ? 0 : left.count();
+            sum += right==null ? 0 : right.count();
+
+            return sum;
+        }
     }
 
     enum Type{
