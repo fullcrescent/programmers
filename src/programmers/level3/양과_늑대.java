@@ -79,6 +79,21 @@ public class 양과_늑대 {
 
             return sum;
         }
+
+        public int find(){
+            int count = 0;
+            Node parent = this.parent;
+
+            while(!parent.visit){
+                if(parent.type==Type.WOLF){
+                    count++;
+                }
+
+                parent = parent.parent;
+            }
+
+            return count;
+        }
     }
 
     enum Type{
