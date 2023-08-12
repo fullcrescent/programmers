@@ -27,26 +27,32 @@ public class 양과_늑대 {
             child.parent = parent;
         }
 
-        int answer = map.get(0).count();
+        int sheepCount = map.get(0).count();
         int wolfCount = 0;
 
-        Queue<Node> queue = new PriorityQueue<>();
+        List<Node> list = new ArrayList<>();
 
         for(int key : map.keySet()){
             Node temp = map.get(key);
 
             if(!temp.visit && temp.type==Type.SHEEP && temp.parent.type==Type.WOLF){
-                queue.add(temp);
+                list.add(temp);
             }
         }
 
-        while(!queue.isEmpty()){
-            Node temp = queue.poll();
+        while(wolfCount<=sheepCount){
+            if(list.size()==0) return sheepCount;
 
+            list.sort(Comparator.comparingInt(Node::find));
 
+            Node temp = list.get(0);
+            list.remove(0);
+
+            wolfCount += temp.find();
+            sheepCount += temp.count();
         }
 
-        return answer;
+        return sheepCount;
     }
 
     static class Node{
@@ -97,6 +103,6 @@ public class 양과_늑대 {
     }
 
     enum Type{
-        SHEEP, WOLF;
+        SHEEP, WOLF
     }
 }
