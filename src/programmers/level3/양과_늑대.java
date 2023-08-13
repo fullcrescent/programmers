@@ -4,8 +4,8 @@ import java.util.*;
 
 public class 양과_늑대 {
     public static void main(String[] args) {
-        int[] info = {0,0,1,1,1,0,1,0,1,0,1,1};
-        int[][] edges = {{0,1},{1,2},{1,4},{0,8},{8,7},{9,10},{9,11},{4,3},{6,5},{4,6},{8,9}};
+        int[] info = {0,1,0,1,1,0,1,0,0,1,0};
+        int[][] edges = {{0,1},{0,2},{1,3},{1,4},{2,5},{2,6},{3,7},{4,8},{6,9},{9,10}};
         int answer = solution(info, edges);
         System.out.println(answer);
     }
@@ -48,7 +48,9 @@ public class 양과_늑대 {
             Node temp = list.get(0);
             list.remove(0);
 
-            wolfCount += temp.find();
+            wolfCount += temp.select();
+
+            if(wolfCount>=sheepCount) return sheepCount;
             sheepCount += temp.count();
         }
 
@@ -91,6 +93,22 @@ public class 양과_늑대 {
             Node parent = this.parent;
 
             while(!parent.visit){
+                if(parent.type==Type.WOLF){
+                    count++;
+                }
+
+                parent = parent.parent;
+            }
+
+            return count;
+        }
+
+        public int select(){
+            int count = 0;
+            Node parent = this.parent;
+
+            while(!parent.visit){
+                parent.visit = true;
                 if(parent.type==Type.WOLF){
                     count++;
                 }
