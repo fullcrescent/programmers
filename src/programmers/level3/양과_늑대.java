@@ -4,7 +4,7 @@ import java.util.*;
 
 public class 양과_늑대 {
     public static void main(String[] args) {
-        int[] info = {0,1,0,1,1,0,1,0,0,1,0};
+        int[] info = {0,1,0,1,1,0,1,0,0,0,0};
         int[][] edges = {{0,1},{0,2},{1,3},{1,4},{2,5},{2,6},{3,7},{4,8},{6,9},{9,10}};
         int answer = solution(info, edges);
         System.out.println(answer);
@@ -16,7 +16,7 @@ public class 양과_늑대 {
         Map<Integer, Node> map = new HashMap<>();
 
         for(int i=0; i<info.length; i++){
-            map.put(i, new Node(info[i]==0? Type.SHEEP : Type.WOLF));
+            map.put(i, new Node(info[i]==0? Type.SHEEP : Type.WOLF, i));
         }
 
         for(int[] edge : edges){
@@ -62,10 +62,12 @@ public class 양과_늑대 {
         Node left;
         Node right;
         Type type;
+        int id;
         boolean visit;
 
-        public Node(Type type) {
+        public Node(Type type, int id) {
             this.type = type;
+            this.id = id;
         }
 
         public void addNode(Node node) {
